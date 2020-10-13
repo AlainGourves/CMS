@@ -1,0 +1,70 @@
+/* media query */
+@media screen and (max-width:768px){
+    #header{
+        padding: 0 5%;
+    }
+    #logo{
+        margin: 8px auto 0;
+    }
+
+    #logo img{
+        height: 70px;
+    }
+
+    .cta{
+        padding: 10px 15px;
+    }
+
+    #cta{
+        padding: 40px 5%;
+        margin: auto;
+    }
+
+    #slider article{
+        top: auto;
+        bottom: 0;
+        transform: none;
+        left: 0;
+        font-size: 1.1em;
+        padding: 15px;
+        background-color: var(--color_3);
+    }
+
+    #presta article{
+        width: 100%;
+        margin-bottom: 50px;
+    }
+
+    #entreprise figure,
+    #entreprise article{
+        width: 100%;
+        margin-bottom: 50px;
+    }
+
+    #actus {
+        text-align: left;
+    }
+    #actus .cta {
+        margin-top: 0;
+    }
+
+    #actus .a_la_une,
+    #actus div{
+        width: 100%;
+        border: none;
+        padding: 20px 0;
+    }
+
+    #actus > div{
+        padding: 0;
+    }
+
+    #footer > div:first-of-type,
+    #footer > div:last-of-type{
+        display: none;
+    }
+
+    #footer > div{
+        width: 100%;
+    }
+}

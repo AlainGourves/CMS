@@ -1,0 +1,11 @@
+<form action="front.php" method="POST" autocomplete="off">
+    <?php  if (isset($message['nom_contact'])) { echo $message['nom_contact']; } ?>
+    <input type="text" tabindex="1" name="nom_contact" id="nom_contact" value="<?php  if (isset($_POST['nom_contact'])) { echo $_POST['nom_contact']; } ?>" placeholder="Votre nom">
+    <input type="text" tabindex="2" name="prenom_contact" id="prenom_contact" value="<?php  if (isset($_POST['prenom_contact'])) { echo $_POST['prenom_contact']; } ?>" placeholder="Votre prénom">
+    <?php  if (isset($message['mel_contact'])) { echo $message['mel_contact']; } ?>
+    <input type="email" tabindex="3" name="mel_contact" id="mel_contact" value="<?php  if (isset($_POST['mel_contact'])) { echo $_POST['mel_contact']; } ?>" placeholder="Votre email">
+    <?php  if (isset($message['message_contact'])) { echo $message['message_contact']; } ?>
+    <textarea name="message_contact" id="message_contact" placeholder="Votre message" tabindex="4"><?php  if (isset($_POST['message_contact'])) { echo $_POST['message_contact']; } ?></textarea>
+
+    <input type="submit" name="submit" id="submit" value="Envoyer" class="cta cta_vert">
+</form>

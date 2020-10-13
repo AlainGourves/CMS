@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Back Office</title>
+    <link rel="stylesheet" href="../css/root.css">
+    <link rel="stylesheet" href="../css/back.css">
+    <link rel="stylesheet" href="../css/dashicons.min.css">
+</head>
+
+<body>
+    <aside id="zone_gauche">
+        <nav id="menu_back">
+            <ul>
+                <li>
+                    <a href="../">Voir le site</a>
+                </li>
+                <li<?php if(isset($val) && $val=="home") { echo " class=\"actif\"";} ?>>
+                    <a href="admin.php?module=home">Home</a>
+                </li>
+                <li<?php if(isset($val) && $val=="comptes") { echo " class=\"actif\"";} ?>>
+                    <a href="admin.php?module=comptes">Gestion des comptes</a>
+                </li>
+                <li<?php if(isset($val) && $val=="actus") { echo " class=\"actif\"";} ?>>
+                    <a href="admin.php?module=actus">Gestion des actus</a>
+                </li>
+                <li<?php if(isset($val) && $val=="slider") { echo " class=\"actif\"";} ?>>
+                    <a href="admin.php?module=slider">Gestion du slider</a>
+                </li>
+                <li<?php if(isset($val) && $val=="messages") { echo " class=\"actif\"";} ?>>
+                    <a href="admin.php?module=messages&action=afficher_message">Messagerie<?php if (isset($notification)) { echo $notification;} ?></a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <main id="zone_droite">
+        <header id="header_back">
+            <h1>Bienvenue sur le Back</h1>
+            <a href="../index.php"><span class="dashicons dashicons-no"></span></a>
+        </header>
+        <section id="contenu_back">
+            <?php
+                if(isset($contenu)){
+                    include($contenu);
+                }
+                if (isset($tab_resultats)) {
+                    echo $tab_resultats;
+                }
+                
+            ?> 
+        </section>
+        <footer id="footer_back">
+
+        </footer>
+    </main>
+</body>
+
+</html>
