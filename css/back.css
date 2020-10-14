@@ -15,6 +15,10 @@
 	--gris2: hsla(60, 18%, 80%, 1);
 	--gris3: hsla(60, 18%, 95%, 1);
 	--mauve: hsla(269, 45%, 27%, 1);
+	--orange: hsl(16, 100%, 60%);
+	--orangePale: hsl(16, 100%, 90%);
+	--vert: hsl(110, 100%, 60%);
+	--vertPale: hsl(110, 100%, 90%);
 }
 
 body{
@@ -119,22 +123,40 @@ body{
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-}
-
-#header_back a{
-	display: inline-block;
-	flex: 1;
-	text-decoration: none;
-}
-
-#header_back .gg-close-r{
 	color: var(--mauve);
 }
 
 #header_back h1{
-	flex: 2;
-	color: var(--mauve);
 	font-size: 36px;
+	width: 50%;
+}
+
+#header_back div{
+	display: flex;
+	align-items: center;
+	width: 50%;
+}
+
+#header_back a{
+	display: inline-block;
+	text-decoration: none;
+	color: var(--mauve);
+}
+
+#header_back .dashicons{
+	display: inline-block;
+	height: 1.5em;
+	width: 1.5em;
+	border: 2px solid var(--mauve);
+	border-radius: 50%;
+}
+
+
+#header_back .user{
+	color: var(--mauve);
+	font-weight: 700;
+	display: inline-block;
+	margin: 0 1em;
 }
 
 #footer_back{
@@ -315,4 +337,26 @@ main #contenu_back p{
 .tab_resultats td[colspan="3"].open{
 	display: table-cell;
 	background-color: #efefe5;
+}
+
+/* ----------------------------------------FORM Compte */
+
+#form_compte label.pas_ok + input {
+	border: 2px solid var(--orange);
+	background-color: var(--orangePale);
+}
+
+#form_compte span.pas_ok + select {
+	background-color: var(--orangePale);
+}
+
+#form_compte label.pas_ok,
+#form_compte span.pas_ok{
+	color: var(--orange);
+	font-weight: 700;
+}
+
+p.ok{
+	color: var(--vert);
+	font-weight: 700;
 }

@@ -21,7 +21,7 @@
                     <a href="admin.php?module=home">Home</a>
                 </li>
                 <li<?php if(isset($val) && $val=="comptes") { echo " class=\"actif\"";} ?>>
-                    <a href="admin.php?module=comptes">Gestion des comptes</a>
+                    <a href="admin.php?module=comptes&action=afficher_comptes">Gestion des comptes</a>
                 </li>
                 <li<?php if(isset($val) && $val=="actus") { echo " class=\"actif\"";} ?>>
                     <a href="admin.php?module=actus">Gestion des actus</a>
@@ -38,7 +38,12 @@
     <main id="zone_droite">
         <header id="header_back">
             <h1>Bienvenue sur le Back</h1>
-            <a href="../index.php"><span class="dashicons dashicons-no"></span></a>
+            <div>
+                <span class="user">
+                    <?php if (isset($bienvenue)) { echo $bienvenue; } ?>
+                </span>
+                <a href="admin.php?module=deconnecter"><span class="dashicons dashicons-no"></span></a>
+            </div>
         </header>
         <section id="contenu_back">
             <?php
@@ -48,7 +53,6 @@
                 if (isset($tab_resultats)) {
                     echo $tab_resultats;
                 }
-                
             ?> 
         </section>
         <footer id="footer_back">
