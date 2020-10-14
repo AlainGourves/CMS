@@ -1,7 +1,28 @@
-<form action="" method="POST">
-    <input type="text" name="nom" placeholder="Nom" value="">
-    <input type="text" name="prenom" placeholder="Prénom" value="">
-    <input type="text" name="identifiant" placeholder="Identifiant" value="">
-    <input type="password" name="password" placeholder="Votre mot de passe" value="">
+<?php 
+
+if (isset($entete)) {
+    echo $entete;
+}
+?>
+
+<form id="form_compte" action="admin.php?module=comptes&action=ajouter_compte" method="POST" autocomplete="off">
+    <?php  if (isset($message['nom_compte'])) { echo $message['nom_compte']; } ?>
+    <input type="text" name="nom_compte"  id="nom_compte" placeholder="Nom" value="<?php if(isset($_POST['nom_compte']) && !$insertion) echo $_POST['nom_compte']; ?>">
+    <?php  if (isset($message['prenom_compte'])) { echo $message['prenom_compte']; } ?>
+    <input type="text" name="prenom_compte"  id="prenom_compte" placeholder="Prénom" value="<?php if(isset($_POST['prenom_compte']) && !$insertion) echo $_POST['prenom_compte']; ?>">
+    <label for="statut_compte">Statut de l'utilisateur
+        <?php  if (isset($message['statut_compte'])) { echo $message['statut_compte']; } ?>
+        <select name="statut_compte" id="statut_compte">
+            <option value="">Choisir...</option>
+            <option value="user"<?php if (isset($selected['user']) && !$insertion) {echo $selected['user'];} ?>>Utilisateur</option>
+            <option value="admin"<?php if (isset($selected['admin']) && !$insertion) {echo $selected['admin'];} ?>>Administrateur</option>
+        </select>
+    </label>
+    <?php  if (isset($message['login_compte'])) { echo $message['login_compte']; } ?>
+    <input type="text" name="login_compte"  id="login_compte" placeholder="Identifiant" value="<?php if(isset($_POST['login_compte']) && !$insertion) echo $_POST['login_compte']; ?>" autocomplete="off">
+    <?php  if (isset($message['pass_compte'])) { echo $message['pass_compte']; } ?>
+    <input type="password" name="pass_compte"  id="pass_compte" placeholder="Votre mot de passe" value="" autocomplete="off">
     <input type="submit" name="submit" value="Envoyer">
 </form>
+
+<?php  if (isset($message['resultat'])) { echo $message['resultat']; } ?>

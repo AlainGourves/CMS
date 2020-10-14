@@ -1,8 +1,14 @@
 <?php
+session_start();
 // je connecte la librairie de fonctions PHP
 require_once("../outils/fonctions.php");
 // Je stocke dans une var le resultat de la fonction connexion()
 $connexion = connexion();
+
+// calcule un btn de retour vers le back, si un utlisateur est connecté
+if(isset($_SESSION['id_compte'])) {
+    $retour_back = "<div id=\"back\"><a href=\"../admin/admin.php\">Retour back</a></div>";
+}
 
 $contact = "form_contact.html";
 

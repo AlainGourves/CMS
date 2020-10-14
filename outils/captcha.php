@@ -36,7 +36,7 @@ for($i=1;$i<=$ncarac;$i++) {
 	//couleur désirée pour le texte
 	//police du texte
 	//texte à écrire
-	imagettftext($img, 25, rand(-10,10), (($i-1)*30)+5, 30, imagecolorallocate($img, rand(0,100), rand(0,100), rand(0,100)),$font, $c);//On ajoute le caractere sur limage
+	imagettftext($img, 25, rand(-10,10), (($i-1)*30)+5, 30, imagecolorallocate($img, rand(20,100), rand(20,100), rand(20,100)),$font, $c);//On ajoute le caractere sur limage
 	$chaine .= $c;//On ajoute le nouveau caractere a la chaine
 }
 	
@@ -44,7 +44,7 @@ for($i=1;$i<=$ncarac;$i++) {
 for($i=1;$i<=$nlignes;$i++) {
 	//On ajoute "$nlignes" lignes
 	imagesetthickness($img,rand(1,3));//On specifie l'epaisseur de la ligne
-	imageline($img,rand(0,$x),rand(0,$y),rand(0,$x),rand(0,$y), imagecolorallocate($img, rand(0,100), rand(0,100), rand(0,100)));//On ajoute la ligne
+	imageline($img,rand(0,$x),rand(0,$y),rand(0,$x),rand(0,$y), imagecolorallocate($img, rand(5,100), rand(5,100), rand(5,100)));//On ajoute la ligne
 }
 
 //On stocke la chaine de caractere dans les sessions

@@ -1,7 +1,4 @@
 <?php
-// permet l'usage des variables de session
-session_start();
-
 if (isset($_SESSION['id_compte'])) {
     if(isset($_GET['action'])) {
 
@@ -60,7 +57,6 @@ if (isset($_SESSION['id_compte'])) {
                 $class = "lu";
             }
             if (isset($_SESSION['id_contact']) && $ligne->id_contact == $_SESSION['id_contact']) {
-                // $tab_resultats .= " class=\"open\""; 
                 $open = " open";
             } else {
                 $open = "";

@@ -474,60 +474,6 @@ function afficher_menu($connexion,$requete,$cas)
 	}
 	
 //==============================================================
-function generer_flux_rss($requete,$connexion)
-	{
-	$resultat=mysqli_query($connexion, $requete); 
-	
-	//on calcule l'entete du flux RSS
-	$flux_rss="<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n";
-	$flux_rss.="<rss xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" version=\"2.0\" xml:base=\"http://flat_tools_v3.l2n\">\n";
-	$flux_rss.="<channel>\n";
-	$flux_rss.="<atom:link rel=\"self\" href=\"http://flat_tools_v3.l2n/feed/rss.xml\"/>\n";	
-	$flux_rss.="<title>Les actus Flattools</title>\n";	
-	$flux_rss.="<description>Le petit journal hebdo de Flattools</description>\n";
-	$flux_rss.="<lastBuildDate>" . date("D") . ", " . date("d M Y") . " " .  date("H:i:s") . " " . date("O") . "</lastBuildDate>\n";	
-	$flux_rss.="<link>http://flat_tools_v3.l2n</link>\n";
-	$flux_rss.="<language>fr</language>\n";
-	$flux_rss.="<copyright>Copyright " . date("Y") . "</copyright>\n";	
-	$flux_rss.="<image>\n";
-	$flux_rss.="<title>Les actus Flattools</title>\n";
-	$flux_rss.="<url>http://flat_tools_v3.l2n/images/logo.png</url>\n";
-	$flux_rss.="<link>http://flat_tools_v3.l2n</link>\n";
-	$flux_rss.="<width>160</width>\n"; 
-	$flux_rss.="<height>38</height>\n"; 
-	$flux_rss.="</image>\n";  	
-	
-	
-	$car_replace=array("<br>","<br />");  
-	
-	//on calcul chaque item du flux (1 item=1 article avec RSS=oui)
-	$i=0;
-	while($ligne=mysqli_fetch_object($resultat))
-		{
-		$flux_rss.="\n<item>\n";
-		$flux_rss.="<title><![CDATA[" . $ligne->titre_article . "]]></title>\n";
-		$contenu_flux=str_replace($car_replace,"\n",$ligne->contenu_article);
-		$flux_rss.="<description><![CDATA[" . str_replace("&","&amp;",strip_tags($contenu_flux)) . "]]></description>\n";
-		$date_flux=date("r",strtotime($date_article));
-		$flux_rss.="<pubDate>" . $date_flux . "</pubDate>\n";	
-		$flux_rss.="<link>http://flat_tools_v2.l2n/front/front.php?page=article#page</link>\n";
-		$flux_rss.="<guid isPermaLink=\"false\">" . $ligne->id_article . "</guid>\n";
-		if(!empty($ligne->fichier_article))
-			{
-			$lien_image[$i]=$ligne->fichier_article;
-			$taille_image[$i]=filesize($ligne->fichier_article);
-			$flux_rss.="<enclosure lenght=\"". $taille_image[$i] . "\" url=\"" . $lien_image[$i] . "\"  type=\"image/" . str_replace("jpg","jpeg",$ligne->fichier_article) . "\" />\n";				
-			}
-		$flux_rss.="</item>\n";	
-		$i++;
-		}
-	
-	$flux_rss.="</channel>\n";
-	$flux_rss.="</rss>\n";
-	return $flux_rss;	
-	}
-	
-//==============================================================
 function afficher_droits($connexion)
 	{
 	$requete="SELECT d.*,m.* FROM droits d INNER JOIN menus m ON d.id_menu=m.id_menu WHERE m.type_menu='back' ORDER BY m.rang_menu";

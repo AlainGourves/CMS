@@ -50,6 +50,26 @@ p{padding:8px 0}
 	padding: 60px 15%;
 }
 
+#back{
+	position: fixed;
+	/* display: flex; */
+	z-index: 999;
+	left: 50%;
+	top: 0;
+	transform: translateX(-50%);
+	padding: 1em;
+	background-color: #868686;
+	border: 2px solid #fff;
+	border-top: none;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
+}
+#back a{
+	text-decoration: none;
+	text-transform: uppercase;
+	color: #fff;
+}
+
 #header{
 	background-color:var(--color_2);
 	color:#fff;
