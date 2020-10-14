@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<title>Connexion | CMS</title>
+<link href="../css/login.css" rel="stylesheet" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="robots" content="noindex,nofollow">
+</head> 
+<body>    
+<form name="form_login" id="form_login" method="POST" action="login.php">
+	<h1>Connexion</h1>
+	<input type="text" placeholder="Login" name="login_compte" value="<?php if(isset($_POST['login_compte'])){echo $_POST['login_compte'];} ?>" />
+	<input type="password" placeholder="Mot de passe" name="pass_compte" />
+	<img id="captcha" src="../outils/captcha.php" alt="code sécurité" />  
+	<input placeholder="Code de sécurité" type="text" name="captcha" value="<?php if(isset($_POST['captcha'])){echo $_POST['captcha'];} ?>" />
+	<input type="submit" value="Entrer" name="submit" />
+</form>
+</body>
+</html>

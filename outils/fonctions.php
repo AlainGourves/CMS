@@ -13,7 +13,6 @@ function connexion() {
 	return $connexion;
 }
 
-/*
 //================================================
 function protocole() {
 	if(isset($_SERVER['HTTPS'])) {
@@ -64,17 +63,15 @@ function login($login,$password) {
 
 
 // ====détecter l'extension du fichier================
-function fichier_type($uploadedFile)
-{
-$tabType = explode(".", $uploadedFile);
-$nb=sizeof($tabType)-1;
-$typeFichier=$tabType[$nb];
- if($typeFichier == "jpeg")
-   {
-   $typeFichier = "jpg";
-   }
-$extension=strtolower($typeFichier);
-return $extension;
+function fichier_type($uploadedFile) {
+	$tabType = explode(".", $uploadedFile);
+	$nb=sizeof($tabType)-1;
+	$typeFichier=$tabType[$nb];
+	if($typeFichier == "jpeg") {
+		$typeFichier = "jpg";
+	}
+	$extension=strtolower($typeFichier);
+	return $extension;
 }
 
 
@@ -555,7 +552,6 @@ function afficher_droits($connexion)
 	
 	return $affichage;	
 	}
-*/
 ?>
 
 

@@ -1,3 +1,3 @@
 <?php
 
-header("Location:front/front.html");
+header("Location:front/front.php");
