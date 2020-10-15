@@ -96,6 +96,11 @@ p{padding:8px 0}
 .cta{
 	padding:15px 20px;	
 	margin:auto;
+	font-size: 11px;
+}
+
+a.cta{
+	text-decoration: none;
 }
 
 .cta_vert{
@@ -110,7 +115,7 @@ p{padding:8px 0}
 	margin-top:20px;
 }
 
-#cta button:first-of-type{
+#cta a{
 	margin-right:10px;
 }
 

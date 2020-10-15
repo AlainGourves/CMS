@@ -14,10 +14,12 @@
 	--gris1: hsla(60, 18%, 70%, 1);
 	--gris2: hsla(60, 18%, 80%, 1);
 	--gris3: hsla(60, 18%, 95%, 1);
-	--mauve: hsla(269, 45%, 27%, 1);
+	--mauve: hsla(269, 45%, 37%, 1);
+	--mauveLight: hsl(269, 45%, 67%);
 	--orange: hsl(16, 100%, 60%);
 	--orangePale: hsl(16, 100%, 90%);
 	--vert: hsl(110, 100%, 60%);
+	--bleu: hsl(210, 80%, 50%);
 	--vertPale: hsl(110, 100%, 90%);
 }
 
@@ -140,20 +142,29 @@ body{
 #header_back a{
 	display: inline-block;
 	text-decoration: none;
-	color: var(--mauve);
 }
 
 #header_back .dashicons{
-	display: inline-block;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	height: 1.5em;
 	width: 1.5em;
 	border: 2px solid var(--mauve);
+	color: var(--mauve);
+	background-color: var(--mauveLight);
 	border-radius: 50%;
+	transition: all .5s ease-in-out;
+}
+#header_back .dashicons:hover{
+	color: #fff;
+	background-color: var(--mauve);
+	transform: rotate(-90deg);
 }
 
 
 #header_back .user{
-	color: var(--mauve);
+	color: var(--mauveLight);
 	font-weight: 700;
 	display: inline-block;
 	margin: 0 1em;
@@ -211,11 +222,11 @@ main #contenu_back p{
 }
 
 ::placeholder{
-	color: var(--color_1);
+	color: var(--gris1);
 }
 
 :placeholder-shown{
-	background-color: rgba(247, 247, 247, 1);
+	background-color: var(--gris3);
 }
 
 #contenu_back input,
@@ -226,6 +237,7 @@ main #contenu_back p{
 	border-radius: 4px;
 	margin-bottom: 15px;
 	font-family: inherit;
+	font-size: .8em;
 	width: 100%;
 	box-shadow: 0 0 4px rgba(0,0,0,.25) inset;
 }
@@ -242,6 +254,10 @@ main #contenu_back p{
 	min-height: 150px;
 	resize: vertical;
 	max-height: 200px;
+}
+#contenu_back input:focus,
+#contenu_back textarea:focus{
+	background-color: #fff;
 }
 
 #contenu_back input[type=submit]{
@@ -279,17 +295,6 @@ main #contenu_back p{
 
 .tab_resultats tr[id^="message"] td{
 	display: none;
-	/* max-height: 0!important;
-	padding: 0;
-	margin: 0;
-	border: 0;
-	line-height: 0;
-	font-size: 0;
-	opacity: 0;
-	overflow: hidden;
-	transform-origin: center top;
-	transform: scaleY(0);
-	transition: all .25s; */
 }
 .tab_resultats span{
 	text-decoration: none;
@@ -313,7 +318,7 @@ main #contenu_back p{
 	color: white;
 	font-size: .8em;
 	border-radius: 5px;
-	background-color: #157ce6;
+	background-color: var(--bleu);
 }
 
 .ouinon a:hover{
@@ -340,6 +345,9 @@ main #contenu_back p{
 }
 
 /* ----------------------------------------FORM Compte */
+#form_compte label{
+	display: block;
+}
 
 #form_compte label.pas_ok + input {
 	border: 2px solid var(--orange);
@@ -359,4 +367,26 @@ main #contenu_back p{
 p.ok{
 	color: var(--vert);
 	font-weight: 700;
+}
+
+.alerte{
+	width: 80%;
+	min-height: 3em;
+	padding: .8em .4em;
+	margin: .5em auto;
+	border-radius: 0.25em;
+	border-width: 4px;
+	border-style: solid;
+	box-shadow: 2px 2px 4px var(--ombre);
+}
+
+.alerte.pas_ok{
+	color: var(--orange);
+	border-color: var(--orange);
+	background-color: var(--orangePale);
+}
+
+.alerte.ouinon{
+	border-color: var(--bleu);
+	background-color: #fff;
 }

@@ -14,9 +14,6 @@ if (isset($_SESSION['id_compte'])) {
                 if (isset($_GET['id_contact'])) {
                     $requete = "UPDATE contacts SET lu='1' WHERE id_contact='" . $_GET['id_contact'] . "'";
                     $resultat = mysqli_query($connexion, $requete);
-                    // variable pour l'affichage du message
-                    // $open[$_GET['id_contact']] = " class=\"open\"";
-
                     // mémorise en variable de session la val de 'id_contact'
                     $_SESSION['id_contact'] = $_GET['id_contact'];
                 }
@@ -24,12 +21,12 @@ if (isset($_SESSION['id_compte'])) {
 
             case 'supprimer_message':
                 if (isset($_GET['id_contact'])) {
-                    $entete = "<h1 class=\"ouinon\">Voulez-vous supprimer le message ?
+                    $entete = "<h1 class=\"alerte ouinon\">Voulez-vous supprimer le message ?
                                 <a href=\"admin.php?module=messages&action=supprimer_message&id_contact=" . $_GET['id_contact'] . "&confirm=1\" class=\"btn btn-oui\">OUI</a>
                                 <a href=\"admin.php?module=messages&action=afficher_message\" class=\"btn btn-non\">NON</a>
                             </h1>";
                     if (isset($_GET['confirm']) && $_GET['confirm'] == 1) {
-                        // si il y aeu confirmation de la suppression (bouton OUI)
+                        // s'il y a eu confirmation de la suppression (bouton OUI)
                         $requete = "DELETE FROM contacts WHERE id_contact='" . $_GET['id_contact'] . "'";
                         $resultat = mysqli_query($connexion, $requete);
                         $entete = "<h1 class=\"ok\">Message supprimé</h1>";
@@ -42,8 +39,7 @@ if (isset($_SESSION['id_compte'])) {
         // on construit un tableau qui affiche tous les messages reçus depuis le front
         $tab_resultats = "\n<table class=\"tab_resultats\">\n";
 
-        $requete = "SELECT * FROM contacts
-                    ORDER BY date_contact DESC";
+        $requete = "SELECT * FROM contacts ORDER BY date_contact DESC";
         $resultat = mysqli_query($connexion, $requete);
 
         // compteur
@@ -73,11 +69,10 @@ if (isset($_SESSION['id_compte'])) {
 
             $tab_resultats .= "\t<td>\n";
             $tab_resultats .= "<a href=\"admin.php?module=messages&action=supprimer_message&id_contact=" . $ligne->id_contact . "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
-            $tab_resultats .= "</td>\n";
-            $tab_resultats .= "</tr>\n";
+            $tab_resultats .= "</td>\n</tr>\n";
 
             // 2e ligne visible si clic
-            $tab_resultats .= "<tr id=\"message" . $i . "\">\n";
+            $tab_resultats .= "<tr>\n";
             $tab_resultats .= "\t<td class=\"" . $open . "\" colspan=\"3\"";
             $tab_resultats .= ">\n<strong>Expéditeur</strong>: ";
             $tab_resultats .= $ligne->mel_contact . "<br><strong>Message</strong>: ";

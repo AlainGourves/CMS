@@ -32,10 +32,10 @@ if (isset($_POST['submit'])) {
     if(!empty($_POST['nom_contact']) && !empty($_POST['mel_contact']) && !empty($_POST['message_contact'])) {
         // requête d'insertion dans bdd
         $requete = "INSERT INTO contacts 
-                        SET nom_contact='". utf8_decode(addslashes($_POST['nom_contact'])). "',
-                            prenom_contact='". utf8_decode(addslashes($_POST['prenom_contact'])). "',
+                        SET nom_contact='". $_POST['nom_contact']. "',
+                            prenom_contact='". $_POST['prenom_contact']. "',
                             mel_contact='". $_POST['mel_contact']. "',
-                            message_contact='". utf8_decode(addslashes($_POST['message_contact'])). "',
+                            message_contact='". $_POST['message_contact']. "',
                             date_contact='". date("Y-m-d H:i:s"). "'";
         $result = mysqli_query($connexion, $requete);
 

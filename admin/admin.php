@@ -5,7 +5,7 @@ session_start();
 if (isset($_SESSION['id_compte'])) {
 	// Si la personne est autorisée à accéder au back, 
 	// calcule une phrase de bienvenue
-	$bienvenue = $_SESSION['prenom_compte']. " ". substr($_SESSION['nom_compte'], 0, 1). " [statut: ". $_SESSION['statut_compte']. "]";
+	$bienvenue = $_SESSION['prenom_compte']. " ". substr($_SESSION['nom_compte'], 0, 1). ". [statut: ". $_SESSION['statut_compte']. "]";
 
 	require_once("../outils/fonctions.php");
 	$connexion = connexion();
