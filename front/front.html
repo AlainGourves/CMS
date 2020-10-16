@@ -25,14 +25,9 @@
 	</header>
 	
 	<nav id="menu_haut" role="navigation">
-		<ul>
-			<li><a href="#">Home</a></li>
-			<li><a href="#">BETB</a></li>
-			<li><a href="#">Construction neuve</a></li>
-			<li><a href="#">Extension</a></li>
-			<li><a href="#">Rénovation</a></li>
-			<li><a href="#">Conseils</a></li>
-		</ul>
+<?php
+		if(isset($menu)) echo $menu;
+?>
 	</nav>
 	
 	<!--main désigne le contenu principal du site-->

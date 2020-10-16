@@ -21,10 +21,14 @@ if (isset($_SESSION['id_compte'])) {
 				header("Location:../log");
 				break;
 
+			case 'menus':
+				include_once("menus.php");
+				break;
+	
 			case 'comptes':
 				include_once("comptes.php");
 				break;
-
+		
 			case 'actus':
 				break;
 

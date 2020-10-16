@@ -44,6 +44,15 @@ if (isset($_POST['submit'])) {
 
 }
 
+// Calcul du menu
+$requete = "SELECT * FROM menus ORDER BY rang_menu ASC";
+$resultat = mysqli_query($connexion, $requete);
+$menu = "<ul>\n";
+while($ligne = mysqli_fetch_object($resultat)){
+    $menu .= "<li><a href=\"". $ligne->lien_menu. "\">". $ligne->intitule_menu. "</a></li>\n";
+}
+$menu .= "</ul>\n";
+
 // on referme la connexion à la bdd
 $connexion = mysqli_close($connexion);
 
