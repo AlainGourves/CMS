@@ -10,10 +10,11 @@ if (isset($_SESSION['id_compte'])) {
         switch ($_GET['action']) {
             case 'afficher_comptes':
                 $entete = "<h1>Gestion des comptes</h1>";
+                $action_form = "afficher_comptes";
                 if (isset($_POST['submit'])) {
                     // gère la liste déroulante des statuts
                     if(!empty($_POST['statut_compte'])) {
-                        $selected[$_POST['statut_compte']] = "selected=\"selected\"";
+                        $selected[$_POST['statut_compte']] = " selected=\"selected\"";
                     }
                     if(empty($_POST['nom_compte'])) {
                         $message['nom_compte'] = "<label for=\"nom_compte\" class=\"pas_ok\">Mets ton nom, gros naze !</label>";
@@ -26,10 +27,10 @@ if (isset($_SESSION['id_compte'])) {
                     }elseif(empty($_POST['pass_compte'])) {
                         $message['pass_compte'] = "<label for=\"pass_compte\" class=\"pas_ok\">Mets un mot de passe, gros naze !</label>";
                     }else{
-                        $nom_compte = $_POST['nom_compte'];
-                        $prenom_compte = $_POST['prenom_compte'];
-                        $statut_compte = $_POST['statut_compte'];
-                        $login_compte = $_POST['login_compte'];
+                        $nom_compte = addslashes($_POST['nom_compte']);
+                        $prenom_compte = addslashes($_POST['prenom_compte']);
+                        $statut_compte = addslashes($_POST['statut_compte']);
+                        $login_compte = addslashes($_POST['login_compte']);
                         $pass_compte = $_POST['pass_compte'];
                         $requete = "INSERT INTO comptes 
                                         SET nom_compte='". $nom_compte. "',
@@ -40,11 +41,46 @@ if (isset($_SESSION['id_compte'])) {
                         $result = mysqli_query($connexion, $requete);
                         if ($result) {
                             $insertion = true;
-                            $message['resultat'] = "<p class=\"ok\">Bravo, ". $prenom_compte. ", te voilà inséré dans la base !</p>";
+                            $message['resultat'] = "<p class=\"alerte ok\">Bravo, ". $prenom_compte. ", te voilà inséré dans la base !</p>";
                         }else{
-                            $message['resultat'] = "<p class=\"pas_ok\">Hélas, ". $prenom_compte. ", une couille git dans le potage !</p>";
+                            $message['resultat'] = "<p class=\"alerte pas_ok\">Hélas, ". $prenom_compte. ", une couille git dans le potage !</p>";
                         }
                     }
+                }
+                break;
+
+            case 'modifier_compte':
+                $action_form = "modifier_compte&id_compte=". $_GET['id_compte'];
+                if (isset($_POST['submit'])) {
+                    $requete = "UPDATE comptes SET 
+                            nom_compte='". addslashes($_POST['nom_compte']). "',
+                            prenom_compte='". addslashes($_POST['prenom_compte']). "',
+                            statut_compte='". addslashes($_POST['statut_compte']). "',
+                            login_compte='". addslashes($_POST['login_compte']). "'";
+                    if (!empty($_POST['pass_compte'])) {
+                        $requete .= ", pass_compte = SHA1('". $_POST['pass_compte']. "') ";
+                    }
+                    $requete .= "WHERE id_compte = '". $_GET['id_compte']. "'";
+                    $resultat = mysqli_query($connexion, $requete);
+                    if ($resultat) {
+                        $insertion = true;
+                        $message['resultat'] = "<p class=\"alerte ok\">Le compte a bien été modifié.</p>";
+                        $action_form = "afficher_comptes";
+                    }else{
+                        $message['resultat'] = "<p class=\"alerte pas_ok\">Hélas, il y a eu un problème !</p>";
+                    }
+                }
+                if(isset($_GET['id_compte'])) {
+                    // on récupère les infos de id_compte
+                    $requete = "SELECT * FROM comptes WHERE id_compte='". $_GET['id_compte']. "'";
+                    $resultat = mysqli_query($connexion, $requete);
+                    // il y a un seul résultat max (id_compte est une clé primaire)
+                    $ligne = mysqli_fetch_object($resultat);
+                    $_POST['nom_compte'] = $ligne->nom_compte;
+                    $_POST['prenom_compte'] = $ligne->prenom_compte;
+                    $_POST['login_compte'] = $ligne->login_compte;
+                    // pour la liste déroulante
+                    $selected[$ligne->statut_compte] = " selected=\"selected\"";
                 }
                 break;
 
@@ -70,27 +106,31 @@ if (isset($_SESSION['id_compte'])) {
                     }
                 }
                 break;
-            
         }
 
         // on construit un tableau qui affiche tous les comptes
-        $tab_resultats = "\n<table class=\"tab_resultats\">\n";
-        $tab_resultats .= "<tr>\n<th>Identité</th>\n<th>Login</th>\n<th>Satut</th>\n<th>Actions</th>\n</tr>\n";
-        
         $requete = "SELECT * FROM comptes ORDER BY id_compte";
         $resultat = mysqli_query($connexion, $requete);
-        while ($ligne = mysqli_fetch_object($resultat)) {
-            $tab_resultats .= "<tr>\n";
-            $tab_resultats .= "\t<td>". utf8_encode($ligne->prenom_compte). " ". utf8_encode($ligne->nom_compte) ."</td>\n";
-            $tab_resultats .= "\t<td>". $ligne->login_compte ."</td>\n";
-            $tab_resultats .= "\t<td>". $ligne->statut_compte ."</td>\n";
-            $tab_resultats .= "\t<td>
-			<a href=\"admin.php?module=comptes&action=supprimer_compte&statut_compte=".$ligne->statut_compte."&id_compte=".$ligne->id_compte."\">
-			<span class=\"dashicons dashicons-no-alt\"></span>
-			</a></td>\n";            
-            $tab_resultats .= "</tr>\n";
-        }
-        $tab_resultats .= "</table>\n";
+        $tab_resultats = afficher_comptes($connexion,$requete);
+        
+        // $tab_resultats = "\n<table class=\"tab_resultats\">\n";
+        // $tab_resultats .= "<tr>\n<th>Identité</th>\n<th>Login</th>\n<th>Satut</th>\n<th>Actions</th>\n</tr>\n";
+        
+        // while ($ligne = mysqli_fetch_object($resultat)) {
+        //     $tab_resultats .= "<tr>\n";
+        //     $tab_resultats .= "\t<td>". $ligne->prenom_compte. " ". $ligne->nom_compte ."</td>\n";
+        //     $tab_resultats .= "\t<td>". $ligne->login_compte ."</td>\n";
+        //     $tab_resultats .= "\t<td>". $ligne->statut_compte ."</td>\n";
+        //     $tab_resultats .= "\t<td>
+		// 	<a href=\"admin.php?module=comptes&action=modifier_compte&id_compte=".$ligne->id_compte."\">
+		// 	<span class=\"dashicons dashicons-edit\"></span>
+		// 	<a href=\"admin.php?module=comptes&action=supprimer_compte&statut_compte=".$ligne->statut_compte."&id_compte=".$ligne->id_compte."\">
+		// 	<span class=\"dashicons dashicons-no-alt\"></span>
+        //     </a>
+        //     </a>            </td>\n";            
+        //     $tab_resultats .= "</tr>\n";
+        // }
+        // $tab_resultats .= "</table>\n";
     }
 }else{
     header("Location:../index.php");

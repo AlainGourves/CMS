@@ -215,8 +215,7 @@ function afficher_contacts($connexion,$requete)
 	return $affichage;
 	}
 //=======================================
-function afficher_comptes($connexion,$requete)
-	{
+function afficher_comptes($connexion,$requete) {
 	$resultat=mysqli_query($connexion,$requete);
 	$i=0;
 	$affichage="<table class=\"tab_resultats\">\n";
@@ -228,34 +227,30 @@ function afficher_comptes($connexion,$requete)
 	$affichage.="<th>Avatar</th>\n";	
 	$affichage.="<th>Actions</th>\n";
 	$affichage.="</tr>\n";	
-	while($ligne=mysqli_fetch_object($resultat))
-		{
+	while($ligne=mysqli_fetch_object($resultat)) {
 		//on affiche le contenu de chaque uplet présent dans la table
-		$affichage.="<tr>\n";
-		$affichage.="<td>" . strtoupper($ligne->nom_compte) . " " . $ligne->prenom_compte . "</td>\n";
+		$affichage.="<tr>\n";	
+		$affichage.="<td>" . $ligne->nom_compte. " " . $ligne->prenom_compte . "</td>\n";
 		$affichage.="<td style=\"text-align:center\">" . $ligne->login_compte . "</td>\n";	
 		$affichage.="<td style=\"text-align:center\">" . $ligne->statut_compte . "</td>\n";	
-		if(!empty($ligne->fichier_compte))
-			{
+		if(!empty($ligne->fichier_compte)) {
 			$avatar="<img class=\"miniature\" src=\"" . $ligne->fichier_compte  . "\" alt=\"\" />";
-			}
-		else
-			{
+		}else{
 			$avatar="no photo !";	
-			}
+		}
 		$affichage.="<td style=\"text-align:center\">" . $avatar . "</td>\n";		
 		$affichage.="<td>";
-		$affichage.="<a href=\"admin.php?action=compte&choix=modifier&id_compte=" . $ligne->id_compte . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
+		$affichage.="<a href=\"admin.php?module=comptes&action=modifier_compte&id_compte=" . $ligne->id_compte . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
 		$affichage.="&nbsp;&nbsp;&nbsp;";
-		$affichage.="<a href=\"admin.php?action=compte&choix=supprimer&id_compte=" . $ligne->id_compte . "\"><span class=\"dashicons dashicons-trash\"></span></a>";
+		$affichage.="<a href=\"admin.php?module=comptes&action=supprimer_compte&statut_compte=".$ligne->statut_compte."&id_compte=".$ligne->id_compte . "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
 		$affichage.="</td>\n";						
 		$affichage.="</tr>\n";
 		$i++;					
-		}
+	}
 	$affichage.="</table>\n";
 
 	return $affichage;
-	}
+}
 //======================================
 function extrait($texte,$nb_mots,$tolerance)	
 	{

@@ -20,6 +20,7 @@
 	--orangePale: hsl(16, 100%, 90%);
 	--vert: hsl(110, 100%, 60%);
 	--bleu: hsl(210, 80%, 50%);
+	--bleuLight: hsl(210, 80%, 80%);
 	--vertPale: hsl(110, 100%, 90%);
 }
 
@@ -263,6 +264,7 @@ main #contenu_back p{
 #contenu_back input[type=submit]{
 	width: auto;
 	text-transform: uppercase;
+	margin-left: 0!important;
 }
 
 /* -------------------------------------------------------- TABLEAU résultat */
@@ -284,11 +286,17 @@ main #contenu_back p{
 	padding: 5px;
 }
 
-.tab_resultats tr:nth-of-type(2n +1):hover{
-	background-color: #94c2f1;
+.tab_resultats tr:hover{
+	background-color: var(--bleuLight);
 }
 
-.tab_resultats tr td:nth-of-type(3){
+.tab_resultats tr:nth-of-type(1):hover{
+	background-color: inherit;
+}
+
+.tab_resultats tr td:nth-of-type(3),
+.tab_resultats tr td:nth-of-type(4),
+.tab_resultats tr td:nth-of-type(5){
 	width: 60px;
 	text-align: center;
 }
@@ -310,7 +318,9 @@ main #contenu_back p{
 	align-items: center;
 }
 
-.ouinon a{
+.ouinon a,
+a.ouinon,
+#contenu_back input[type=submit]{
 	display: block;
 	padding: 6px 8px;
 	margin: 0 10px;
@@ -321,7 +331,9 @@ main #contenu_back p{
 	background-color: var(--bleu);
 }
 
-.ouinon a:hover{
+.ouinon a:hover,
+a.ouinon:hover,
+#contenu_back input[type=submit]:hover{
 	background-color: #000;
 }
 
@@ -362,6 +374,14 @@ main #contenu_back p{
 #form_compte span.pas_ok{
 	color: var(--orange);
 	font-weight: 700;
+}
+
+.tab_resultats .dashicons{
+	color: var(--bleu);
+}
+
+.tab_resultats .dashicons:hover{
+	color: #000;
 }
 
 p.ok{

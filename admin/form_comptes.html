@@ -4,8 +4,8 @@ if (isset($entete)) {
     echo $entete;
 }
 ?>
-
-<form id="form_compte" action="admin.php?module=comptes&action=ajouter_compte" method="POST" autocomplete="off">
+<form id="form_compte" action="admin.php?module=comptes&action=<?php if(isset($action_form)) {
+    echo $action_form;}?>" method="POST" autocomplete="off">
     <?php  if (isset($message['nom_compte'])) { echo $message['nom_compte']; } ?>
     <input type="text" name="nom_compte"  id="nom_compte" placeholder="Nom" value="<?php if(isset($_POST['nom_compte']) && !$insertion) echo $_POST['nom_compte']; ?>">
     <?php  if (isset($message['prenom_compte'])) { echo $message['prenom_compte']; } ?>
@@ -23,6 +23,7 @@ if (isset($entete)) {
     <?php  if (isset($message['pass_compte'])) { echo $message['pass_compte']; } ?>
     <input type="password" name="pass_compte"  id="pass_compte" placeholder="Votre mot de passe" value="" autocomplete="off">
     <input type="submit" name="submit" value="Envoyer">
+    <a href="#" id="videForm" class="ouinon"><span class="dashicons dashicons-trash"></span></a>
 </form>
 
 <?php  if (isset($message['resultat'])) { echo $message['resultat']; } ?>
