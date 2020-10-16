@@ -112,25 +112,6 @@ if (isset($_SESSION['id_compte'])) {
         $requete = "SELECT * FROM comptes ORDER BY id_compte";
         $resultat = mysqli_query($connexion, $requete);
         $tab_resultats = afficher_comptes($connexion,$requete);
-        
-        // $tab_resultats = "\n<table class=\"tab_resultats\">\n";
-        // $tab_resultats .= "<tr>\n<th>Identité</th>\n<th>Login</th>\n<th>Satut</th>\n<th>Actions</th>\n</tr>\n";
-        
-        // while ($ligne = mysqli_fetch_object($resultat)) {
-        //     $tab_resultats .= "<tr>\n";
-        //     $tab_resultats .= "\t<td>". $ligne->prenom_compte. " ". $ligne->nom_compte ."</td>\n";
-        //     $tab_resultats .= "\t<td>". $ligne->login_compte ."</td>\n";
-        //     $tab_resultats .= "\t<td>". $ligne->statut_compte ."</td>\n";
-        //     $tab_resultats .= "\t<td>
-		// 	<a href=\"admin.php?module=comptes&action=modifier_compte&id_compte=".$ligne->id_compte."\">
-		// 	<span class=\"dashicons dashicons-edit\"></span>
-		// 	<a href=\"admin.php?module=comptes&action=supprimer_compte&statut_compte=".$ligne->statut_compte."&id_compte=".$ligne->id_compte."\">
-		// 	<span class=\"dashicons dashicons-no-alt\"></span>
-        //     </a>
-        //     </a>            </td>\n";            
-        //     $tab_resultats .= "</tr>\n";
-        // }
-        // $tab_resultats .= "</table>\n";
     }
 }else{
     header("Location:../index.php");

@@ -1,0 +1,25 @@
+<?php 
+
+if (isset($entete)) {
+    echo $entete;
+}
+?>
+<form id="form_menus" action="admin.php?module=menus&action=<?php if(isset($action_form)) {
+    echo $action_form;}?>" method="POST" autocomplete="off">
+    <?php  if (isset($message['intitule_menu'])) { echo $message['intitule_menu']; } ?>
+    <input type="text" name="intitule_menu"  id="intitule_menu" placeholder="Intitulé du menu" value="<?php if(isset($_POST['intitule_menu']) && !$insertion) echo $_POST['intitule_menu']; ?>">
+
+
+    <?php  if (isset($message['lien_menu'])) { echo $message['lien_menu']; } ?>
+    <input type="text" name="lien_menu"  id="lien_menu" placeholder="Lien du menu" value="<?php if(isset($_POST['lien_menu']) && !$insertion) echo $_POST['lien_menu']; ?>">
+    
+    <?php  if (isset($message['rang_menu'])) { echo $message['rang_menu']; } ?>
+    <input type="number" name="rang_menu"  id="rang_menu" placeholder="0" value="<?php if(isset($_POST['rang_menu']) && !$insertion) echo $_POST['rang_menu']; ?>">
+
+    <div class="btnsForm">
+        <input type="submit" name="submit" value="Envoyer">
+        <a href="#" id="videForm" class="ouinon"><span class="dashicons dashicons-trash"></span></a>
+    </div>
+</form>
+
+<?php  if (isset($message['resultat'])) { echo $message['resultat']; } ?>

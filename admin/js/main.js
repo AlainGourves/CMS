@@ -1,9 +1,9 @@
-let formCompte = document.querySelector('#form_compte');
+let myForm = document.querySelector('form');
 
 window.addEventListener("load", e => {
 
-    if (formCompte) {
-        let fields = formCompte.elements;
+    if (myForm) {
+        let fields = myForm.elements;
         let emptyBtn = document.querySelector('#videForm');
 
         emptyBtn.addEventListener("click", e => {
@@ -11,7 +11,7 @@ window.addEventListener("load", e => {
                 if (fields[i].nodeName === "SELECT"){
                     fields[i].selectedIndex = 0;
                 }
-                if (fields[i].nodeName === "INPUT" && (fields[i].type === "text" || fields[i].type === "password")) {
+                if (fields[i].nodeName === "INPUT" && (fields[i].type === "text" || fields[i].type === "number" || fields[i].type === "password")) {
                     fields[i].value = '';
                 }
             }
