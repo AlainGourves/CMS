@@ -4,8 +4,12 @@ if (isset($entete)) {
     echo $entete;
 }
 ?>
-<form id="form_menus" action="admin.php?module=menus&action=<?php if(isset($action_form)) {
-    echo $action_form;}?>" method="POST" autocomplete="off">
+<form id="form_menus" action="admin.php?module=menus&action=<?php 
+    if(isset($action_form)) { 
+        echo $action_form;
+    }else{
+        echo "afficher_menus";
+    } ?>" method="POST" autocomplete="off">
     <?php  if (isset($message['intitule_menu'])) { echo $message['intitule_menu']; } ?>
     <input type="text" name="intitule_menu"  id="intitule_menu" placeholder="Intitulé du menu" value="<?php if(isset($_POST['intitule_menu']) && !$insertion) echo $_POST['intitule_menu']; ?>">
 

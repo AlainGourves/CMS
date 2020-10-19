@@ -1,6 +1,8 @@
 <?php
 
 if (isset($_SESSION['id_compte'])) {
+    $entete = "<h1>Gestion des menus</h1>";
+
     if(isset($_GET['action'])) {
         
         $message = array();
@@ -8,7 +10,6 @@ if (isset($_SESSION['id_compte'])) {
         
         switch ($_GET['action']) {
             case 'afficher_menus':
-                $entete = "<h1>Gestion des menus</h1>";
                 $action_form = "afficher_menus";
                 if (isset($_POST['submit'])) {
                     if(empty($_POST['intitule_menu'])) {
@@ -43,7 +44,6 @@ if (isset($_SESSION['id_compte'])) {
             break;
             
             case 'modifier_menu':
-                $entete = "<h1>Gestion des menus</h1>";
                 $action_form = "modifier_menu&id_menu=". $_GET['id_menu'];
                 if (isset($_POST['submit'])) {
                     $requete = "UPDATE menus SET 
@@ -57,6 +57,9 @@ if (isset($_SESSION['id_compte'])) {
                         $insertion = true;
                         $message['resultat'] = "<p class=\"alerte ok\">Le menu a bien été modifié.</p>";
                         $action_form = "afficher_menus";
+                        //on suprime la variable $_GET['id_menu']
+				        //afin de ne pas executer le if(isset($_GET['id_menu'])) qui suit
+			        	unset($_GET['id_menu']);
                     }else{
                         $message['resultat'] = "<p class=\"alerte pas_ok\">Hélas, il y a eu un problème !</p>";
                     }
@@ -74,13 +77,17 @@ if (isset($_SESSION['id_compte'])) {
             
             case 'supprimer_menu':
                 if(isset($_GET['id_menu'])) {
-                    $entete="<h1 class=\"alerte ouinon\">Vous-voulez vraiment supprimer ce menu ? 
+                    $entete="<h1 class=\"alerte ouinon\">Vous-voulez vraiment supprimer ce menu&nbsp;? 
                     <a href=\"admin.php?module=menus&action=supprimer_menu&id_menu=".$_GET['id_menu']."&confirm=1\">OUI</a>
                     <a href=\"admin.php?module=menus&action=afficher_menus\">NON</a>
                     </h1>";
                     if(isset($_GET['confirm']) && $_GET['confirm']==1) {
                         $requete = "DELETE FROM menus WHERE id_menu='". $_GET['id_menu']."'";
                         $resultat = mysqli_query($connexion, $requete);
+
+                        // Redirection
+                        $url=$_SERVER['PHP_SELF']. "?module=menus&action=afficher_menus";
+                        header("Location: $url");
                         $entete = "<h1 class=\"alerte ok\">Menu supprimé</h1>";
                     }
                 }
@@ -89,26 +96,7 @@ if (isset($_SESSION['id_compte'])) {
     }
     
     $requete = "SELECT * FROM menus ORDER BY rang_menu ASC";
-    $resultat = mysqli_query($connexion, $requete);
-    
-    // on construit un tableau qui affiche tous les menus
-    $tab_resultats = "\n<table class=\"tab_resultats\">\n";
-    $tab_resultats .= "<tr>\n<th>Rang</th>\n<th>Intitulé</th>\n<th>Lien</th>\n<th>Actions</th>\n</tr>\n";
-    
-    while ($ligne = mysqli_fetch_object($resultat)) {
-        $tab_resultats .= "<tr>\n";
-        $tab_resultats .= "\t<td>". $ligne->rang_menu ."</td>\n";
-        $tab_resultats .= "\t<td>". $ligne->intitule_menu ."</td>\n";
-        $tab_resultats .= "\t<td>". $ligne->lien_menu ."</td>\n";
-        $tab_resultats .= "\t<td>";
-        $tab_resultats .= "<a href=\"admin.php?module=menus&action=modifier_menu&id_menu=".$ligne->id_menu."\">
-        <span class=\"dashicons dashicons-edit\"></span></a>";
-        $tab_resultats .= "<a href=\"admin.php?module=menus&action=supprimer_menu&id_menu=".$ligne->id_menu."\">
-        <span class=\"dashicons dashicons-no-alt\"></span></a>";
-        $tab_resultats .= "</td>\n";
-        $tab_resultats .= "</tr>\n";
-    }
-    $tab_resultats .= "</table>\n";
+    $tab_resultats=afficher_menus($connexion,$requete);
     
 }else{
     header("Location:../index.php");

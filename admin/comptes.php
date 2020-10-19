@@ -86,22 +86,22 @@ if (isset($_SESSION['id_compte'])) {
 
             case 'supprimer_compte':
                 if(isset($_GET['id_compte'])) {
-                    $entete="<h1 class=\"alerte ouinon\">Vous-voulez vraiment supprimer ce compte ? 
-                    <a href=\"admin.php?module=comptes&action=supprimer_compte&statut_compte=".$_GET['statut_compte']."&id_compte=".$_GET['id_compte']."&confirm=1\">OUI</a>
-                    <a href=\"admin.php?module=comptes&action=afficher_comptes\">NON</a>
-                    </h1>";
-                    //si l'internaute a confirmé la suppression (bouton oui)
-                    if(isset($_GET['confirm']) && $_GET['confirm']==1) {
-                        // on vérifie que ça n'est pas le dernier admin
-                        $requete =  "SELECT * FROM comptes WHERE statut_compte='admin'";
-                        $result = mysqli_query($connexion, $requete);
-                        $nb = mysqli_num_rows($result);
-                        if ($nb==1  && $_GET['statut_compte']=="admin") {
-                            $entete="<h1 class=\"alerte pas_ok\">Impossible ! Il faut au moins un compte admin</h1>";
-                        }else{
-                            $requete2 = "DELETE FROM comptes WHERE id_compte='". $_GET['id_compte']. "'";
-                            $result2 = mysqli_query($connexion, $requete2);
-                            $entete = "<h1 class=\"alerte ok\">Compte supprimé</h1>";
+                    // on vérifie que ça n'est pas le dernier admin
+                    $requete =  "SELECT * FROM comptes WHERE statut_compte='admin'";
+                    $result = mysqli_query($connexion, $requete);
+                    $nb = mysqli_num_rows($result);
+                    if ($nb==1  && $_GET['statut_compte']=="admin") {
+                        $entete="<h1 class=\"alerte pas_ok\">Impossible ! Il faut au moins un compte admin</h1>";
+                    }else{
+                        $entete="<h1 class=\"alerte ouinon\">Vous-voulez vraiment supprimer ce compte ? 
+                        <a href=\"admin.php?module=comptes&action=supprimer_compte&statut_compte=".$_GET['statut_compte']."&id_compte=".$_GET['id_compte']."&confirm=1\">OUI</a>
+                        <a href=\"admin.php?module=comptes&action=afficher_comptes\">NON</a>
+                        </h1>";
+                        //si l'internaute a confirmé la suppression (bouton oui)
+                        if(isset($_GET['confirm']) && $_GET['confirm']==1) {
+                                $requete2 = "DELETE FROM comptes WHERE id_compte='". $_GET['id_compte']. "'";
+                                $result2 = mysqli_query($connexion, $requete2);
+                                $entete = "<h1 class=\"alerte ok\">Compte supprimé</h1>";
                         }
                     }
                 }

@@ -188,32 +188,55 @@ return $date_au_format;
   }    
   
 //=======================================
-function afficher_contacts($connexion,$requete)
-	{
-	$resultat=mysqli_query($connexion,$requete);
-	$i=0;
-	$affichage="<table class=\"tab_resultats\">\n";
-	$affichage.="<tr>\n";
-	$affichage.="<th>Identité</th>\n";
-	$affichage.="<th>Email</th>\n";
-	$affichage.="<th>Date</th>\n";	
-	$affichage.="<th>Action</th>\n";
-	$affichage.="</tr>\n";		
-	while($ligne=mysqli_fetch_object($resultat))
-		{
-		$affichage.="<tr>\n";
-		$affichage.="<td>" . strtoupper($ligne->nom_contact) . " " . $ligne->prenom_contact . "</td>\n";
-		$affichage.="<td>" . $ligne->mel_contact . "</td>\n";	
-		$affichage.="<td>" . $ligne->date_contact . "</td>\n";	
-		$affichage.="<td><a href=\"admin.php?action=contact&choix=supprimer&id_contact=" . $ligne->id_contact . "\"><span class=\"dashicons dashicons-trash\"></span></a></td>\n";						
-		$affichage.="</tr>\n";
-		$i++;					
-		}
-	$_SESSION['nb_contacts']=$i;
-	$affichage.="</table>\n";
+function afficher_contacts($connexion,$requete) {
+	$resultat = mysqli_query($connexion, $requete);
+	// on construit un tableau qui affiche tous les messages reçus depuis le front
+	$tab_resultats = "\n<table class=\"tab_resultats\">\n";
 
-	return $affichage;
+	// compteur
+	$i = 1;
+	// tant qu'il y a des lignes dans $resultat, on exploite chaque ligne comme objet
+	while ($ligne = mysqli_fetch_object($resultat)) {
+		// Si le message n'a pas été lu
+		if ($ligne->lu == 0) {
+			$class = "non_lu";
+		} else {
+			$class = "lu";
+		}
+		if (isset($_SESSION['id_contact']) && $ligne->id_contact == $_SESSION['id_contact']) {
+			$open = " open";
+		} else {
+			$open = "";
+		}
+
+		$tab_resultats .= "<tr>\n";
+		$tab_resultats .= "\t<td class=\"" . $class . $open . "\">\n<a href=\"admin.php?module=messages&action=marquer_message&id_contact=" . $ligne->id_contact . "\">";
+		if (!empty($ligne->prenom_contact)) {
+			$tab_resultats .= $ligne->prenom_contact . " ";
+		}
+		$tab_resultats .= $ligne->nom_contact;
+		$tab_resultats .= "</a></td>\n";
+		$tab_resultats .= "\t<td>\n" . $ligne->date_contact . "</td>\n";
+
+		$tab_resultats .= "\t<td>\n";
+		$tab_resultats .= "<a href=\"admin.php?module=messages&action=supprimer_message&id_contact=" . $ligne->id_contact . "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
+		$tab_resultats .= "</td>\n</tr>\n";
+
+		// 2e ligne visible si clic
+		$tab_resultats .= "<tr>\n";
+		$tab_resultats .= "\t<td class=\"" . $open . "\" colspan=\"3\"";
+		$tab_resultats .= ">\n<strong>Expéditeur</strong>: ";
+		$tab_resultats .= $ligne->mel_contact . "<br><strong>Message</strong>: ";
+		$tab_resultats .= $ligne->message_contact;
+		$tab_resultats .= "</td>\n";
+		$tab_resultats .= "</tr>\n";
+
+		$i++;
 	}
+	$tab_resultats .= "</table>\n";
+
+	return $tab_resultats;
+}
 //=======================================
 function afficher_comptes($connexion,$requete) {
 	$resultat=mysqli_query($connexion,$requete);
@@ -381,91 +404,28 @@ function afficher_articles($connexion,$requete,$cas)
 	}
 	
 //=======================================
-function afficher_menu($connexion,$requete,$cas)
-	{
-	$resultat=mysqli_query($connexion,$requete);
-	
-	if(isset($cas))
-		{
-		switch($cas)
-			{
-			case "back":
-
-			$i=0;
-			$affichage="<table class=\"tab_resultats\">\n";
-			//on calcule les entêtes des colonnes
-			$affichage.="<tr>\n";
-			$affichage.="<th>Tri</th>\n";					
-			$affichage.="<th>Position</th>\n";					
-			$affichage.="<th>Intitulé</th>\n";
-			$affichage.="<th>Dashicon</th>\n";	
-			$affichage.="<th>Type</th>\n";				
-			$affichage.="<th>Actions</th>\n";
-			$affichage.="</tr>\n";	
-			while($ligne=mysqli_fetch_object($resultat))
-				{
-				//on affiche le contenu de chaque uplet présent dans la table
-				$affichage.="<tr>\n";
-				$affichage.="<td><a href=\"admin.php?action=menu&choix=trier&id_menu=" . $ligne->id_menu . "&tri=up\"><span class=\"dashicons dashicons-arrow-up\"></span></a>&nbsp;&nbsp;<a href=\"admin.php?action=menu&choix=trier&id_menu=" . $ligne->id_menu . "&tri=down\"><span class=\"dashicons dashicons-arrow-down\"></span></a></td>\n";	
-				$affichage.="<td>" . $ligne->rang_menu . "</td>\n";				
-				$affichage.="<td><a href=\"" . $ligne->lien_menu . "\" target=\"_blank\">" . $ligne->intitule_menu . "</a></td>\n";
-				$affichage.="<td  class=\"td_img\"><span class=\"" .  $ligne->dashicon_menu . "\"></span></td>\n";
-				$affichage.="<td style=\"text-align:center\">" . $ligne->type_menu . "</td>\n";				
-				$affichage.="<td>";		
-				$affichage.="<a href=\"admin.php?action=menu&choix=modifier&id_menu=" . $ligne->id_menu . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
-				$affichage.="&nbsp;&nbsp;&nbsp;";
-				$affichage.="<a href=\"admin.php?action=menu&choix=supprimer&id_menu=" . $ligne->id_menu . "\"><span class=\"dashicons dashicons-trash\"></span></a>";
-				$affichage.="</td>\n";						
-				$affichage.="</tr>\n";
-				$i++;					
-				}
-			$affichage.="</table>\n";
-			
-			break;
-
-			case "front":
-			
-			$i=0;
-			$affichage="<ul class=\"dispo_flex\">\n";
-
-			while($ligne=mysqli_fetch_object($resultat))
-				{
-				//on affiche le contenu de chaque uplet présent dans la table
-				$affichage.="<li>\n";
-				$affichage.="<a href=\"" . $ligne->lien_menu ."\">";		
-				$affichage.="<span class=\"" . $ligne->dashicon_menu . "\"></span>";
-				$affichage.="<br />" . $ligne->intitule_menu;
-				$affichage.="</a>";				
-				$affichage.="</li>\n";
-				$i++;					
-				}
-			$affichage.="</ul>\n";
-			
-			break;	
-
-			case "menu_back":
-			
-			$i=0;
-			$affichage="<ul class=\"dispo_flex\">\n";
-
-			while($ligne=mysqli_fetch_object($resultat))
-				{
-				//on affiche le contenu de chaque uplet présent dans la table
-				$affichage.="<li>\n";
-				$affichage.="<a href=\"" . $ligne->lien_menu ."\">";		
-				$affichage.="<span class=\"" . $ligne->dashicon_menu . "\"></span>";
-				$affichage.="<br />" . $ligne->intitule_menu;
-				$affichage.="</a>";				
-				$affichage.="</li>\n";
-				$i++;					
-				}
-			$affichage.="</ul>\n";
-			
-			break;				
-			}		
-		}
-
-	return $affichage;
+function afficher_menus($connexion,$requete) {
+	$resultat = mysqli_query($connexion, $requete);
+    
+    // on construit un tableau qui affiche tous les menus
+    $tab_resultats = "\n<table class=\"tab_resultats\">\n";
+    $tab_resultats .= "<tr>\n<th>Rang</th>\n<th>Intitulé</th>\n<th>Lien</th>\n<th>Actions</th>\n</tr>\n";
+    
+    while ($ligne = mysqli_fetch_object($resultat)) {
+        $tab_resultats .= "<tr>\n";
+        $tab_resultats .= "\t<td>". $ligne->rang_menu ."</td>\n";
+        $tab_resultats .= "\t<td>". $ligne->intitule_menu ."</td>\n";
+        $tab_resultats .= "\t<td>". $ligne->lien_menu ."</td>\n";
+        $tab_resultats .= "\t<td>";
+        $tab_resultats .= "<a href=\"admin.php?module=menus&action=modifier_menu&id_menu=".$ligne->id_menu."\">
+        <span class=\"dashicons dashicons-edit\"></span></a>";
+        $tab_resultats .= "<a href=\"admin.php?module=menus&action=supprimer_menu&id_menu=".$ligne->id_menu."\">
+        <span class=\"dashicons dashicons-no-alt\"></span></a>";
+        $tab_resultats .= "</td>\n";
+        $tab_resultats .= "</tr>\n";
+    }
+    $tab_resultats .= "</table>\n";
+	return $tab_resultats;
 	}
 	
 //==============================================================
