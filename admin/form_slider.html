@@ -16,7 +16,7 @@ if(isset($action_form)) {
 
     <textarea name="descriptif_slider"  id="descriptif_slider" placeholder="Descriptif de l'image"><?php if(isset($_POST['descriptif_slider']) && !$insertion) echo $_POST['descriptif_slider']; ?></textarea>
 
-    <label for="fichier_slider">Fichier image (jpg/png/svg/gif)
+    <label for="fichier_slider">Fichier image (jpg/png/gif)
         <?php  if (isset($message['fichier_slider'])) { echo $message['fichier_slider']; } ?>
     <input type="file" name="fichier_slider"  id="fichier_slider" value="">
     </label>

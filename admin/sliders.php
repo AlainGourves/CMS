@@ -19,7 +19,6 @@ if (isset($_SESSION['id_compte'])) {
                     }else{
                         // on teste si le fichier a le bon format
                         if (fichier_type($_FILES['fichier_slider']['name'])=='png' ||
-                            fichier_type($_FILES['fichier_slider']['name'])=='svg' ||
                             fichier_type($_FILES['fichier_slider']['name'])=='jpg' ||
                             fichier_type($_FILES['fichier_slider']['name'])=='gif') {
                             // on insère dans la table
