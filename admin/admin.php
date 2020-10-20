@@ -5,7 +5,13 @@ session_start();
 if (isset($_SESSION['id_compte'])) {
 	// Si la personne est autorisée à accéder au back, 
 	// calcule une phrase de bienvenue
-	$bienvenue = $_SESSION['prenom_compte']. " ". substr($_SESSION['nom_compte'], 0, 1). ". [statut: ". $_SESSION['statut_compte']. "]";
+	$bienvenue = $_SESSION['prenom_compte']. " ". substr($_SESSION['nom_compte'], 0, 1). ".";
+	if (!empty($_SESSION['fichier_compte'])) {
+		$bienvenue .= $_SESSION['fichier_compte'];
+	}else{
+		$bienvenue .= "<span class=\"dashicons dashicons-admin-users avatar\"></span>";
+	}
+	$bienvenue .= "[statut: ". $_SESSION['statut_compte']. "]";
 
 	require_once("../outils/fonctions.php");
 	$connexion = connexion();
@@ -27,12 +33,13 @@ if (isset($_SESSION['id_compte'])) {
 	
 			case 'comptes':
 				include_once("comptes.php");
-				break;
-		
+			break;
+			
 			case 'actus':
-				break;
-
+			break;
+			
 			case 'slider':
+				include_once("sliders.php");
 				break;
 
 			case 'messages':

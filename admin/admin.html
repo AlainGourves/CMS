@@ -30,7 +30,7 @@
                     <a href="admin.php?module=actus">Gestion des actus</a>
                 </li>
                 <li<?php if(isset($val) && $val=="slider") { echo " class=\"actif\"";} ?>>
-                    <a href="admin.php?module=slider">Gestion du slider</a>
+                    <a href="admin.php?module=slider&action=afficher_sliders">Gestion du slider</a>
                 </li>
                 <li<?php if(isset($val) && $val=="messages") { echo " class=\"actif\"";} ?>>
                     <a href="admin.php?module=messages&action=afficher_message">Messagerie<?php if (isset($notification)) { echo $notification;} ?></a>

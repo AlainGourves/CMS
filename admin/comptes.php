@@ -16,34 +16,72 @@ if (isset($_SESSION['id_compte'])) {
                     if(!empty($_POST['statut_compte'])) {
                         $selected[$_POST['statut_compte']] = " selected=\"selected\"";
                     }
-                    if(empty($_POST['nom_compte'])) {
+
+                    // gère l'image avatar
+                    $is_avatar = false;
+                    if(!empty($_FILES['fichier_compte']['name'])){
+                        if ( fichier_type($_FILES['fichier_compte']['name']) == 'png' ||
+                            fichier_type($_FILES['fichier_compte']['name']) == 'jpg' ||
+                            fichier_type($_FILES['fichier_compte']['name']) == 'gif') {
+                            $is_avatar = true;
+                        } else {
+                            $message['fichier_compte'] = "<label for=\"fichier_compte\" class=\"pas_ok\">Seules les exentions png, svg, jpg et gif sont autorisées !</label>";
+                        }
+                    }
+                    if (empty($_POST['nom_compte'])) {
                         $message['nom_compte'] = "<label for=\"nom_compte\" class=\"pas_ok\">Mets ton nom, gros naze !</label>";
-                    }elseif(empty($_POST['prenom_compte'])) {
+                    } elseif (empty($_POST['prenom_compte'])) {
                         $message['prenom_compte'] = "<label for=\"prenom_compte\" class=\"pas_ok\">Mets ton prénom, gros naze !</label>";
-                    }elseif(empty($_POST['statut_compte'])) {
+                    } elseif (empty($_POST['statut_compte'])) {
                         $message['statut_compte'] = "<span class=\"pas_ok\">Choisis un statut, gros naze !</span>";
-                    }elseif(empty($_POST['login_compte'])) {
+                    } elseif (empty($_POST['login_compte'])) {
                         $message['login_compte'] = "<label for=\"login_compte\" class=\"pas_ok\">Mets un identifiant, gros naze !</label>";
-                    }elseif(empty($_POST['pass_compte'])) {
+                    } elseif (empty($_POST['pass_compte'])) {
                         $message['pass_compte'] = "<label for=\"pass_compte\" class=\"pas_ok\">Mets un mot de passe, gros naze !</label>";
-                    }else{
+                    } else {
                         $nom_compte = addslashes($_POST['nom_compte']);
                         $prenom_compte = addslashes($_POST['prenom_compte']);
                         $statut_compte = addslashes($_POST['statut_compte']);
                         $login_compte = addslashes($_POST['login_compte']);
                         $pass_compte = $_POST['pass_compte'];
                         $requete = "INSERT INTO comptes 
-                                        SET nom_compte='". $nom_compte. "',
-                                        prenom_compte='". $prenom_compte. "',
-                                        login_compte='". $login_compte. "',
-                                        pass_compte=SHA1('". $pass_compte. "'),
-                                        statut_compte='". $statut_compte. "'";
+                                        SET nom_compte='" . $nom_compte . "',
+                                        prenom_compte='" . $prenom_compte . "',
+                                        login_compte='" . $login_compte . "',
+                                        pass_compte=SHA1('" . $pass_compte . "'),
+                                        statut_compte='" . $statut_compte . "'";
                         $result = mysqli_query($connexion, $requete);
+                        $dernier_id_cree = mysqli_insert_id($connexion);
                         if ($result) {
+
+                            if ($is_avatar) {
+                                // ================================= traitement fichier avatar
+                                // _b: big, _s: small
+                                $chemin_b = "../medias/avatar_b" . $dernier_id_cree . "." . fichier_type($_FILES['fichier_compte']['name']);
+                                $chemin_s = "../medias/avatar_s" . $dernier_id_cree . "." . fichier_type($_FILES['fichier_compte']['name']);
+
+                                if (is_uploaded_file($_FILES['fichier_compte']['tmp_name'])) {
+                                    // tmp_name : fich temporaire généré sur le serveur
+                                    if (copy($_FILES['fichier_compte']['tmp_name'], $chemin_b)) {
+                                        // on calcule les dimensions de l'image originelle
+                                        $size = @getimagesize($chemin_b); // @: empêche les messages d'erreur
+                                        $ratio = $size[0] / $size[1];
+                                        // génère miniature en respectant aspect ratio
+                                        $larg_thumbnail = 80;
+                                        $quality = 90; // % compression jpeg
+                                        // redimentionne et stocke le thumbnail
+                                        redimage($chemin_b, $chemin_s, $larg_thumbnail, $larg_thumbnail / $ratio, $quality);
+
+                                        // On met à jour la table comptes
+                                        $requete = "UPDATE comptes SET fichier_compte='" . $chemin_s . "' WHERE id_compte='" . $dernier_id_cree . "'";
+                                        $resultat = mysqli_query($connexion, $requete);
+                                    }
+                                }
+                            }
                             $insertion = true;
-                            $message['resultat'] = "<p class=\"alerte ok\">Bravo, ". $prenom_compte. ", te voilà inséré dans la base !</p>";
-                        }else{
-                            $message['resultat'] = "<p class=\"alerte pas_ok\">Hélas, ". $prenom_compte. ", une couille git dans le potage !</p>";
+                            $message['resultat'] = "<p class=\"alerte ok\">Bravo, " . $prenom_compte . ", te voilà inséré dans la base !</p>";
+                        } else {
+                            $message['resultat'] = "<p class=\"alerte pas_ok\">Hélas, " . $prenom_compte . ", une couille git dans le potage !</p>";
                         }
                     }
                 }
@@ -52,22 +90,59 @@ if (isset($_SESSION['id_compte'])) {
             case 'modifier_compte':
                 $action_form = "modifier_compte&id_compte=". $_GET['id_compte'];
                 if (isset($_POST['submit'])) {
-                    $requete = "UPDATE comptes SET 
-                            nom_compte='". addslashes($_POST['nom_compte']). "',
-                            prenom_compte='". addslashes($_POST['prenom_compte']). "',
-                            statut_compte='". addslashes($_POST['statut_compte']). "',
-                            login_compte='". addslashes($_POST['login_compte']). "'";
-                    if (!empty($_POST['pass_compte'])) {
-                        $requete .= ", pass_compte = SHA1('". $_POST['pass_compte']. "') ";
-                    }
-                    $requete .= "WHERE id_compte = '". $_GET['id_compte']. "'";
-                    $resultat = mysqli_query($connexion, $requete);
-                    if ($resultat) {
-                        $insertion = true;
-                        $message['resultat'] = "<p class=\"alerte ok\">Le compte a bien été modifié.</p>";
-                        $action_form = "afficher_comptes";
+                    if (empty($_POST['nom_compte'])) {
+                        $message['nom_compte'] = "<label for=\"nom_compte\" class=\"pas_ok\">Mets ton nom, gros naze !</label>";
+                    } elseif (empty($_POST['prenom_compte'])) {
+                        $message['prenom_compte'] = "<label for=\"prenom_compte\" class=\"pas_ok\">Mets ton prénom, gros naze !</label>";
+                    } elseif (empty($_POST['statut_compte'])) {
+                        $message['statut_compte'] = "<span class=\"pas_ok\">Choisis un statut, gros naze !</span>";
+                    } elseif (empty($_POST['login_compte'])) {
+                        $message['login_compte'] = "<label for=\"login_compte\" class=\"pas_ok\">Mets un identifiant, gros naze !</label>";
                     }else{
-                        $message['resultat'] = "<p class=\"alerte pas_ok\">Hélas, il y a eu un problème !</p>";
+                       $requete = "UPDATE comptes SET 
+                               nom_compte='". addslashes($_POST['nom_compte']). "',
+                               prenom_compte='". addslashes($_POST['prenom_compte']). "',
+                               statut_compte='". addslashes($_POST['statut_compte']). "',
+                               login_compte='". addslashes($_POST['login_compte']). "'";
+                       if (!empty($_POST['pass_compte'])) {
+                           $requete .= ", pass_compte = SHA1('". $_POST['pass_compte']. "') ";
+                       }
+                       // Fichier avatar
+                       if(!empty($_FILES['fichier_compte']['name'])){
+                           if ( fichier_type($_FILES['fichier_compte']['name']) == 'png' ||
+                               fichier_type($_FILES['fichier_compte']['name']) == 'jpg' ||
+                               fichier_type($_FILES['fichier_compte']['name']) == 'gif') {
+
+
+                               // _b: big, _s: small
+                               $chemin_b = "../medias/avatar_b" . $_GET['id_compte'] . "." . fichier_type($_FILES['fichier_compte']    ['name']);
+                               $chemin_s = "../medias/avatar_s" . $_GET['id_compte'] . "." . fichier_type($_FILES['fichier_compte']    ['name']);
+
+                               if (is_uploaded_file($_FILES['fichier_compte']['tmp_name'])) {
+                                   // tmp_name : fich temporaire généré sur le serveur
+                                   if (copy($_FILES['fichier_compte']['tmp_name'], $chemin_b)) {
+                                       // on calcule les dimensions de l'image originelle
+                                       $size = @getimagesize($chemin_b); // @: empêche les messages d'erreur
+                                       $ratio = $size[0] / $size[1];
+                                       // génère miniature en respectant aspect ratio
+                                       $larg_thumbnail = 80;
+                                       $quality = 90; // % compression jpeg
+                                       // redimentionne et stocke le thumbnail
+                                       redimage($chemin_b, $chemin_s, $larg_thumbnail, $larg_thumbnail / $ratio, $quality);
+                                       $requete .= ", fichier_compte='". $chemin_s. "' ";
+                                   }
+                               }
+                           }
+                       }
+                       $requete .= "WHERE id_compte = '". $_GET['id_compte']. "'";
+                       $resultat = mysqli_query($connexion, $requete);
+                       if ($resultat) {
+                           $insertion = true;
+                           $message['resultat'] = "<p class=\"alerte ok\">Le compte a bien été modifié.</p>";
+                           $action_form = "afficher_comptes";
+                       }else{
+                           $message['resultat'] = "<p class=\"alerte pas_ok\">Hélas, il y a eu un problème !</p>";
+                       }
                     }
                 }
                 if(isset($_GET['id_compte'])) {
@@ -93,15 +168,27 @@ if (isset($_SESSION['id_compte'])) {
                     if ($nb==1  && $_GET['statut_compte']=="admin") {
                         $entete="<h1 class=\"alerte pas_ok\">Impossible ! Il faut au moins un compte admin</h1>";
                     }else{
+                        $extension = (isset($_GET['ext'])) ? "&ext=". $_GET['ext'] : '';
                         $entete="<h1 class=\"alerte ouinon\">Vous-voulez vraiment supprimer ce compte ? 
-                        <a href=\"admin.php?module=comptes&action=supprimer_compte&statut_compte=".$_GET['statut_compte']."&id_compte=".$_GET['id_compte']."&confirm=1\">OUI</a>
+                        <a href=\"admin.php?module=comptes&action=supprimer_compte&statut_compte=".$_GET['statut_compte']."&id_compte=".$_GET['id_compte']. $extension. "&confirm=1\">OUI</a>
                         <a href=\"admin.php?module=comptes&action=afficher_comptes\">NON</a>
                         </h1>";
                         //si l'internaute a confirmé la suppression (bouton oui)
                         if(isset($_GET['confirm']) && $_GET['confirm']==1) {
+                                // Supression fich avatar
+                                if (isset($_GET['ext'])) {
+                                    $chemin_a_supprimer_b = "../medias/avatar_b". $_GET['id_compte']. ".". $_GET['ext'];
+                                    $chemin_a_supprimer_s = "../medias/avatar_s". $_GET['id_compte']. ".". $_GET['ext'];
+                                    echo $chemin_a_supprimer_b;
+                                    echo $chemin_a_supprimer_s;
+                                    unlink($chemin_a_supprimer_b);
+                                    unlink($chemin_a_supprimer_s);
+                                }
                                 $requete2 = "DELETE FROM comptes WHERE id_compte='". $_GET['id_compte']. "'";
                                 $result2 = mysqli_query($connexion, $requete2);
                                 $entete = "<h1 class=\"alerte ok\">Compte supprimé</h1>";
+                                // réinitialise l'action du formulaire
+                                $action_form = "afficher_comptes";
                         }
                     }
                 }

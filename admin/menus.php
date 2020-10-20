@@ -31,6 +31,7 @@ if (isset($_SESSION['id_compte'])) {
                             intitule_menu='". addslashes($_POST['intitule_menu']). "',
                             lien_menu='". addslashes($_POST['lien_menu']). "',
                             rang_menu='". $_POST['rang_menu']."'";
+                            echo $requete;
                             $resultat = mysqli_query($connexion, $requete);
                             if ($resultat) {
                                 $insertion = true;

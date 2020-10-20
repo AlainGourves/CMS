@@ -53,7 +53,7 @@ function login($login,$password) {
 		$_SESSION['nom_compte']=$ligne->nom_compte;
 		$_SESSION['statut_compte']=$ligne->statut_compte;		
 		if(!empty($ligne->fichier_compte)) {
-			$_SESSION['fichier_compte']="<img src=\"" . $ligne->fichier_compte . "\" alt=\"\" />";
+			$_SESSION['fichier_compte']="<img src=\"" . $ligne->fichier_compte . "\" alt=\"avatar\" class=\"avatar\" />";
 		}
 		header("Location:../admin/admin.php");    
 		return true;
@@ -257,15 +257,18 @@ function afficher_comptes($connexion,$requete) {
 		$affichage.="<td style=\"text-align:center\">" . $ligne->login_compte . "</td>\n";	
 		$affichage.="<td style=\"text-align:center\">" . $ligne->statut_compte . "</td>\n";	
 		if(!empty($ligne->fichier_compte)) {
+			// on récupère l'extension du fichier pour calculer un paramètre GET
+			$extension = "&ext=".fichier_type($ligne->fichier_compte);
 			$avatar="<img class=\"miniature\" src=\"" . $ligne->fichier_compte  . "\" alt=\"\" />";
 		}else{
-			$avatar="no photo !";	
+			$extension = '';
+			$avatar="<span class=\"dashicons dashicons-admin-users\"></span>";	
 		}
 		$affichage.="<td style=\"text-align:center\">" . $avatar . "</td>\n";		
 		$affichage.="<td>";
 		$affichage.="<a href=\"admin.php?module=comptes&action=modifier_compte&id_compte=" . $ligne->id_compte . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
 		$affichage.="&nbsp;&nbsp;&nbsp;";
-		$affichage.="<a href=\"admin.php?module=comptes&action=supprimer_compte&statut_compte=".$ligne->statut_compte."&id_compte=".$ligne->id_compte . "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
+		$affichage.="<a href=\"admin.php?module=comptes&action=supprimer_compte&statut_compte=".$ligne->statut_compte."&id_compte=".$ligne->id_compte. $extension. "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
 		$affichage.="</td>\n";						
 		$affichage.="</tr>\n";
 		$i++;					
@@ -453,6 +456,35 @@ function afficher_droits($connexion)
 	
 	return $affichage;	
 	}
+
+	
+//=======================================
+function afficher_sliders($connexion,$requete) {
+	$resultat = mysqli_query($connexion, $requete);
+	$affichage="<table class=\"tab_resultats\">\n";
+    //on calcule les entêtes des colonnes
+    $affichage.="<tr>\n";                            
+    $affichage.="<th>Titre image</th>\n";    
+    $affichage.="<th>Image</th>\n";        
+    $affichage.="<th>Actions</th>\n";
+    $affichage.="</tr>\n";
+    while($ligne=mysqli_fetch_object($resultat))
+        {
+        //on affiche le contenu de chaque uplet présent dans la table
+        $affichage.="<tr>\n";
+        $affichage.="<td><strong>" . $ligne->titre_slider . "</strong><br />". extrait($ligne->descriptif_slider, 5, 0). "</td>\n";                
+        $affichage.="<td><a href=\"". str_replace("_s", "_b", $ligne->fichier_slider). "\" target=\"blank\"><img src=\"".$ligne->fichier_slider."\" alt=\"\" /></a></td>\n";
+        $affichage.="<td>";        
+        $affichage.="<a href=\"admin.php?module=sliders&action=modifier_slider&id_slider=" . $ligne->id_slider . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
+        $affichage.="&nbsp;&nbsp;&nbsp;";
+        $affichage.="<a href=\"admin.php?module=sliders&action=supprimer_slider&id_slider=" . $ligne->id_slider . "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
+        $affichage.="</td>\n";                        
+        $affichage.="</tr>\n";                    
+        }
+    $affichage.="</table>\n";
+
+    return $affichage;
+}
 ?>
 
 

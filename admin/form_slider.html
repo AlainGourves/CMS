@@ -1,1 +1,29 @@
-<h1>Slider</h1>
+<?php 
+
+if (isset($entete)) {
+    echo $entete;
+}
+?>
+<form id="form_compte" action="admin.php?module=slider&action=<?php 
+if(isset($action_form)) { 
+    echo $action_form;
+}else{
+    echo "afficher_slider";
+} ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
+    <?php  if (isset($message['titre_slider'])) { echo $message['titre_slider']; } ?>
+    <input type="text" name="titre_slider"  id="titre_slider" placeholder="Titre de l'image" value="<?php if(isset($_POST['titre_slider']) && !$insertion) echo $_POST['titre_slider']; ?>">
+
+
+    <textarea name="descriptif_slider"  id="descriptif_slider" placeholder="Descriptif de l'image"><?php if(isset($_POST['descriptif_slider']) && !$insertion) echo $_POST['descriptif_slider']; ?></textarea>
+
+    <label for="fichier_slider">Fichier image (jpg/png/svg/gif)
+        <?php  if (isset($message['fichier_slider'])) { echo $message['fichier_slider']; } ?>
+    <input type="file" name="fichier_slider"  id="fichier_slider" value="">
+    </label>
+    <div class="btnsForm">
+        <input type="submit" name="submit" value="Envoyer">
+        <a href="#" id="videForm" class="ouinon"><span class="dashicons dashicons-trash"></span></a>
+    </div>
+</form>
+
+<?php  if (isset($message['resultat'])) { echo $message['resultat']; } ?>

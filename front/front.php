@@ -10,6 +10,18 @@ if(isset($_SESSION['id_compte'])) {
     $retour_back = "<div id=\"back\"><a href=\"../admin/admin.php\">Retour back</a></div>";
 }
 
+// ================================  Calcul du menu ==
+$requete = "SELECT * FROM menus ORDER BY rang_menu ASC";
+$resultat = mysqli_query($connexion, $requete);
+$menu_haut = "	<nav id=\"menu_haut\" role=\"navigation\">\n";
+$menu_haut .= "<ul>\n";
+while($ligne = mysqli_fetch_object($resultat)){
+    $menu_haut .= "<li><a href=\"". $ligne->lien_menu. "\">". $ligne->intitule_menu. "</a></li>\n";
+}
+$menu_haut .= "</ul>\n";
+$menu_haut .= "</nav>\n";
+// ====================================================
+
 $contact = "form_contact.html";
 
 if (isset($_POST['submit'])) {
@@ -44,14 +56,6 @@ if (isset($_POST['submit'])) {
 
 }
 
-// Calcul du menu
-$requete = "SELECT * FROM menus ORDER BY rang_menu ASC";
-$resultat = mysqli_query($connexion, $requete);
-$menu = "<ul>\n";
-while($ligne = mysqli_fetch_object($resultat)){
-    $menu .= "<li><a href=\"". $ligne->lien_menu. "\">". $ligne->intitule_menu. "</a></li>\n";
-}
-$menu .= "</ul>\n";
 
 // on referme la connexion à la bdd
 $connexion = mysqli_close($connexion);
