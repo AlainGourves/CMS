@@ -177,10 +177,9 @@ if (isset($_SESSION['id_compte'])) {
                         if(isset($_GET['confirm']) && $_GET['confirm']==1) {
                                 // Supression fich avatar
                                 if (isset($_GET['ext'])) {
+                                    // TODO: le chemin complet de `_s` est déjà dans `fichier_compte` !!!
                                     $chemin_a_supprimer_b = "../medias/avatar_b". $_GET['id_compte']. ".". $_GET['ext'];
                                     $chemin_a_supprimer_s = "../medias/avatar_s". $_GET['id_compte']. ".". $_GET['ext'];
-                                    echo $chemin_a_supprimer_b;
-                                    echo $chemin_a_supprimer_s;
                                     unlink($chemin_a_supprimer_b);
                                     unlink($chemin_a_supprimer_s);
                                 }
@@ -193,6 +192,32 @@ if (isset($_SESSION['id_compte'])) {
                     }
                 }
                 break;
+
+            case 'supprimer_avatar':
+                if(isset($_GET['id_compte'])) {
+                    $extension = (isset($_GET['ext'])) ? "&ext=". $_GET['ext'] : '';
+                    $entete="<h1 class=\"alerte ouinon\">Vous-voulez vraiment supprimer l'avatar ? 
+                    <a href=\"admin.php?module=comptes&action=supprimer_avatar&id_compte=".$_GET['id_compte']. $extension. "&confirm=1\">OUI</a>
+                    <a href=\"admin.php?module=comptes&action=afficher_comptes\">NON</a>
+                    </h1>";
+                    //si l'internaute a confirmé la suppression (bouton oui)
+                    if(isset($_GET['confirm']) && $_GET['confirm']==1) {
+                        // Supression fich avatar
+                        if (isset($_GET['ext'])) {
+                            $chemin_a_supprimer_b = "../medias/avatar_b". $_GET['id_compte']. ".". $_GET['ext'];
+                            $chemin_a_supprimer_s = "../medias/avatar_s". $_GET['id_compte']. ".". $_GET['ext'];
+                            unlink($chemin_a_supprimer_b);
+                            unlink($chemin_a_supprimer_s);
+                            $requete = "UPDATE comptes SET fichier_compte='' WHERE id_compte='". $_GET['id_compte']. "'";
+                            $resultat = mysqli_query($connexion, $requete);
+                            $entete = "<h1 class=\"alerte ok\">Avatar supprimé</h1>";
+                            // réinitialise l'action du formulaire
+                            $action_form = "afficher_comptes";
+                        }
+                    }
+                }
+                break;
+
         }
 
         // on construit un tableau qui affiche tous les comptes

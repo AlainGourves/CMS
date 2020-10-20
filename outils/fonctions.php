@@ -76,53 +76,48 @@ function fichier_type($uploadedFile) {
 
 
 //============================================
-function redimage($img_src,$img_dest,$dst_w,$dst_h,$quality)
-{
-if(!isset($quality))
-	{
-	$quality=100;
+function redimage($img_src, $img_dest, $dst_w, $dst_h, $quality) {
+	if (!isset($quality)) {
+		$quality = 100;
 	}
-   $extension=fichier_type($img_src);
+	$extension = fichier_type($img_src);
 
-   // Lit les dimensions de l'image
-   $size = @GetImageSize($img_src);
-   $src_w = $size[0];
-   $src_h = $size[1];
-   // Crée une image vierge aux bonnes dimensions   truecolor
-   $dst_im = @ImageCreatetruecolor($dst_w,$dst_h);
-   imagealphablending($dst_im, false);
-   imagesavealpha($dst_im, true);      
-    
-   // Copie dedans l'image initiale redimensionnée  
-   
-   if($extension=="jpg")
-     {
-     $src_im = @ImageCreateFromJpeg($img_src);
-     imagecopyresampled($dst_im,$src_im,0,0,0,0,$dst_w,$dst_h,$src_w,$src_h);
-    
-     // Sauve la nouvelle image
-     @ImageJpeg($dst_im,$img_dest,$quality);     
-     }
-   if($extension=="png")
-     {
-     $src_im = @ImageCreateFromPng($img_src);    
-     imagecopyresampled($dst_im,$src_im,0,0,0,0,$dst_w,$dst_h,$src_w,$src_h);     
-     
-     // Sauve la nouvelle image
-     @ImagePng($dst_im,$img_dest,0);     
-     }     
-   if($extension=="gif")
-     {
-     $src_im = @ImageCreateFromGif($img_src);
-     imagecopyresampled($dst_im,$src_im,0,0,0,0,$dst_w,$dst_h,$src_w,$src_h);
-     
-     // Sauve la nouvelle image
-     @ImagePng($dst_im,$img_dest,0);     
-     }
+	// Lit les dimensions de l'image
+	$size = @getimagesize($img_src);
+	$src_w = $size[0];
+	$src_h = $size[1];
+	// Crée une image vierge aux bonnes dimensions   truecolor
+	$dst_im = @imagecreatetruecolor($dst_w, $dst_h);
+	imagealphablending($dst_im, false);
+	imagesavealpha($dst_im, true);
 
-   // Détruis les tampons
-   @ImageDestroy($dst_im);
-   @ImageDestroy($src_im);
+	// Copie dedans l'image initiale redimensionnée  
+	if ($extension == "jpg") {
+		$src_im = @ImageCreateFromJpeg($img_src);
+		imagecopyresampled($dst_im, $src_im, 0, 0, 0, 0, $dst_w, $dst_h, $src_w, $src_h);
+
+		// Sauve la nouvelle image
+		@ImageJpeg($dst_im, $img_dest, $quality);
+	}
+
+	if ($extension == "png") {
+		$src_im = @ImageCreateFromPng($img_src);
+		imagecopyresampled($dst_im, $src_im, 0, 0, 0, 0, $dst_w, $dst_h, $src_w, $src_h);
+
+		// Sauve la nouvelle image
+		@ImagePng($dst_im, $img_dest, 0);
+	}
+
+	if ($extension == "gif") {
+		$src_im = @ImageCreateFromGif($img_src);
+		imagecopyresampled($dst_im, $src_im, 0, 0, 0, 0, $dst_w, $dst_h, $src_w, $src_h);
+
+		// Sauve la nouvelle image
+		@ImagePng($dst_im, $img_dest, 0);
+	}
+	// Détruis les tampons
+	@ImageDestroy($dst_im);
+	@ImageDestroy($src_im);
 }
 
 //===============================
@@ -259,12 +254,15 @@ function afficher_comptes($connexion,$requete) {
 		if(!empty($ligne->fichier_compte)) {
 			// on récupère l'extension du fichier pour calculer un paramètre GET
 			$extension = "&ext=".fichier_type($ligne->fichier_compte);
-			$avatar="<img class=\"miniature\" src=\"" . $ligne->fichier_compte  . "\" alt=\"\" />";
+			$avatar = "<figure>";
+			$avatar .= "<img src=\"" . $ligne->fichier_compte  . "\" alt=\"Avatar\" />";
+			$avatar .= "<figcaption><a href=\"admin.php?module=comptes&action=supprimer_avatar&id_compte=" . $ligne->id_compte . $extension. "\"><span class=\"dashicons dashicons-dismiss\"></span></a></figcaption>";
+			$avatar .= "</figure>";
 		}else{
 			$extension = '';
 			$avatar="<span class=\"dashicons dashicons-admin-users\"></span>";	
 		}
-		$affichage.="<td style=\"text-align:center\">" . $avatar . "</td>\n";		
+		$affichage.="<td   class=\"miniature\" \">" . $avatar . "</td>\n";		
 		$affichage.="<td>";
 		$affichage.="<a href=\"admin.php?module=comptes&action=modifier_compte&id_compte=" . $ligne->id_compte . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
 		$affichage.="&nbsp;&nbsp;&nbsp;";

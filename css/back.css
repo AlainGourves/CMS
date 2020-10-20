@@ -367,11 +367,13 @@ main #contenu_back p {
 }
 
 .tab_resultats img {
-	height: 30px;
+	display: block;
+	height: 40px;
 	border-radius: 4px;
 }
 
-.tab_resultats img:hover {
+.tab_resultats td:not(.miniature) img:hover,
+.tab_resultats td.miniature figure:hover {
 	transform: scale(1.5);
 	transition: all .25s ease-in-out;
 	box-shadow: 2px 2px 4px var(--ombre2);
@@ -497,4 +499,25 @@ p.ok {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+}
+
+/* gestion avatar dans le tableau des comptes */
+.miniature figure{
+	position: relative;
+	width: min-content;
+	height: min-content;
+	margin: 0 auto;
+}
+
+.miniature figure figcaption{
+	position: absolute;
+	right: 0;
+	top: 0;
+	transform: translate(25%, -25%);
+}
+
+.miniature figcaption span{
+	font-size: .8em;
+	width: auto;
+	height: auto;
 }
