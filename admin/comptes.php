@@ -63,14 +63,10 @@ if (isset($_SESSION['id_compte'])) {
                                 if (is_uploaded_file($_FILES['fichier_compte']['tmp_name'])) {
                                     // tmp_name : fich temporaire généré sur le serveur
                                     if (copy($_FILES['fichier_compte']['tmp_name'], $chemin_b)) {
-                                        // on calcule les dimensions de l'image originelle
-                                        $size = @getimagesize($chemin_b); // @: empêche les messages d'erreur
-                                        $ratio = $size[0] / $size[1];
-                                        // génère miniature en respectant aspect ratio
                                         $larg_thumbnail = 80;
                                         $quality = 90; // % compression jpeg
-                                        // redimentionne et stocke le thumbnail
-                                        redimage($chemin_b, $chemin_s, $larg_thumbnail, $larg_thumbnail / $ratio, $quality);
+                                        // crée un thumbnail carré
+                                        avatar($chemin_b, $chemin_s, $larg_thumbnail, $larg_thumbnail, $quality);
 
                                         // On met à jour la table comptes
                                         $requete = "UPDATE comptes SET fichier_compte='" . $chemin_s . "' WHERE id_compte='" . $dernier_id_cree . "'";
@@ -121,14 +117,10 @@ if (isset($_SESSION['id_compte'])) {
                                if (is_uploaded_file($_FILES['fichier_compte']['tmp_name'])) {
                                    // tmp_name : fich temporaire généré sur le serveur
                                    if (copy($_FILES['fichier_compte']['tmp_name'], $chemin_b)) {
-                                       // on calcule les dimensions de l'image originelle
-                                       $size = @getimagesize($chemin_b); // @: empêche les messages d'erreur
-                                       $ratio = $size[0] / $size[1];
-                                       // génère miniature en respectant aspect ratio
+                                       // génère thumbnail carré
                                        $larg_thumbnail = 80;
                                        $quality = 90; // % compression jpeg
-                                       // redimentionne et stocke le thumbnail
-                                       redimage($chemin_b, $chemin_s, $larg_thumbnail, $larg_thumbnail / $ratio, $quality);
+                                       avatar($chemin_b, $chemin_s, $larg_thumbnail, $larg_thumbnail, $quality);
                                        $requete .= ", fichier_compte='". $chemin_s. "' ";
                                    }
                                }

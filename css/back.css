@@ -374,9 +374,10 @@ main #contenu_back p {
 
 .tab_resultats td:not(.miniature) img:hover,
 .tab_resultats td.miniature figure:hover {
-	transform: scale(1.5);
+	transform: scale(2);
 	transition: all .25s ease-in-out;
 	box-shadow: 2px 2px 4px var(--ombre2);
+	z-index: 10;
 }
 /* --------------------- */
 .ouinon {
