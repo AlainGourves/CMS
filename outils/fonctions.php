@@ -120,6 +120,68 @@ function redimage($img_src, $img_dest, $dst_w, $dst_h, $quality) {
 	@ImageDestroy($src_im);
 }
 
+//============================================
+function avatar($img_src, $img_dest, $dst_w, $dst_h, $quality) {
+	if (!isset($quality)) {
+		$quality = 100;
+	}
+	$extension = fichier_type($img_src);
+
+	// Lit les dimensions de l'image
+	$size = @getimagesize($img_src);
+	$src_w = $size[0];
+	$src_h = $size[1];
+	$ratio = $src_w/$src_h;
+	// calcule l'origine de l'image de destination en fct de l'aspect ratio
+	if ($ratio > 1) {
+		// format paysage
+		$src_x = ($src_w - $src_h)/2;
+		$src_y = 0;
+		$src_w = $src_h;
+	}elseif($ratio < 1) {
+		// portrait
+		$src_x = 0;
+		$src_y = ($src_h - $src_w)/2;
+		$src_h = $src_w;
+	}else{
+		// carré
+		$src_x = 0;
+		$src_y = 0;
+	}
+
+	// Crée une image vierge aux bonnes dimensions   truecolor
+	$dst_im = @imagecreatetruecolor($dst_w, $dst_h);
+	imagealphablending($dst_im, false);
+	imagesavealpha($dst_im, true);
+
+	// Copie dedans l'image initiale redimensionnée  
+	if ($extension == "jpg") {
+		$src_im = @ImageCreateFromJpeg($img_src);
+		imagecopyresampled($dst_im, $src_im, 0, 0, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
+
+		// Sauve la nouvelle image
+		@ImageJpeg($dst_im, $img_dest, $quality);
+	}
+
+	if ($extension == "png") {
+		$src_im = @ImageCreateFromPng($img_src);
+		imagecopyresampled($dst_im, $src_im, 0, 0, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
+
+		// Sauve la nouvelle image
+		@ImagePng($dst_im, $img_dest, 0);
+	}
+
+	if ($extension == "gif") {
+		$src_im = @ImageCreateFromGif($img_src);
+		imagecopyresampled($dst_im, $src_im, 0, 0, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
+
+		// Sauve la nouvelle image
+		@ImagePng($dst_im, $img_dest, 0);
+	}
+	// Détruis les tampons
+	@ImageDestroy($dst_im);
+	@ImageDestroy($src_im);
+}
 //===============================
 function format_date($date,$format)
 {
