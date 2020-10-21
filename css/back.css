@@ -169,7 +169,7 @@ body {
 
 #header_back .avatar{
 	width: 60px;
-	max-height: 60px;
+	height: 60px;
 	border-radius: 50%;
 	font-size: 2em;
 	margin: 0 .5em;
@@ -443,6 +443,56 @@ a.ouinon:hover,
 	http://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/
 */
 	height: 2.5rem;
+}
+.inputFile{
+	width: 0.1px!important;
+	height: 0.1px!important;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+.inputFile + label {
+	background-color: var(--gris2);
+	display: inline-flex!important;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	padding-left: 2.6rem;
+	padding-right: .6em;
+	margin-left: 2em;
+	width: max-content;
+	font-weight: 700;
+	font-size: .8em;
+	color: var(--bleu);
+	height: 2.5rem;
+	box-shadow: 0px 0px 2px rgba(0,0,0,.25);
+	cursor: pointer;
+}
+
+.inputFile:focus + label,
+.inputFile + label:hover {
+	transform: scale(1.05);
+	box-shadow: 0px 0px 4px rgba(0,0,0,.25);
+}
+
+.inputFile + label .dashicons{
+	position: absolute;
+	width: 2rem;
+	height: 2.5rem;
+	left: 0;
+	top: 0;
+	color: white;
+	background-color: var(--gris1);
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.inputFile + label .dashicons:before{
+	font-size: 28px;
 }
 
 #form_compte label.pas_ok+input {

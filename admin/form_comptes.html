@@ -24,9 +24,11 @@ if(isset($action_form)) {
         <span class="custom-arrow"></span>
     </label>
 
-    <label for="fichier_compte">Fichier Avatar (jpg/png/gif)
-        <?php  if (isset($message['fichier_compte'])) { echo $message['fichier_compte']; } ?>
-    <input type="file" name="fichier_compte"  id="fichier_compte" value="">
+    <?php  if (isset($message['fichier_compte'])) { echo $message['fichier_compte']; } ?>
+    <input type="file" name="fichier_compte"  id="fichier_compte" class="inputFile" value="">
+    <label for="fichier_compte">
+        <span class="dashicons dashicons-cloud-upload"></span>
+        Fichier Avatar
     </label>
 
     <?php  if (isset($message['login_compte'])) { echo $message['login_compte']; } ?>
