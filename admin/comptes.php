@@ -111,8 +111,8 @@ if (isset($_SESSION['id_compte'])) {
 
 
                                // _b: big, _s: small
-                               $chemin_b = "../medias/avatar_b" . $_GET['id_compte'] . "." . fichier_type($_FILES['fichier_compte']    ['name']);
-                               $chemin_s = "../medias/avatar_s" . $_GET['id_compte'] . "." . fichier_type($_FILES['fichier_compte']    ['name']);
+                               $chemin_b = "../medias/avatar_b" . $_GET['id_compte'] . "." . fichier_type($_FILES['fichier_compte']['name']);
+                               $chemin_s = "../medias/avatar_s" . $_GET['id_compte'] . "." . fichier_type($_FILES['fichier_compte']['name']);
 
                                if (is_uploaded_file($_FILES['fichier_compte']['tmp_name'])) {
                                    // tmp_name : fich temporaire généré sur le serveur
@@ -122,6 +122,12 @@ if (isset($_SESSION['id_compte'])) {
                                        $quality = 90; // % compression jpeg
                                        avatar($chemin_b, $chemin_s, $larg_thumbnail, $larg_thumbnail, $quality);
                                        $requete .= ", fichier_compte='". $chemin_s. "' ";
+
+                                        // met à jour $_SESSION['fichier_compte'] si l'avatar
+                                        // ajouté est celui de l'utilisateur en cours
+                                        if ($_SESSION['id_compte'] == $_GET['id_compte']) {
+                                            $_SESSION['fichier_compte'] = "<img src=\"" . $chemin_s . "\" alt=\"avatar\" class=\"avatar\" />";;
+                                        }
                                    }
                                }
                            }
@@ -205,6 +211,12 @@ if (isset($_SESSION['id_compte'])) {
                             $entete = "<h1 class=\"alerte ok\">Avatar supprimé</h1>";
                             // réinitialise l'action du formulaire
                             $action_form = "afficher_comptes";
+
+                            // met à jour $_SESSION['fichier_compte'] si l'avatar
+                            // supprimé est celui de l'utilisateur en cours
+                            if ($_SESSION['id_compte'] == $_GET['id_compte']) {
+                                $_SESSION['fichier_compte'] = '';
+                            }
                         }
                     }
                 }

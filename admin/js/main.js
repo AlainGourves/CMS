@@ -1,4 +1,5 @@
 let myForm = document.querySelector('form');
+let inputFile = document.querySelector('.inputFile' );
 
 window.addEventListener("load", e => {
 
@@ -15,6 +16,14 @@ window.addEventListener("load", e => {
                     fields[i].value = '';
                 }
             }
+        });
+    }
+
+    if (inputFile){
+        inputFile.addEventListener('change', e => {
+            let path = e.target.value;
+            let file = path.split('\\').pop();
+            console.log(file);
         });
     }
 });

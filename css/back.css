@@ -25,6 +25,8 @@
 	--bleu: hsl(210, 80%, 50%);
 	--bleuLight: hsl(210, 80%, 80%);
 	--vertPale: hsl(110, 100%, 90%);
+
+	--rebond: cubic-bezier(0.5, 0.5, 0.7, 1.8);
 }
 
 body {
@@ -158,7 +160,7 @@ body {
 	color: var(--mauve);
 	background-color: var(--mauveLight);
 	border-radius: 50%;
-	transition: all .25s ease-in-out;
+	transition: transform .25s var(--rebond);
 }
 
 #header_back span:not(.avatar).dashicons:hover {
@@ -167,13 +169,21 @@ body {
 	transform: rotate(-90deg);
 }
 
-#header_back .avatar{
+#header_back img.avatar,
+#header_back span.avatar{
 	width: 60px;
 	height: 60px;
 	border-radius: 50%;
-	font-size: 2em;
 	margin: 0 .5em;
 	border: 2px solid var(--mauve);
+
+}
+
+#header_back span.avatar{
+	font-size: 2em;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 #header_back .user {
@@ -255,6 +265,11 @@ main #contenu_back p {
 	font-size: .8em;
 	width: 100%;
 	box-shadow: 0 0 4px rgba(0, 0, 0, .25) inset;
+}
+#contenu_back select,
+#contenu_back .inputFile + label{
+	border: 1px solid var(--gris1);
+	border-radius: 4px;
 }
 
 #contenu_back input::after,
@@ -375,7 +390,7 @@ main #contenu_back p {
 .tab_resultats td:not(.miniature) img:hover,
 .tab_resultats td.miniature figure:hover {
 	transform: scale(2);
-	transition: all .25s ease-in-out;
+	transition: transform .25s var(--rebond);
 	box-shadow: 2px 2px 4px var(--ombre2);
 	z-index: 10;
 }
@@ -437,13 +452,9 @@ a.ouinon:hover,
 	position: relative;
 }
 
-#form_compte #fichier_compte{
 /*
-	TODO
 	http://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/
 */
-	height: 2.5rem;
-}
 .inputFile{
 	width: 0.1px!important;
 	height: 0.1px!important;
@@ -571,4 +582,5 @@ p.ok {
 	font-size: .8em;
 	width: auto;
 	height: auto;
+	text-shadow: 1px 1px 1px var(--ombre);
 }
