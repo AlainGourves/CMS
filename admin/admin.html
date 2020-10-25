@@ -41,12 +41,10 @@
     <main id="zone_droite">
         <header id="header_back">
             <h1>Bienvenue sur le Back</h1>
-            <div>
-                <span class="user">
+            <div class="user">
                     <?php if (isset($bienvenue)) { echo $bienvenue; } ?>
-                </span>
-                <a href="admin.php?module=deconnecter"><span class="dashicons dashicons-no"></span></a>
             </div>
+            <a href="admin.php?module=deconnecter"><span class="dashicons dashicons-no"></span></a>
         </header>
         <section id="contenu_back">
             <?php

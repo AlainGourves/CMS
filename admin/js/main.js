@@ -1,5 +1,5 @@
 let myForm = document.querySelector('form');
-let inputFile = document.querySelector('.inputFile' );
+let inputFile = document.querySelector('.inputFile');
 
 window.addEventListener("load", e => {
 
@@ -15,6 +15,11 @@ window.addEventListener("load", e => {
                 if (fields[i].nodeName === "INPUT" && (fields[i].type === "text" || fields[i].type === "number" || fields[i].type === "password")) {
                     fields[i].value = '';
                 }
+                if (fields[i].nodeName === "INPUT" && fields[i].type === "file") {
+                    let label = fields[i].nextElementSibling;
+                    let val = label.dataset.val;
+                    label.lastChild.textContent = val;
+                }
             }
         });
     }
@@ -23,7 +28,8 @@ window.addEventListener("load", e => {
         inputFile.addEventListener('change', e => {
             let path = e.target.value;
             let file = path.split('\\').pop();
-            console.log(file);
+            let label = inputFile.nextElementSibling;
+            label.lastChild.textContent = file;
         });
     }
 });

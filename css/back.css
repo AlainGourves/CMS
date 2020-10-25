@@ -123,9 +123,9 @@ body {
 #header_back {
 	position: fixed;
 	height: var(--hautBarres);
-	width: 100%;
+	width: calc(100% - var(--largAside));
 	top: 0;
-	padding: 0 30px;
+	padding: 0 24px;
 	z-index: 10;
 	background: var(--gris2);
 	display: flex;
@@ -139,14 +139,15 @@ body {
 	width: 50%;
 }
 
-#header_back div {
+/* #header_back div {
 	display: flex;
 	align-items: center;
 	width: 50%;
-}
+} */
 
 #header_back a {
-	display: inline-block;
+	display: block;
+	margin: 0 1em;
 	text-decoration: none;
 }
 
@@ -190,8 +191,35 @@ body {
 	color: var(--mauveLight);
 	font-weight: 700;
 	display: flex;
+	justify-content: space-between;
 	align-items: center;
 	margin: 0 1em;
+}
+
+#header_back .user div{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+}
+
+#header_back .user_name,
+#header_back .user_status{
+	display: block;
+}
+
+#header_back .user_name{
+	cursor: pointer;
+}
+
+#header_back .user_status{
+	transform: scaleY(0);
+	transform-origin: top;
+	opacity: 0;
+	transition: transform .25s var(--rebond);
+}
+#header_back .user_name:hover + .user_status{
+	transform: scale(1);
+	opacity: 1;
 }
 
 #footer_back {
@@ -242,6 +270,7 @@ main #contenu_back p {
 
 #contenu_back form {
 	width: 80%;
+	max-width: 800px;
 	margin: auto;
 }
 
@@ -490,7 +519,7 @@ a.ouinon:hover,
 .inputFile + label .dashicons{
 	position: absolute;
 	width: 2rem;
-	height: 2.5rem;
+	height: calc(2.5rem - 1px);;
 	left: 0;
 	top: 0;
 	color: white;
@@ -544,6 +573,12 @@ p.ok {
 	border-style: solid;
 	box-shadow: 2px 2px 4px var(--ombre);
 	background-color: #fff;
+}
+
+.alerte.ok {
+	color: var(--vert);
+	border-color: var(--vert);
+	background-color: var(--vertPale);
 }
 
 .alerte.pas_ok {
