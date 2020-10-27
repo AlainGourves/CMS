@@ -56,9 +56,6 @@ body {
 	padding: 20px;
 	z-index: 100;
 	background: var(--gris1);
-	display: flex;
-	justify-content: center;
-	align-items: center;
 }
 
 #menu_back ul {
@@ -185,9 +182,6 @@ body {
 
 #header_back span.avatar{
 	font-size: 2em;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 }
 
 #header_back .user {
@@ -249,9 +243,6 @@ main #contenu_back p {
 
 #menu_back .notif {
 	position: absolute;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	width: 2em;
 	height: 2em;
 	top: -1em;
@@ -528,9 +519,7 @@ form label {
 	background-color: var(--gris1);
 	border-top-left-radius: 4px;
 	border-bottom-left-radius: 4px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	display: flex!important;
 }
 
 .inputFile + label .dashicons:before{
