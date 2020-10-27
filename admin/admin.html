@@ -26,8 +26,8 @@
                 <li<?php if(isset($val) && $val=="menus") { echo " class=\"actif\"";} ?>>
                     <a href="admin.php?module=menus&action=afficher_menus">Gestion des menus</a>
                 </li>
-                <li<?php if(isset($val) && $val=="actus") { echo " class=\"actif\"";} ?>>
-                    <a href="admin.php?module=actus">Gestion des actus</a>
+                <li<?php if(isset($val) && $val=="articles") { echo " class=\"actif\"";} ?>>
+                    <a href="admin.php?module=articles&action=afficher_articles">Gestion des articles</a>
                 </li>
                 <li<?php if(isset($val) && $val=="slider") { echo " class=\"actif\"";} ?>>
                     <a href="admin.php?module=slider&action=afficher_sliders">Gestion du slider</a>
@@ -39,9 +39,9 @@
         </nav>
     </aside>
     <main id="zone_droite">
-        <header id="header_back">
+        <header id="header_back" class="flex">
             <h1>Bienvenue sur le Back</h1>
-            <div class="user">
+            <div class="user flex">
                     <?php if (isset($bienvenue)) { echo $bienvenue; } ?>
             </div>
             <a href="admin.php?module=deconnecter"><span class="dashicons dashicons-no"></span></a>

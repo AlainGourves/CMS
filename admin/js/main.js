@@ -12,7 +12,7 @@ window.addEventListener("load", e => {
                 if (fields[i].nodeName === "SELECT"){
                     fields[i].selectedIndex = 0;
                 }
-                if (fields[i].nodeName === "INPUT" && (fields[i].type === "text" || fields[i].type === "number" || fields[i].type === "password")) {
+                if (fields[i].nodeName === "INPUT" && (fields[i].type === "text" || fields[i].type === "number" || fields[i].type === "password" || fields[i].type === "date")) {
                     fields[i].value = '';
                 }
                 if (fields[i].nodeName === "INPUT" && fields[i].type === "file") {

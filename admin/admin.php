@@ -36,7 +36,8 @@ if (isset($_SESSION['id_compte'])) {
 				include_once("comptes.php");
 			break;
 			
-			case 'actus':
+			case 'articles':
+				include_once("articles.php");
 			break;
 			
 			case 'slider':
