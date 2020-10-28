@@ -32,4 +32,10 @@ window.addEventListener("load", e => {
             label.lastChild.textContent = file;
         });
     }
+
+    let d = document.querySelector('input[type=date]');
+    if (d && d.value==''){
+        let today = new Date().toISOString().substr(0,10);
+        d.value = today;
+    }
 });

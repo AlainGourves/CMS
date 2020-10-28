@@ -18,9 +18,7 @@ if (isset($_SESSION['id_compte'])) {
                         $message['fichier_slider'] = "<label for=\"fichier_slider\" class=\"pas_ok\">Va chercher un fichier, abruti !</label>";
                     }else{
                         // on teste si le fichier a le bon format
-                        if (fichier_type($_FILES['fichier_slider']['name'])=='png' ||
-                        fichier_type($_FILES['fichier_slider']['name'])=='jpg' ||
-                        fichier_type($_FILES['fichier_slider']['name'])=='gif') {
+                        if (fichier_type($_FILES['fichier_slider']['name'])=='png' || fichier_type($_FILES['fichier_slider']['name'])=='jpg' || fichier_type($_FILES['fichier_slider']['name'])=='gif') {
                             
                             //calcule le rang à attribuer au nouveau slider
                             $requete = "SELECT id_slider FROM sliders";
@@ -83,18 +81,16 @@ if (isset($_SESSION['id_compte'])) {
                         $message['titre_slider'] = "<label for=\"titre_slider\" class=\"pas_ok\">mets ton titre, chacal !</label>";
                     }else{
                         $requete="UPDATE sliders 
-                        SET titre_slider='".addslashes($_POST['titre_slider'])."',
-                        descriptif_slider='".addslashes($_POST['descriptif_slider'])."' 
-                        WHERE id_slider='".$_GET['id_slider']."'";	
+                            SET titre_slider='".addslashes($_POST['titre_slider'])."',
+                                descriptif_slider='".addslashes($_POST['descriptif_slider'])."' 
+                            WHERE id_slider='".$_GET['id_slider']."'";	
                         $resultat=mysqli_query($connexion,$requete);
-                                                
+                        
                         //si une nouvelle image a été choisie
                         if(!empty($_FILES['fichier_slider']['name'])) {
                             //on teste si le fichier a le bon format
-                            if(fichier_type($_FILES['fichier_slider']['name'])=="png" ||
-                                fichier_type($_FILES['fichier_slider']['name'])=="jpg" ||
-                                fichier_type($_FILES['fichier_slider']['name'])=="gif") {
-
+                            if(fichier_type($_FILES['fichier_slider']['name'])=="png" || fichier_type($_FILES['fichier_slider']['name'])=="jpg" || fichier_type($_FILES['fichier_slider']['name'])=="gif") {
+                                
                                 //on génère les 2 chemins des fichiers image : le big et le small
                                 $chemin_b="../medias/slider_b" . $_GET['id_slider'] . "." . fichier_type($_FILES['fichier_slider']['name']);
                                 $chemin_s="../medias/slider_s" . $_GET['id_slider'] . "." . fichier_type($_FILES['fichier_slider']['name']);						
@@ -160,10 +156,11 @@ if (isset($_SESSION['id_compte'])) {
                     if (isset($_GET['confirm']) && $_GET['confirm'] == 1) {
                         // Supression image
                         // récupère le nom du fichier
-                        $requete = "SELECT fichier_slider FROM sliders WHERE id_slider='".$_GET['id_slider']."'";
+                        $requete = "SELECT fichier_slider,rang_slider FROM sliders WHERE id_slider='".$_GET['id_slider']."'";
                         $resultat = mysqli_query($connexion, $requete);
                         $ligne=mysqli_fetch_object($resultat);
                         
+                        $rang_a_supprimer = $ligne->rang_slider;
                         $chemin_a_supprimer_s = $ligne->fichier_slider;
                         $chemin_a_supprimer_b = str_replace("_s","_b",$ligne->fichier_slider);
                         unlink($chemin_a_supprimer_b);
@@ -171,6 +168,11 @@ if (isset($_SESSION['id_compte'])) {
                         // MàJ table
                         $requete = "DELETE FROM sliders WHERE id_slider='" . $_GET['id_slider'] . "'";
                         $resultat = mysqli_query($connexion, $requete);
+                        
+                        // Mise à jour des rangs
+                        $requete = "UPDATE sliders SET rang_slider=(rang_slider -1) WHERE rang_slider>". $rang_a_supprimer;
+                        $resultat = mysqli_query($connexion, $requete);
+                        
                         $entete = "<h1 class=\"alerte ok\">Image supprimée</h1>";
                     }
                     $action_form="afficher_sliders";

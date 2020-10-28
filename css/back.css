@@ -39,6 +39,7 @@ body {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	flex-wrap: wrap;
 }
 
 .flex-center{
@@ -307,6 +308,8 @@ main #contenu_back p {
 #contenu_back input[type=submit] {
 	width: auto;
 	text-transform: uppercase;
+	-webkit-appearance: none;
+	-webkit-border-radius: 0;
 }
 
 #contenu_back input[type=date] {
@@ -471,7 +474,9 @@ form label {
 	width: max-content;
 	position: relative;
 }
-
+.flex label{
+	display: block;
+}
 /*
 	http://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/
 */
@@ -562,7 +567,9 @@ p.ok {
 	border-radius: 0.25em;
 	border-width: 4px;
 	border-style: solid;
-	box-shadow: 2px 2px 4px var(--ombre);
+	box-shadow: 2px 2px 4px var(--ombre),
+				1px 1px 1px var(--ombre2) inset;
+	text-shadow: 1px 1px 2px var(--ombre);
 	background-color: #fff;
 }
 
