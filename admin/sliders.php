@@ -79,11 +79,66 @@ if (isset($_SESSION['id_compte'])) {
             case 'modifier_slider':
                 $action_form = "modifier_slider&id_slider=". $_GET['id_slider'];
                 if (isset($_POST['submit'])) {
-                    
+                    if (empty($_POST['titre_slider'])) {
+                        $message['titre_slider'] = "<label for=\"titre_slider\" class=\"pas_ok\">mets ton titre, chacal !</label>";
+                    }else{
+                        $requete="UPDATE sliders 
+                        SET titre_slider='".addslashes($_POST['titre_slider'])."',
+                        descriptif_slider='".addslashes($_POST['descriptif_slider'])."' 
+                        WHERE id_slider='".$_GET['id_slider']."'";	
+                        $resultat=mysqli_query($connexion,$requete);
+                                                
+                        //si une nouvelle image a été choisie
+                        if(!empty($_FILES['fichier_slider']['name'])) {
+                            //on teste si le fichier a le bon format
+                            if(fichier_type($_FILES['fichier_slider']['name'])=="png" ||
+                                fichier_type($_FILES['fichier_slider']['name'])=="jpg" ||
+                                fichier_type($_FILES['fichier_slider']['name'])=="gif") {
+
+                                //on génère les 2 chemins des fichiers image : le big et le small
+                                $chemin_b="../medias/slider_b" . $_GET['id_slider'] . "." . fichier_type($_FILES['fichier_slider']['name']);
+                                $chemin_s="../medias/slider_s" . $_GET['id_slider'] . "." . fichier_type($_FILES['fichier_slider']['name']);						
+                                if(is_uploaded_file($_FILES['fichier_slider']['tmp_name'])) {                                
+                                    if(copy($_FILES['fichier_slider']['tmp_name'], $chemin_b)) {
+                                        //On calcule les dimensions de l'image originelle
+                                        $size=GetImageSize($chemin_b);
+                                        $largeur=$size[0];
+                                        $hauteur=$size[1];
+                                        $rapport=$largeur/$hauteur;
+                                        //si $rapport>1 alors image paysage
+                                        //si $rapport<1 alors image portrait
+                                        //si $rapport=1 alors image carrée
+                                        
+                                        //on genere une miniature en respectant l'homothétie
+                                        $largeur_mini=60;
+                                        $quality=80;
+                                        redimage($chemin_b,$chemin_s,$largeur_mini,$largeur_mini/$rapport,$quality);
+                                        //on met la jour la table sliders avec le chemin du fichier
+                                        $requete="UPDATE sliders SET fichier_slider='" . $chemin_s . "' WHERE id_slider='".$_GET['id_compte']."'";
+                                        $resultat=mysqli_query($connexion, $requete);					
+                                    }									
+                                }
+                            }else{
+                                $message="<label class=\"pas_ok\">Seules les extensions png, gif et jpg sont autorisées !</label>";	
+                            }					
+                        }
+                        if ($resultat) {
+                            $insertion = true;
+                            $message['resultat'] = "<p class=\"alerte ok\">L'item du slider a été modifié.</p>";
+                        }else{
+                            $message['resultat'] = "<p class=\"alerte pas_ok\">Hélas, il y a eu un problème !</p>";
+                        }
+                        //on se replace sur l'action afficher_comptes
+                        $action_form="afficher_sliders";
+                        
+                        //on suprime la variable $_GET['id_slider']
+                        //afin de ne pas executer le if(isset($_GET['id_slider'])) qui suit
+                        unset($_GET['id_slider']);
+                    }
                 }
                 if(isset($_GET['id_slider'])) {
                     $action_form="modifier_slider&id_slider=" . $_GET['id_slider'];
-				
+                    
                     //on récupere dans la table les infos
                     $requete="SELECT * FROM sliders WHERE id_slider='".$_GET['id_slider']."'";
                     $resultat=mysqli_query($connexion,$requete);
@@ -108,7 +163,7 @@ if (isset($_SESSION['id_compte'])) {
                         $requete = "SELECT fichier_slider FROM sliders WHERE id_slider='".$_GET['id_slider']."'";
                         $resultat = mysqli_query($connexion, $requete);
                         $ligne=mysqli_fetch_object($resultat);
-
+                        
                         $chemin_a_supprimer_s = $ligne->fichier_slider;
                         $chemin_a_supprimer_b = str_replace("_s","_b",$ligne->fichier_slider);
                         unlink($chemin_a_supprimer_b);
@@ -118,6 +173,7 @@ if (isset($_SESSION['id_compte'])) {
                         $resultat = mysqli_query($connexion, $requete);
                         $entete = "<h1 class=\"alerte ok\">Image supprimée</h1>";
                     }
+                    $action_form="afficher_sliders";
                 }
             break;
             
@@ -125,7 +181,7 @@ if (isset($_SESSION['id_compte'])) {
                 $action_form = "afficher_slider";
                 
                 if (isset($_GET['id_slider']) && isset($_GET['tri'])){
-
+                    
                     // on vérifie quel était le rang du slider à trier
                     $requete = "SELECT id_slider, rang_slider FROM sliders WHERE id_slider='". $_GET['id_slider']. "'";
                     $resultat = mysqli_query($connexion, $requete);
