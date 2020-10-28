@@ -411,7 +411,11 @@ function afficher_articles($connexion,$requete,$cas)
 					$affichage.="<span class=\"dashicons dashicons-hidden\"></span></td>";
 				}else{
 					$affichage.="<figure>";
-					$affichage.="<img class=\"miniature\" src=\"" . str_replace("_b","_s",$ligne->fichier_article) . "\" alt=\"\" />";
+
+					$affichage.="<a href=\"". str_replace("_s", "_b", $ligne->fichier_article). "\" target=\"blank\">";
+					$affichage.="<img class=\"miniature\" src=\"" . $ligne->fichier_article . "\" alt=\"\" />";
+					$affichage.="</a>";
+
 					$affichage.="<figcaption><a class=\"suppr_img\" href=\"admin.php?module=articles&action=supprimer_image&id_article=". $ligne->id_article ."\">
 					<span class=\"dashicons dashicons-dismiss\"></span></a></figcaption>";		
 				}
