@@ -14,6 +14,8 @@ if(isset($action_form)) {
     <input type="text" name="nom_compte"  id="nom_compte" placeholder="Nom" value="<?php if(isset($_POST['nom_compte']) && !$insertion) echo $_POST['nom_compte']; ?>">
     <?php  if (isset($message['prenom_compte'])) { echo $message['prenom_compte']; } ?>
     <input type="text" name="prenom_compte"  id="prenom_compte" placeholder="Prénom" value="<?php if(isset($_POST['prenom_compte']) && !$insertion) echo $_POST['prenom_compte']; ?>">
+
+    <div class="flex">
     <label for="statut_compte">Statut du compte:
         <?php  if (isset($message['statut_compte'])) { echo $message['statut_compte']; } ?>
         <select name="statut_compte" id="statut_compte">
@@ -27,15 +29,16 @@ if(isset($action_form)) {
     <?php  if (isset($message['fichier_compte'])) { echo $message['fichier_compte']; } ?>
     <input type="file" name="fichier_compte"  id="fichier_compte" class="inputFile" value="">
     <label for="fichier_compte" data-val="Fichier Avatar">
-        <span class="dashicons dashicons-cloud-upload"></span>
+        <span class="dashicons dashicons-cloud-upload flex-center"></span>
         Fichier Avatar
     </label>
+    </div>
 
     <?php  if (isset($message['login_compte'])) { echo $message['login_compte']; } ?>
     <input type="text" name="login_compte"  id="login_compte" placeholder="Identifiant" value="<?php if(isset($_POST['login_compte']) && !$insertion) echo $_POST['login_compte']; ?>" autocomplete="off">
     <?php  if (isset($message['pass_compte'])) { echo $message['pass_compte']; } ?>
     <input type="password" name="pass_compte"  id="pass_compte" placeholder="Votre mot de passe" value="" autocomplete="off">
-    <div class="btnsForm">
+    <div class="flex">
         <input type="submit" name="submit" value="Envoyer">
         <a href="#" id="videForm" class="ouinon"><span class="dashicons dashicons-trash"></span></a>
     </div>

@@ -20,7 +20,7 @@ if (isset($entete)) {
     <?php  if (isset($message['rang_menu'])) { echo $message['rang_menu']; } ?>
     <input type="number" name="rang_menu"  id="rang_menu" placeholder="0" value="<?php if(isset($_POST['rang_menu']) && !$insertion) echo $_POST['rang_menu']; ?>">
 
-    <div class="btnsForm">
+    <div class="flex">
         <input type="submit" name="submit" value="Envoyer">
         <a href="#" id="videForm" class="ouinon"><span class="dashicons dashicons-trash"></span></a>
     </div>

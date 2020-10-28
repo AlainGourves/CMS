@@ -35,6 +35,18 @@ body {
 	overflow: hidden;
 }
 
+.flex{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.flex-center{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 #zone_gauche {
 	position: fixed;
 	top: 0;
@@ -44,9 +56,6 @@ body {
 	padding: 20px;
 	z-index: 100;
 	background: var(--gris1);
-	display: flex;
-	justify-content: center;
-	align-items: center;
 }
 
 #menu_back ul {
@@ -128,22 +137,13 @@ body {
 	padding: 0 24px;
 	z-index: 10;
 	background: var(--gris2);
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
 	color: var(--mauve);
 }
 
 #header_back h1 {
 	font-size: 36px;
-	width: 50%;
+	flex: 1;
 }
-
-/* #header_back div {
-	display: flex;
-	align-items: center;
-	width: 50%;
-} */
 
 #header_back a {
 	display: block;
@@ -182,17 +182,11 @@ body {
 
 #header_back span.avatar{
 	font-size: 2em;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 }
 
 #header_back .user {
 	color: var(--mauveLight);
 	font-weight: 700;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
 	margin: 0 1em;
 }
 
@@ -249,9 +243,6 @@ main #contenu_back p {
 
 #menu_back .notif {
 	position: absolute;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	width: 2em;
 	height: 2em;
 	top: -1em;
@@ -301,18 +292,11 @@ main #contenu_back p {
 	border-radius: 4px;
 }
 
-#contenu_back input::after,
-#contenu_back textarea::after {
-	content: "Requis";
-	font-size: 10px;
-	background-color: red;
-}
-
 #contenu_back textarea {
 	font-size: 13.33px;
-	min-height: 150px;
+	min-height: 100px;
 	resize: vertical;
-	max-height: 200px;
+	max-height: 180px;
 }
 
 #contenu_back input:focus,
@@ -323,6 +307,13 @@ main #contenu_back p {
 #contenu_back input[type=submit] {
 	width: auto;
 	text-transform: uppercase;
+}
+
+#contenu_back input[type=date] {
+	width: 14em;
+	height: 2.5rem;
+	text-transform: uppercase;
+	text-align: center;
 }
 
 #contenu_back select{
@@ -390,12 +381,12 @@ main #contenu_back p {
 	background-color: inherit;
 }
 
-.tab_resultats tr td:nth-of-type(3),
+/* .tab_resultats tr td:nth-of-type(3),
 .tab_resultats tr td:nth-of-type(4),
 .tab_resultats tr td:nth-of-type(5) {
 	width: 60px;
 	text-align: center;
-}
+} */
 
 .tab_resultats tr[id^="message"] td {
 	display: none;
@@ -474,8 +465,8 @@ a.ouinon:hover,
 	background-color: #efefe5;
 }
 
-/* ----------------------------------------FORM Compte */
-#form_compte label {
+/* ----------------------------------------FORM */
+form label {
 	display: inline-block;
 	width: max-content;
 	position: relative;
@@ -491,6 +482,8 @@ a.ouinon:hover,
 	overflow: hidden;
 	position: absolute;
 	z-index: -1;
+	padding: 0 !important;
+	margin-bottom: 0 !important;
 }
 .inputFile + label {
 	background-color: var(--gris2);
@@ -500,7 +493,7 @@ a.ouinon:hover,
 	align-items: center;
 	padding-left: 2.6rem;
 	padding-right: .6em;
-	margin-left: 2em;
+	margin-bottom: 15px;
 	width: max-content;
 	font-weight: 700;
 	font-size: .8em;
@@ -526,9 +519,7 @@ a.ouinon:hover,
 	background-color: var(--gris1);
 	border-top-left-radius: 4px;
 	border-bottom-left-radius: 4px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	display: flex!important;
 }
 
 .inputFile + label .dashicons:before{
@@ -592,13 +583,10 @@ p.ok {
 	background-color: #fff;
 }
 
-.btnsForm {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
 /* gestion avatar dans le tableau des comptes */
+/* td.miniature{
+	text-align: center;
+} */
 .miniature figure{
 	position: relative;
 	width: min-content;
@@ -618,4 +606,12 @@ p.ok {
 	width: auto;
 	height: auto;
 	text-shadow: 1px 1px 1px var(--ombre);
+}
+
+.miniature .dashicons-hidden,
+.miniature .dashicons-hidden:hover{
+	width: 100%;
+	height: 100%;
+	color: var(--ombre2);
+	font-size: 2.5rem;
 }

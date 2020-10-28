@@ -1,0 +1,36 @@
+<?php 
+
+if (isset($entete)) {
+    echo $entete;
+}
+?>
+<form id="form_article" action="admin.php?module=articles&action=<?php 
+if(isset($action_form)) { 
+    echo $action_form;
+}else{
+    echo "afficher_articles";
+} ?>" method="POST" enctype="multipart/form-data">
+    <?php  if (isset($message['titre_article'])) { echo $message['titre_article']; } ?>
+    <input type="text" name="titre_article"  id="titre_article" placeholder="Titre de l'article" value="<?php if(isset($_POST['titre_article']) && !$insertion) echo $_POST['titre_article']; ?>">
+
+    <?php  if (isset($message['contenu_article'])) { echo $message['contenu_article']; } ?>
+    <textarea name="contenu_article"  id="contenu_article" placeholder="Texte de l'article"><?php if(isset($_POST['contenu_article']) && !$insertion) echo $_POST['contenu_article']; ?></textarea>
+
+    <div class="flex">
+        <input type="date" name="date_article" id="date_article" value="<?php if(isset($_POST['date_article']) && !$insertion) echo $_POST['date_article']; ?>">
+
+        <?php  if (isset($message['fichier_article'])) { echo $message['fichier_article']; } ?>
+        <input type="file" name="fichier_article"  id="fichier_article" class="inputFile" value="">
+        <label for="fichier_article" data-val="Image article">
+            <span class="dashicons dashicons-cloud-upload flex-center"></span>
+            Image article
+        </label>
+    </div>
+
+
+    <div class="flex">
+        <input type="submit" name="submit" value="Envoyer">
+        <a href="#" id="videForm" class="ouinon"><span class="dashicons dashicons-trash"></span></a>
+    </div>
+</form>
+<?php  if (isset($message['resultat'])) { echo $message['resultat']; } ?>
