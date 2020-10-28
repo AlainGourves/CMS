@@ -11,7 +11,7 @@ if (isset($_SESSION['id_compte'])) {
 	if (!empty($_SESSION['fichier_compte'])) {
 		$bienvenue .= $_SESSION['fichier_compte'];
 	}else{
-		$bienvenue .= "<span class=\"dashicons dashicons-admin-users avatar\"></span>";
+		$bienvenue .= "<span class=\"dashicons dashicons-admin-users avatar flex-center\"></span>";
 	}
 
 	require_once("../outils/fonctions.php");
@@ -36,7 +36,8 @@ if (isset($_SESSION['id_compte'])) {
 				include_once("comptes.php");
 			break;
 			
-			case 'actus':
+			case 'articles':
+				include_once("articles.php");
 			break;
 			
 			case 'slider':
@@ -60,7 +61,7 @@ if (isset($_SESSION['id_compte'])) {
 	$resultat = mysqli_query($connexion, $requete);
 	$nb_lignes = mysqli_num_rows($resultat);
 	if ($nb_lignes > 0) {
-		$notification = " <span class=\"notif\">" . $nb_lignes . "</span>";
+		$notification = " <span class=\"notif flex-center\">" . $nb_lignes . "</span>";
 	}
 
 	// on referme la connexion à la bdd

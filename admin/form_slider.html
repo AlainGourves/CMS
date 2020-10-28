@@ -4,7 +4,7 @@ if (isset($entete)) {
     echo $entete;
 }
 ?>
-<form id="form_compte" action="admin.php?module=slider&action=<?php 
+<form id="form_slider" action="admin.php?module=slider&action=<?php 
 if(isset($action_form)) { 
     echo $action_form;
 }else{
@@ -16,13 +16,15 @@ if(isset($action_form)) {
 
     <textarea name="descriptif_slider"  id="descriptif_slider" placeholder="Descriptif de l'image"><?php if(isset($_POST['descriptif_slider']) && !$insertion) echo $_POST['descriptif_slider']; ?></textarea>
 
-    <?php  if (isset($message['fichier_slider'])) { echo $message['fichier_slider']; } ?>
-    <input type="file" name="fichier_slider"  id="fichier_slider" class="inputFile" value="">
-    <label for="fichier_slider" data-val="Fichier image">
-        <span class="dashicons dashicons-cloud-upload"></span>
-        Fichier image
-    </label>
-    <div class="btnsForm">
+    <div>
+        <?php  if (isset($message['fichier_slider'])) { echo $message['fichier_slider']; } ?>
+        <input type="file" name="fichier_slider"  id="fichier_slider" class="inputFile" value="">
+        <label for="fichier_slider" data-val="Fichier image">
+            <span class="dashicons dashicons-cloud-upload flex-center"></span>
+            Fichier image
+        </label>
+    </div>
+    <div class="flex">
         <input type="submit" name="submit" value="Envoyer">
         <a href="#" id="videForm" class="ouinon"><span class="dashicons dashicons-trash"></span></a>
     </div>

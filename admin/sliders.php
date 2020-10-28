@@ -2,7 +2,7 @@
 
 if (isset($_SESSION['id_compte'])) {
     $entete = "<h1>Gestion du slider</h1>";
-
+    
     if(isset($_GET['action'])) {
         
         $message = array();
@@ -19,19 +19,23 @@ if (isset($_SESSION['id_compte'])) {
                     }else{
                         // on teste si le fichier a le bon format
                         if (fichier_type($_FILES['fichier_slider']['name'])=='png' ||
-                            fichier_type($_FILES['fichier_slider']['name'])=='jpg' ||
-                            fichier_type($_FILES['fichier_slider']['name'])=='gif') {
+                        fichier_type($_FILES['fichier_slider']['name'])=='jpg' ||
+                        fichier_type($_FILES['fichier_slider']['name'])=='gif') {
+                            
+                            //calcule le rang à attribuer au nouveau slider
+                            $requete = "SELECT id_slider FROM sliders";
+                            $resultat = mysqli_query($connexion, $requete);
+                            $nb = mysqli_num_rows($resultat);
+                            $rang = $nb + 1;
                             // on insère dans la table
-                            $requete = "INSERT INTO sliders 
-                                    SET titre_slider='". addslashes($_POST['titre_slider']). "',
-                                    descriptif_slider='". addslashes($_POST['descriptif_slider']). "'";
+                            $requete = "INSERT INTO sliders SET rang_slider='". $rang ."', titre_slider='". addslashes($_POST['titre_slider']). "', descriptif_slider='". addslashes($_POST['descriptif_slider']). "'";
                             $resultat = mysqli_query($connexion, $requete);
                             $dernier_id_cree = mysqli_insert_id($connexion);
                             
                             // _b: big, _s: small
                             $chemin_b = "../medias/slider_b". $dernier_id_cree. ".". fichier_type($_FILES['fichier_slider']['name']);
                             $chemin_s = "../medias/slider_s". $dernier_id_cree. ".". fichier_type($_FILES['fichier_slider']['name']);
-
+                            
                             if (is_uploaded_file($_FILES['fichier_slider']['tmp_name'])) {
                                 // tmp_name : fich temporaire généré sur le serveur
                                 if (copy($_FILES['fichier_slider']['tmp_name'], $chemin_b)) {
@@ -43,17 +47,17 @@ if (isset($_SESSION['id_compte'])) {
                                     // si $rapport > 1 => format paysage
                                     // si $rapport < 1 => format portrait
                                     // si $rapport = 1 => format carré
-
+                                    
                                     // génère miniature en respectant aspect ratio
                                     $larg_thumbnail = 100;
                                     $quality = 80; // % compression jpeg
                                     // redimentionne et stocke le thumbnail
                                     redimage($chemin_b, $chemin_s, $larg_thumbnail, $larg_thumbnail/$rapport, $quality);
-
+                                    
                                     // On met à jour la table sliders
                                     $requete = "UPDATE sliders 
-                                                    SET fichier_slider='". $chemin_s."' 
-                                                    WHERE id_slider='". $dernier_id_cree. "'";
+                                    SET fichier_slider='". $chemin_s."' 
+                                    WHERE id_slider='". $dernier_id_cree. "'";
                                     $resultat = mysqli_query($connexion, $requete);
                                     if ($resultat) {
                                         $insertion = true;
@@ -67,39 +71,104 @@ if (isset($_SESSION['id_compte'])) {
                             $message['fichier_slider'] = "<label for=\"fichier_slider\" class=\"pas_ok\">Seules les exentions png, svg, jpg et gif sont autorisées !</label>";
                         }
                         // 
-
+                        
                     }
                 }
-                break;
-
+            break;
+            
             case 'modifier_slider':
                 $action_form = "modifier_slider&id_slider=". $_GET['id_slider'];
                 if (isset($_POST['submit'])) {
-
+                    
                 }
                 if(isset($_GET['id_slider'])) {
-
+                    $action_form="modifier_slider&id_slider=" . $_GET['id_slider'];
+				
+                    //on récupere dans la table les infos
+                    $requete="SELECT * FROM sliders WHERE id_slider='".$_GET['id_slider']."'";
+                    $resultat=mysqli_query($connexion,$requete);
+                    $ligne=mysqli_fetch_object($resultat);
+                    
+                    //on recharge le formulaire avec les données stockées dans la table
+                    $_POST['titre_slider']=$ligne->titre_slider;
+                    $_POST['descriptif_slider']=$ligne->descriptif_slider;
                 }
             break;
-
+            
             case 'supprimer_slider':
                 if(isset($_GET['id_slider'])) {
                     $entete = "<h1 class=\"alerte ouinon\">Vous-voulez vraiment supprimer cette image ? 
-                    <a href=\"admin.php?module=sliders&action=supprimer_slider&id_slider=" . $_GET['id_slider'] . "&confirm=1\">OUI</a>
-                    <a href=\"admin.php?module=sliders&action=afficher_sliders\">NON</a>
+                    <a href=\"admin.php?module=slider&action=supprimer_slider&id_slider=" . $_GET['id_slider'] . "&confirm=1\">OUI</a>
+                    <a href=\"admin.php?module=slider&action=afficher_sliders\">NON</a>
                     </h1>";
                     //si l'internaute a confirmé la suppression (bouton oui)
                     if (isset($_GET['confirm']) && $_GET['confirm'] == 1) {
+                        // Supression image
+                        // récupère le nom du fichier
+                        $requete = "SELECT fichier_slider FROM sliders WHERE id_slider='".$_GET['id_slider']."'";
+                        $resultat = mysqli_query($connexion, $requete);
+                        $ligne=mysqli_fetch_object($resultat);
+
+                        $chemin_a_supprimer_s = $ligne->fichier_slider;
+                        $chemin_a_supprimer_b = str_replace("_s","_b",$ligne->fichier_slider);
+                        unlink($chemin_a_supprimer_b);
+                        unlink($chemin_a_supprimer_s);
+                        // MàJ table
                         $requete = "DELETE FROM sliders WHERE id_slider='" . $_GET['id_slider'] . "'";
-                        $resultat = mysqli_query($connexion, $requete2);
+                        $resultat = mysqli_query($connexion, $requete);
                         $entete = "<h1 class=\"alerte ok\">Image supprimée</h1>";
                     }
                 }
             break;
-        }
+            
+            case 'trier_slider':
+                $action_form = "afficher_slider";
+                
+                if (isset($_GET['id_slider']) && isset($_GET['tri'])){
 
+                    // on vérifie quel était le rang du slider à trier
+                    $requete = "SELECT id_slider, rang_slider FROM sliders WHERE id_slider='". $_GET['id_slider']. "'";
+                    $resultat = mysqli_query($connexion, $requete);
+                    $ligne = mysqli_fetch_object(($resultat));
+                    $isUpdate = false;
+                    switch($_GET['tri']){
+                        case "up":
+                            if ($ligne->rang_slider > 1){
+                                $isUpdate = true;
+                                // calcule le nouveau rang du slider
+                                $nouveau_rang = $ligne->rang_slider - 1;
+                                // modifie le rang de la ligne qui avait déjà ce rang
+                                $inversion_rang = $nouveau_rang + 1;
+                            }
+                        break;
+                        
+                        case "down":
+                            // on compte le nbre de ligne de la table
+                            $requete = "SELECT id_slider FROM sliders";
+                            $resultat=mysqli_query($connexion, $requete);
+                            $nb_lignes = mysqli_num_rows($resultat);
+                            if($ligne->rang_slider < $nb_lignes){
+                                $isUpdate = true;
+                                // calcule le nouveau rang du slider
+                                $nouveau_rang = $ligne->rang_slider + 1;
+                                // modifie le rang de la ligne qui avait déjà ce rang
+                                $inversion_rang = $nouveau_rang - 1;
+                            }
+                        break;
+                    }
+                    if ($isUpdate){
+                        $requete = "UPDATE sliders SET rang_slider='" . $inversion_rang . "' WHERE rang_slider='" . $nouveau_rang . "'";
+                        $resultat = mysqli_query($connexion, $requete);
+                        // attribue le nouveau rang au slider concerné
+                        $requete="UPDATE sliders SET rang_slider='". $nouveau_rang. "' WHERE id_slider='". $_GET['id_slider'] . "'";
+                        $resultat=mysqli_query($connexion, $requete);
+                    }
+                }
+            break;
+        }
+        
         // on construit un tableau qui affiche tous les sliders
-        $requete = "SELECT * FROM sliders ORDER BY id_slider";
+        $requete = "SELECT * FROM sliders ORDER BY rang_slider";
         $tab_resultats = afficher_sliders($connexion,$requete);  
     }
 }else{

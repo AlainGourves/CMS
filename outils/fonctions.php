@@ -391,7 +391,7 @@ function afficher_articles($connexion,$requete,$cas)
 			$affichage.="<th>Titre</th>\n";
 			$affichage.="<th>Extrait</th>\n";
 			$affichage.="<th>Date</th>\n";	
-			$affichage.="<th>RSS</th>\n";	
+			// $affichage.="<th>RSS</th>\n";	
 			$affichage.="<th>Image</th>\n";		
 			$affichage.="<th>Actions</th>\n";
 			$affichage.="</tr>\n";	
@@ -399,29 +399,33 @@ function afficher_articles($connexion,$requete,$cas)
 				{
 				//on affiche le contenu de chaque uplet présent dans la table
 				$affichage.="<tr>\n";
-				$affichage.="<td><a href=\"admin.php?action=article&choix=trier&id_article=" . $ligne->id_article . "&tri=up\"><span class=\"dashicons dashicons-arrow-up\"></span></a>&nbsp;&nbsp;<a href=\"admin.php?action=article&choix=trier&id_article=" . $ligne->id_article . "&tri=down\"><span class=\"dashicons dashicons-arrow-down\"></span></a></td>\n";	
+				$affichage.="<td><a href=\"admin.php?module=articles&action=trier_article&id_article=" . $ligne->id_article . "&tri=up\"><span class=\"dashicons dashicons-arrow-up\"></span></a>&nbsp;&nbsp;<a href=\"admin.php?module=articles&action=trier_article&id_article=" . $ligne->id_article . "&tri=down\"><span class=\"dashicons dashicons-arrow-down\"></span></a></td>\n";	
 				$affichage.="<td>" . $ligne->titre_article . "</td>\n";
 				$affichage.="<td>" . extrait($ligne->contenu_article,8,4) . "</td>\n";
-				$affichage.="<td>" . $ligne->date_article . "</td>\n";	
-				$affichage.="<td>" . $ligne->rss . "</td>\n";
-				if(empty($ligne->fichier_article))
-					{
-					$affichage.="<td class=\"td_img\">pas d'image</td>";
-					}
-				else
-					{
-					$affichage.="<td class=\"td_img\">
-					<img class=\"miniature\" src=\"" . str_replace("_b","_s",$ligne->fichier_article) . "\" alt=\"\" />
-					<a class=\"suppr_img\" href=\"admin.php?action=article&choix=supprimer_image&id_article=". $ligne->id_article ."\">
-					<span class=\"dashicons dashicons-no-alt\"></span></a>
-					</td>\n";		
-					}
+				//traitement date
+				$time = strtotime($ligne->date_article);
+				$affichage.="<td>" .  date("j M Y", $time). "</td>\n";	
+				// $affichage.="<td>" . $ligne->rss . "</td>\n";
+				$affichage.="<td class=\"miniature\">";
+				if(empty($ligne->fichier_article)){
+					$affichage.="<span class=\"dashicons dashicons-hidden\"></span></td>";
+				}else{
+					$affichage.="<figure>";
+
+					$affichage.="<a href=\"". str_replace("_s", "_b", $ligne->fichier_article). "\" target=\"blank\">";
+					$affichage.="<img class=\"miniature\" src=\"" . $ligne->fichier_article . "\" alt=\"\" />";
+					$affichage.="</a>";
+
+					$affichage.="<figcaption><a class=\"suppr_img\" href=\"admin.php?module=articles&action=supprimer_image&id_article=". $ligne->id_article ."\">
+					<span class=\"dashicons dashicons-dismiss\"></span></a></figcaption>";		
+				}
+				$affichage.="</td>\n";
 				$affichage.="<td>";
-				$affichage.="<a href=\"admin.php?action=article&choix=dupliquer&id_article=" . $ligne->id_article . "\"><span class=\"dashicons dashicons-admin-page\"></span></a>";
+				$affichage.="<a href=\"admin.php?module=articles&action=dupliquer_article&id_article=" . $ligne->id_article . "\"><span class=\"dashicons dashicons-admin-page\"></span></a>";
 				$affichage.="&nbsp;&nbsp;&nbsp;";				
-				$affichage.="<a href=\"admin.php?action=article&choix=modifier&id_article=" . $ligne->id_article . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
+				$affichage.="<a href=\"admin.php?module=articles&action=modifier_article&id_article=" . $ligne->id_article . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
 				$affichage.="&nbsp;&nbsp;&nbsp;";
-				$affichage.="<a href=\"admin.php?action=article&choix=supprimer&id_article=" . $ligne->id_article . "\"><span class=\"dashicons dashicons-trash\"></span></a>";
+				$affichage.="<a href=\"admin.php?module=articles&action=supprimer_article&id_article=" . $ligne->id_article . "\"><span class=\"dashicons dashicons-trash\"></span></a>";
 				$affichage.="</td>\n";						
 				$affichage.="</tr>\n";
 				$i++;					
@@ -524,6 +528,7 @@ function afficher_sliders($connexion,$requete) {
 	$affichage="<table class=\"tab_resultats\">\n";
     //on calcule les entêtes des colonnes
     $affichage.="<tr>\n";                            
+    $affichage.="<th>Tri</th>\n";    
     $affichage.="<th>Titre image</th>\n";    
     $affichage.="<th>Image</th>\n";        
     $affichage.="<th>Actions</th>\n";
@@ -532,12 +537,17 @@ function afficher_sliders($connexion,$requete) {
         {
         //on affiche le contenu de chaque uplet présent dans la table
         $affichage.="<tr>\n";
+		$affichage.="<td>
+			<a href=\"admin.php?module=slider&action=trier_slider&id_slider=". $ligne->id_slider. "&tri=up\"><span class=\"dashicons dashicons-arrow-up\"></span>
+			&nbsp;&nbsp;&nbsp;
+			<a href=\"admin.php?module=slider&action=trier_slider&id_slider=". $ligne->id_slider. "&tri=down\"><span class=\"dashicons dashicons-arrow-down\"></span>
+		</td>\n";                
         $affichage.="<td><strong>" . $ligne->titre_slider . "</strong><br />". extrait($ligne->descriptif_slider, 5, 0). "</td>\n";                
         $affichage.="<td><a href=\"". str_replace("_s", "_b", $ligne->fichier_slider). "\" target=\"blank\"><img src=\"".$ligne->fichier_slider."\" alt=\"\" /></a></td>\n";
         $affichage.="<td>";        
-        $affichage.="<a href=\"admin.php?module=sliders&action=modifier_slider&id_slider=" . $ligne->id_slider . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
+        $affichage.="<a href=\"admin.php?module=slider&action=modifier_slider&id_slider=" . $ligne->id_slider . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
         $affichage.="&nbsp;&nbsp;&nbsp;";
-        $affichage.="<a href=\"admin.php?module=sliders&action=supprimer_slider&id_slider=" . $ligne->id_slider . "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
+        $affichage.="<a href=\"admin.php?module=slider&action=supprimer_slider&id_slider=" . $ligne->id_slider . "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
         $affichage.="</td>\n";                        
         $affichage.="</tr>\n";                    
         }
