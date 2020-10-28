@@ -165,9 +165,10 @@ if (isset($_SESSION['id_compte'])) {
                     if (isset($_GET['confirm']) && $_GET['confirm'] == 1) {
                         // Cas où il y a une image enregistrée
                         // récupère le nom du fichier
-                        $requete = "SELECT fichier_article FROM articles WHERE id_article='".$_GET['id_article']."'";
+                        $requete = "SELECT fichier_article,rang_article FROM articles WHERE id_article='".$_GET['id_article']."'";
                         $resultat = mysqli_query($connexion, $requete);
                         $ligne=mysqli_fetch_object($resultat);
+                        $rang_a_supprimer = $ligne->rang_article;
                         if (!empty($ligne->fichier_article)){
                             $chemin_a_supprimer_s = $ligne->fichier_article;
                             $chemin_a_supprimer_b = str_replace("_s","_b",$ligne->fichier_article);
@@ -176,7 +177,11 @@ if (isset($_SESSION['id_compte'])) {
                         }
                         $requete = "DELETE FROM articles WHERE id_article='" . $_GET['id_article'] . "'";
                         $resultat = mysqli_query($connexion, $requete);
-                        $entete = "<h1 class=\"alerte ok\">Article supprimé</h1>";
+                        // Mise à jour des rangs
+                        $requete = "UPDATE articles SET rang_article=(rang_article -1) WHERE rang_article>". $rang_a_supprimer;
+                        $resultat = mysqli_query($connexion, $requete);
+                        
+                         $entete = "<h1 class=\"alerte ok\">Article supprimé</h1>";
                     }
                 }
                 break;
