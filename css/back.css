@@ -310,6 +310,7 @@ main #contenu_back p {
 	text-transform: uppercase;
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
+	border-radius: 0;
 }
 
 #contenu_back input[type=date] {
