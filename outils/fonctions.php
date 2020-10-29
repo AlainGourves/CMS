@@ -1,4 +1,25 @@
 <?php
+/**
+ * ************************* FONCTIONS
+ * 		- connexion()
+ * 		- protocole()
+ * 		- security($chaine)
+ * 		- login($login,$password)
+ * 		- fichier_type($uploadedFile)
+ * 		- redimage($img_src, $img_dest, $dst_w, $dst_h, $quality)
+ * 		- avatar($img_src, $img_dest, $dst_w, $dst_h, $quality)
+ * 		- format_date($date,$format)
+ * 		- envoi_mel($destinataire,$sujet,$message_txt, $message_html,$expediteur)
+ * 		- afficher_contacts($connexion,$requete)
+ * 		- afficher_comptes($connexion,$requete)
+ * 		- extrait($texte,$nb_mots,$tolerance)
+ * 		- afficher_articles($connexion,$requete,$cas)
+ * 		- afficher_menus($connexion,$requete)
+ * 		- afficher_droits($connexion)
+ * 		- afficher_sliders($connexion,$requete)
+ */
+
+
 //===============================
 // la fonction connecter() permet de choisir une
 // base de données et de s'y connecter.
@@ -183,25 +204,21 @@ function avatar($img_src, $img_dest, $dst_w, $dst_h, $quality) {
 	@ImageDestroy($src_im);
 }
 //===============================
-function format_date($date,$format)
-{
-if($format=="anglais")
-   {
-	$tab_date=explode("/",$date);
-	$date_au_format=$tab_date[2] . "-" . $tab_date[1] . "-" . $tab_date[0];	
-	 }
-if($format=="francais")
-   {
-	$tab_date=explode("-",$date);
-	$date_au_format=$tab_date[2] . "/" . $tab_date[1] . "/" . $tab_date[0];	
-	 }
-return $date_au_format;	
+function format_date($date,$format) {
+	if($format=="anglais") {
+		$tab_date=explode("/",$date);
+		$date_au_format=$tab_date[2] . "-" . $tab_date[1] . "-" . $tab_date[0];	
+	}
+	if($format=="francais") {
+		$tab_date=explode("-",$date);
+		$date_au_format=$tab_date[2] . "/" . $tab_date[1] . "/" . $tab_date[0];	
+	}
+	return $date_au_format;	
 }
 
 //===============================================
 
- function envoi_mel($destinataire,$sujet,$message_txt, $message_html,$expediteur)
-  {
+ function envoi_mel($destinataire,$sujet,$message_txt, $message_html,$expediteur) {
   if (!preg_match("#^[a-z0-9._-]+@(hotmail|live|msn).[a-z]{2,4}$#", $destinataire)) // On filtre les serveurs qui rencontrent des bogues.
     {
   	$passage_ligne = "\r\n";
@@ -338,8 +355,7 @@ function afficher_comptes($connexion,$requete) {
 	return $affichage;
 }
 //======================================
-function extrait($texte,$nb_mots,$tolerance)	
-	{
+function extrait($texte,$nb_mots,$tolerance) {
 	//on coupe le texte sur les espaces
 	$tab_mots=explode(" ",$texte);
 	
@@ -373,16 +389,13 @@ function extrait($texte,$nb_mots,$tolerance)
 	}
 	
 //=======================================
-function afficher_articles($connexion,$requete,$cas)
-	{
+function afficher_articles($connexion,$requete,$cas) {
 	$resultat=mysqli_query($connexion,$requete);
 	
 	if(isset($cas))
 		{
-		switch($cas)
-			{
+		switch($cas) {
 			case "back":
-
 			$i=0;
 			$affichage="<table class=\"tab_resultats\">\n";
 			//on calcule les entêtes des colonnes
@@ -395,16 +408,16 @@ function afficher_articles($connexion,$requete,$cas)
 			$affichage.="<th>Image</th>\n";		
 			$affichage.="<th>Actions</th>\n";
 			$affichage.="</tr>\n";	
-			while($ligne=mysqli_fetch_object($resultat))
-				{
+			while($ligne=mysqli_fetch_object($resultat)) {
 				//on affiche le contenu de chaque uplet présent dans la table
 				$affichage.="<tr>\n";
 				$affichage.="<td><a href=\"admin.php?module=articles&action=trier_article&id_article=" . $ligne->id_article . "&tri=up\"><span class=\"dashicons dashicons-arrow-up\"></span></a>&nbsp;&nbsp;<a href=\"admin.php?module=articles&action=trier_article&id_article=" . $ligne->id_article . "&tri=down\"><span class=\"dashicons dashicons-arrow-down\"></span></a></td>\n";	
 				$affichage.="<td>" . $ligne->titre_article . "</td>\n";
 				$affichage.="<td>" . extrait($ligne->contenu_article,8,4) . "</td>\n";
 				//traitement date
+				setlocale(LC_TIME, "fr_FR");
 				$time = strtotime($ligne->date_article);
-				$affichage.="<td>" .  date("j M Y", $time). "</td>\n";	
+				$affichage.="<td>" .  strftime("%e %b %Y", $time). "</td>\n";	
 				// $affichage.="<td>" . $ligne->rss . "</td>\n";
 				$affichage.="<td class=\"miniature\">";
 				if(empty($ligne->fichier_article)){
@@ -429,18 +442,16 @@ function afficher_articles($connexion,$requete,$cas)
 				$affichage.="</td>\n";						
 				$affichage.="</tr>\n";
 				$i++;					
-				}
+			}
 			$affichage.="</table>\n";
-			
 			break;
 
+
 			case "front":
-			
 			$affichage="";
 			$nom_mois=array("Jan","Fev","Mar","Avr","Mai","Juin","Juil","Aou","Sept","Oct","Nov","Dec");
 			$i=0;
-			while($ligne=mysqli_fetch_object($resultat))
-				{				
+			while($ligne=mysqli_fetch_object($resultat)) {				
 				//calcul de la date en 3 morceaux
 				$tab_date=explode("-",$ligne->date_article);
 				$annee=$tab_date[0];
@@ -453,22 +464,21 @@ function afficher_articles($connexion,$requete,$cas)
 				$affichage.="<span class=\"mm\">" . $mois . "</span>\n"; 
 				$affichage.="<span class=\"aaaa\">" . $annee . "</span>\n";								
 				$affichage.="</div>\n";
-				if(!empty($ligne->fichier_article))
-					{
+				if(!empty($ligne->fichier_article)){
 					$affichage.="<img src=\"". str_replace("_b","_s",$ligne->fichier_article) . "\" alt=\"" . $ligne->titre_article . "\" />\n";
-					}
+				}
 				$affichage.="<h2 class=\"textvert\">" . $ligne->titre_article . "</h2>\n";
 				$affichage.="<p>" . $ligne->contenu_article . "</p>\n";
 				$affichage.="</article>\n";
 				$i++;				
-				}
+			}
 					
 			break;			
-			}		
-		}
+		}		
+	}
 
 	return $affichage;
-	}
+}
 	
 //=======================================
 function afficher_menus($connexion,$requete) {
@@ -496,8 +506,7 @@ function afficher_menus($connexion,$requete) {
 	}
 	
 //==============================================================
-function afficher_droits($connexion)
-	{
+function afficher_droits($connexion) {
 	$requete="SELECT d.*,m.* FROM droits d INNER JOIN menus m ON d.id_menu=m.id_menu WHERE m.type_menu='back' ORDER BY m.rang_menu";
 	//echo $requete;
 	$resultat=mysqli_query($connexion, $requete); 
