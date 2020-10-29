@@ -25,11 +25,11 @@ p a{
     text-decoration: underline;
 }
 
-a img {
+a img{
     border: none;
 }
 
-a {
+a{
     text-decoration: none;
 }
 
@@ -72,36 +72,13 @@ a {
     text-align: center
 }
 
-
-
-.placeholder {
-    color: #727272;
-}
-
-::-webkit-input-placeholder {
-    color: #727272;
-}
-
-:-ms-input-placeholder {
-    color: #727272;
-}
-
-:-moz-placeholder {
-    color: #727272;
-}
-
-:-o-placeholder {
-    color: #727272;
-}
-
-.textarea::-webkit-input-placeholder {
-    color: #727272;
-}
-
-.textarea:-ms-input-placeholder {
-    color: #727272;
-}
-
+.placeholder,
+::-webkit-input-placeholder,
+:-ms-input-placeholder,
+:-moz-placeholder,
+:-o-placeholder,
+.textarea::-webkit-input-placeholder,
+.textarea:-ms-input-placeholder,
 .textarea:-moz-input-placeholder {
     color: #727272;
 }

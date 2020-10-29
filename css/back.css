@@ -480,17 +480,21 @@ form label {
 }
 /*
 	http://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/
+	https://css-tricks.com/comparing-various-ways-to-hide-things-in-css/
 */
 .inputFile{
-	width: 0.1px!important;
-	height: 0.1px!important;
-	opacity: 0;
-	overflow: hidden;
+	width: 1px!important;
+	height: 1px!important;
 	position: absolute;
+	overflow: hidden;
+	white-space: nowrap;
+	clip: rect(0,0,0,0);
+	clip-path: inset(50%);
 	z-index: -1;
 	padding: 0 !important;
 	margin-bottom: 0 !important;
 }
+
 .inputFile + label {
 	background-color: var(--gris2);
 	display: inline-flex!important;
