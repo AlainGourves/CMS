@@ -392,8 +392,7 @@ function extrait($texte,$nb_mots,$tolerance) {
 function afficher_articles($connexion,$requete,$cas) {
 	$resultat=mysqli_query($connexion,$requete);
 	
-	if(isset($cas))
-		{
+	if(isset($cas)){
 		switch($cas) {
 			case "back":
 			$i=0;
