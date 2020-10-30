@@ -265,7 +265,7 @@ function format_date($date,$format) {
 function afficher_contacts($connexion,$requete) {
 	$resultat = mysqli_query($connexion, $requete);
 	// on construit un tableau qui affiche tous les messages reçus depuis le front
-	$tab_resultats = "\n<table class=\"tab_resultats\">\n";
+	$tab_resultats = "\n<table class=\"tab_resultats\" id=\"tab_contacts\">\n";
 
 	// compteur
 	$i = 1;
@@ -289,8 +289,17 @@ function afficher_contacts($connexion,$requete) {
 			$tab_resultats .= $ligne->prenom_contact . " ";
 		}
 		$tab_resultats .= $ligne->nom_contact;
-		$tab_resultats .= "</a></td>\n";
-		$tab_resultats .= "\t<td>\n" . $ligne->date_contact . "</td>\n";
+		$tab_resultats .= "<span class=\"dashicons ";
+		$tab_resultats .= ($open=="") ? "dashicons-arrow-down-alt2" : "dashicons-arrow-up-alt2";
+		$tab_resultats .= "\"></span></a></td>\n";
+		
+		//traitement date
+		$tab_resultats .= "\t<td>\n";
+		setlocale(LC_TIME, "fr_FR");
+		$time = strtotime($ligne->date_contact);
+		$tab_resultats .= strftime("%e %b %Y %R", $time);
+		$tab_resultats .= "</td>\n";
+	
 
 		$tab_resultats .= "\t<td>\n";
 		$tab_resultats .= "<a href=\"admin.php?module=messages&action=supprimer_message&id_contact=" . $ligne->id_contact . "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
@@ -315,21 +324,21 @@ function afficher_contacts($connexion,$requete) {
 function afficher_comptes($connexion,$requete) {
 	$resultat=mysqli_query($connexion,$requete);
 	$i=0;
-	$affichage="<table class=\"tab_resultats\">\n";
+	$affichage="<table class=\"tab_resultats\" id=\"tab_comptes\">\n";
 	//on calcule les entêtes des colonnes
 	$affichage.="<tr>\n";
-	$affichage.="<th>Identité</th>\n";
-	$affichage.="<th>Login</th>\n";
-	$affichage.="<th>Statut</th>\n";
-	$affichage.="<th>Avatar</th>\n";	
-	$affichage.="<th>Actions</th>\n";
+	$affichage.="<th class=\"large\">Identité</th>\n";
+	$affichage.="<th class=\"medium\">Login</th>\n";
+	$affichage.="<th class=\"medium\">Statut</th>\n";
+	$affichage.="<th class=\"small\">Avatar</th>\n";	
+	$affichage.="<th class=\"small\">Actions</th>\n";
 	$affichage.="</tr>\n";	
 	while($ligne=mysqli_fetch_object($resultat)) {
 		//on affiche le contenu de chaque uplet présent dans la table
 		$affichage.="<tr>\n";	
 		$affichage.="<td>" . $ligne->nom_compte. " " . $ligne->prenom_compte . "</td>\n";
-		$affichage.="<td style=\"text-align:center\">" . $ligne->login_compte . "</td>\n";	
-		$affichage.="<td style=\"text-align:center\">" . $ligne->statut_compte . "</td>\n";	
+		$affichage.="<td>" . $ligne->login_compte . "</td>\n";	
+		$affichage.="<td>" . $ligne->statut_compte . "</td>\n";	
 		if(!empty($ligne->fichier_compte)) {
 			// on récupère l'extension du fichier pour calculer un paramètre GET
 			$extension = "&ext=".fichier_type($ligne->fichier_compte);
@@ -344,7 +353,7 @@ function afficher_comptes($connexion,$requete) {
 		$affichage.="<td   class=\"miniature\" \">" . $avatar . "</td>\n";		
 		$affichage.="<td>";
 		$affichage.="<a href=\"admin.php?module=comptes&action=modifier_compte&id_compte=" . $ligne->id_compte . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
-		$affichage.="&nbsp;&nbsp;&nbsp;";
+		$affichage.="&nbsp;";
 		$affichage.="<a href=\"admin.php?module=comptes&action=supprimer_compte&statut_compte=".$ligne->statut_compte."&id_compte=".$ligne->id_compte. $extension. "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
 		$affichage.="</td>\n";						
 		$affichage.="</tr>\n";
@@ -396,21 +405,21 @@ function afficher_articles($connexion,$requete,$cas) {
 		switch($cas) {
 			case "back":
 			$i=0;
-			$affichage="<table class=\"tab_resultats\">\n";
+			$affichage="<table class=\"tab_resultats\" id=\"tab_articles\">\n";
 			//on calcule les entêtes des colonnes
 			$affichage.="<tr>\n";
-			$affichage.="<th>Tri</th>\n";			
-			$affichage.="<th>Titre</th>\n";
-			$affichage.="<th>Extrait</th>\n";
-			$affichage.="<th>Date</th>\n";	
+			$affichage.="<th class=\"small\">Tri</th>\n";			
+			$affichage.="<th class=\"medium\">Titre</th>\n";
+			$affichage.="<th class=\"large\">Extrait</th>\n";
+			$affichage.="<th class=\"medium\">Date</th>\n";	
 			// $affichage.="<th>RSS</th>\n";	
-			$affichage.="<th>Image</th>\n";		
-			$affichage.="<th>Actions</th>\n";
+			$affichage.="<th class=\"small\">Image</th>\n";		
+			$affichage.="<th class=\"small\">Actions</th>\n";
 			$affichage.="</tr>\n";	
 			while($ligne=mysqli_fetch_object($resultat)) {
 				//on affiche le contenu de chaque uplet présent dans la table
 				$affichage.="<tr>\n";
-				$affichage.="<td><a href=\"admin.php?module=articles&action=trier_article&id_article=" . $ligne->id_article . "&tri=up\"><span class=\"dashicons dashicons-arrow-up\"></span></a>&nbsp;&nbsp;<a href=\"admin.php?module=articles&action=trier_article&id_article=" . $ligne->id_article . "&tri=down\"><span class=\"dashicons dashicons-arrow-down\"></span></a></td>\n";	
+				$affichage.="<td><a href=\"admin.php?module=articles&action=trier_article&id_article=" . $ligne->id_article . "&tri=up\"><span class=\"dashicons dashicons-arrow-up\"></span></a>&nbsp;<a href=\"admin.php?module=articles&action=trier_article&id_article=" . $ligne->id_article . "&tri=down\"><span class=\"dashicons dashicons-arrow-down\"></span></a></td>\n";	
 				$affichage.="<td>" . $ligne->titre_article . "</td>\n";
 				$affichage.="<td>" . extrait($ligne->contenu_article,8,4) . "</td>\n";
 				//traitement date
@@ -434,9 +443,9 @@ function afficher_articles($connexion,$requete,$cas) {
 				$affichage.="</td>\n";
 				$affichage.="<td>";
 				$affichage.="<a href=\"admin.php?module=articles&action=dupliquer_article&id_article=" . $ligne->id_article . "\"><span class=\"dashicons dashicons-admin-page\"></span></a>";
-				$affichage.="&nbsp;&nbsp;&nbsp;";				
+				$affichage.="&nbsp;";				
 				$affichage.="<a href=\"admin.php?module=articles&action=modifier_article&id_article=" . $ligne->id_article . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
-				$affichage.="&nbsp;&nbsp;&nbsp;";
+				$affichage.="&nbsp;";
 				$affichage.="<a href=\"admin.php?module=articles&action=supprimer_article&id_article=" . $ligne->id_article . "\"><span class=\"dashicons dashicons-trash\"></span></a>";
 				$affichage.="</td>\n";						
 				$affichage.="</tr>\n";
@@ -484,8 +493,13 @@ function afficher_menus($connexion,$requete) {
 	$resultat = mysqli_query($connexion, $requete);
     
     // on construit un tableau qui affiche tous les menus
-    $tab_resultats = "\n<table class=\"tab_resultats\">\n";
-    $tab_resultats .= "<tr>\n<th>Rang</th>\n<th>Intitulé</th>\n<th>Lien</th>\n<th>Actions</th>\n</tr>\n";
+    $tab_resultats = "\n<table class=\"tab_resultats\" id=\"tab_menus\">\n";
+	$tab_resultats .= "<tr>\n
+		<th class=\"small\">Rang</th>\n
+		<th class=\"medium\">Intitulé</th>\n
+		<th class=\"large\">Lien</th>\n
+		<th class=\"small\">Actions</th>\n
+	</tr>\n";
     
     while ($ligne = mysqli_fetch_object($resultat)) {
         $tab_resultats .= "<tr>\n";
@@ -520,8 +534,8 @@ function afficher_droits($connexion) {
 		{
 		$affichage.="<tr>\n";
 		$affichage.="<td>" . $ligne->intitule_menu . "</td>\n";		
-		$affichage.="<td style=\"text-align:center\"><a style=\"text-decoration:none;color:#000\" href=\"admin.php?action=droits&id_droit=" . $ligne->id_droit . "&statut=admin&valeur=" . $ligne->admin . "\"><img src=\"../images/" . $ligne->admin . ".png\" alt=\"\" /></a></td>";
-		$affichage.="<td style=\"text-align:center\"><a style=\"text-decoration:none;color:#000\" href=\"admin.php?action=droits&id_droit=" . $ligne->id_droit . "&statut=user&valeur=" . $ligne->user . "\"><img src=\"../images/" . $ligne->user . ".png\" alt=\"\" /></a></td>";		
+		$affichage.="<td><a style=\"text-decoration:none;color:#000\" href=\"admin.php?action=droits&id_droit=" . $ligne->id_droit . "&statut=admin&valeur=" . $ligne->admin . "\"><img src=\"../images/" . $ligne->admin . ".png\" alt=\"\" /></a></td>";
+		$affichage.="<td><a style=\"text-decoration:none;color:#000\" href=\"admin.php?action=droits&id_droit=" . $ligne->id_droit . "&statut=user&valeur=" . $ligne->user . "\"><img src=\"../images/" . $ligne->user . ".png\" alt=\"\" /></a></td>";		
 		$affichage.="</tr>\n";	
 		}
 	$affichage.="</table>\n";	
@@ -533,13 +547,13 @@ function afficher_droits($connexion) {
 //=======================================
 function afficher_sliders($connexion,$requete) {
 	$resultat = mysqli_query($connexion, $requete);
-	$affichage="<table class=\"tab_resultats\">\n";
+	$affichage="<table class=\"tab_resultats\" id=\"tab_sliders\">\n";
     //on calcule les entêtes des colonnes
     $affichage.="<tr>\n";                            
-    $affichage.="<th>Tri</th>\n";    
-    $affichage.="<th>Titre image</th>\n";    
-    $affichage.="<th>Image</th>\n";        
-    $affichage.="<th>Actions</th>\n";
+    $affichage.="<th class=\"small\">Tri</th>\n";    
+    $affichage.="<th class=\"large\">Titre image</th>\n";    
+    $affichage.="<th class=\"small\">Image</th>\n";        
+    $affichage.="<th class=\"small\">Actions</th>\n";
     $affichage.="</tr>\n";
     while($ligne=mysqli_fetch_object($resultat))
         {
@@ -547,14 +561,14 @@ function afficher_sliders($connexion,$requete) {
         $affichage.="<tr>\n";
 		$affichage.="<td>
 			<a href=\"admin.php?module=slider&action=trier_slider&id_slider=". $ligne->id_slider. "&tri=up\"><span class=\"dashicons dashicons-arrow-up\"></span>
-			&nbsp;&nbsp;&nbsp;
+			&nbsp;
 			<a href=\"admin.php?module=slider&action=trier_slider&id_slider=". $ligne->id_slider. "&tri=down\"><span class=\"dashicons dashicons-arrow-down\"></span>
 		</td>\n";                
         $affichage.="<td><strong>" . $ligne->titre_slider . "</strong><br />". extrait($ligne->descriptif_slider, 5, 0). "</td>\n";                
         $affichage.="<td><a href=\"". str_replace("_s", "_b", $ligne->fichier_slider). "\" target=\"blank\"><img src=\"".$ligne->fichier_slider."\" alt=\"\" /></a></td>\n";
         $affichage.="<td>";        
         $affichage.="<a href=\"admin.php?module=slider&action=modifier_slider&id_slider=" . $ligne->id_slider . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
-        $affichage.="&nbsp;&nbsp;&nbsp;";
+        $affichage.="&nbsp;";
         $affichage.="<a href=\"admin.php?module=slider&action=supprimer_slider&id_slider=" . $ligne->id_slider . "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
         $affichage.="</td>\n";                        
         $affichage.="</tr>\n";                    

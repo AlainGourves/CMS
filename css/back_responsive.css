@@ -1,0 +1,7 @@
+@media (hover: none) and (pointer: coarse) {
+    #header_back .user_status{
+        transform: scaleY(1);
+        opacity: 1;
+        transition: none;
+    }
+}

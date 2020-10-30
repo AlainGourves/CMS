@@ -281,7 +281,7 @@ main #contenu_back p {
 	padding: 8px 15px;
 	border: none;
 	border-radius: 4px;
-	margin-bottom: 15px;
+	margin-bottom: 1em;
 	font-family: inherit;
 	font-size: .8em;
 	width: 100%;
@@ -369,12 +369,25 @@ main #contenu_back p {
 .tab_resultats {
 	border-collapse: collapse;
 	width: 100%;
-	margin: 20px 0;
+	max-width: 1000px;
+	margin: 1em auto;
 }
 
 .tab_resultats td,
 .tab_resultats th {
 	padding: 5px;
+}
+.tab_resultats th {
+	text-align: left;
+}
+.tab_resultats th.small{
+	width: 10ch;	
+}
+.tab_resultats th.medium{
+	width: 20ch;	
+}
+.tab_resultats th.large{
+	width: auto;	
 }
 
 .tab_resultats tr:hover {
@@ -384,13 +397,6 @@ main #contenu_back p {
 .tab_resultats tr:nth-of-type(1):hover {
 	background-color: inherit;
 }
-
-/* .tab_resultats tr td:nth-of-type(3),
-.tab_resultats tr td:nth-of-type(4),
-.tab_resultats tr td:nth-of-type(5) {
-	width: 60px;
-	text-align: center;
-} */
 
 .tab_resultats tr[id^="message"] td {
 	display: none;
@@ -418,17 +424,36 @@ main #contenu_back p {
 	box-shadow: 2px 2px 4px var(--ombre2);
 	z-index: 10;
 }
-/* --------------------- */
-.ouinon {
-	display: flex;
-	align-items: center;
+
+#tab_comptes tr > :nth-of-type(4),
+#tab_comptes tr > :nth-of-type(5){
+	text-align: center;
+}
+#tab_menus tr > :nth-of-type(4){
+	text-align: center;
+}
+#tab_articles tr > :nth-of-type(1),
+#tab_articles tr > :nth-of-type(5),
+#tab_articles tr > :nth-of-type(6){
+	text-align: center;
+}
+#tab_articles td {
+	vertical-align: top;
+}
+#tab_sliders tr > :nth-of-type(1),
+#tab_sliders tr > :nth-of-type(3),
+#tab_sliders tr > :nth-of-type(4){
+	text-align: center;
 }
 
+
+/* --------------------- */
 .ouinon a,
 a.ouinon,
 #contenu_back input[type=submit] {
 	display: block;
 	padding: 6px 8px;
+	margin-bottom: 1em;
 	text-decoration: none;
 	color: white;
 	font-size: .8em;
@@ -475,6 +500,7 @@ form label {
 	width: max-content;
 	position: relative;
 }
+
 .flex label{
 	display: block;
 }
@@ -503,7 +529,7 @@ form label {
 	align-items: center;
 	padding-left: 2.6rem;
 	padding-right: .6em;
-	margin-bottom: 15px;
+	margin-bottom: 1em;
 	width: max-content;
 	font-weight: 700;
 	font-size: .8em;

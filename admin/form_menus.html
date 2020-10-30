@@ -18,11 +18,16 @@ if (isset($entete)) {
     <input type="text" name="lien_menu"  id="lien_menu" placeholder="Lien du menu" value="<?php if(isset($_POST['lien_menu']) && !$insertion) echo $_POST['lien_menu']; ?>">
     
     <?php  if (isset($message['rang_menu'])) { echo $message['rang_menu']; } ?>
-    <input type="number" name="rang_menu"  id="rang_menu" placeholder="0" value="<?php if(isset($_POST['rang_menu']) && !$insertion) echo $_POST['rang_menu']; ?>">
+    <input type="number" name="rang_menu"  id="rang_menu" placeholder="0" value="<?php 
+        if(isset($_POST['rang_menu']) && !$insertion) {
+            echo $_POST['rang_menu'];
+        }else if(isset($dernier_rang)){
+            echo $dernier_rang;
+        } ?>">
 
     <div class="flex">
-        <input type="submit" name="submit" value="Envoyer">
         <a href="#" id="videForm" class="ouinon"><span class="dashicons dashicons-trash"></span></a>
+        <input type="submit" name="submit" value="Envoyer">
     </div>
 </form>
 

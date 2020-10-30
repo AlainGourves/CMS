@@ -3,6 +3,12 @@
 if (isset($_SESSION['id_compte'])) {
     $entete = "<h1>Gestion des menus</h1>";
 
+    // dernier rang
+    $requete = "SELECT rang_menu FROM menus ORDER BY rang_menu DESC LIMIT 1";
+    $resultat = mysqli_query($connexion, $requete);
+    $ligne = mysqli_fetch_object($resultat);
+    $dernier_rang = $ligne->rang_menu + 1;
+
     if(isset($_GET['action'])) {
         
         $message = array();
@@ -31,9 +37,9 @@ if (isset($_SESSION['id_compte'])) {
                             intitule_menu='". addslashes($_POST['intitule_menu']). "',
                             lien_menu='". addslashes($_POST['lien_menu']). "',
                             rang_menu='". $_POST['rang_menu']."'";
-                            echo $requete;
                             $resultat = mysqli_query($connexion, $requete);
                             if ($resultat) {
+                                $dernier_rang = $_POST['rang_menu'] + 1;
                                 $insertion = true;
                                 $message['resultat'] = "<p class=\"alerte ok\">Menu ajouté !</p>";
                             }else{
@@ -85,10 +91,9 @@ if (isset($_SESSION['id_compte'])) {
                     if(isset($_GET['confirm']) && $_GET['confirm']==1) {
                         $requete = "DELETE FROM menus WHERE id_menu='". $_GET['id_menu']."'";
                         $resultat = mysqli_query($connexion, $requete);
-
-                        // Redirection
-                        $url=$_SERVER['PHP_SELF']. "?module=menus&action=afficher_menus";
-                        header("Location: $url");
+                        $dernier_rang--;
+                        
+                        $action_form = "afficher_menus";
                         $entete = "<h1 class=\"alerte ok\">Menu supprimé</h1>";
                     }
                 }
