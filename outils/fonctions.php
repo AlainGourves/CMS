@@ -495,7 +495,7 @@ function afficher_menus($connexion,$requete) {
     // on construit un tableau qui affiche tous les menus
     $tab_resultats = "\n<table class=\"tab_resultats\" id=\"tab_menus\">\n";
 	$tab_resultats .= "<tr>\n
-		<th class=\"small\">Rang</th>\n
+		<th class=\"small\">Tri</th>\n
 		<th class=\"medium\">Intitulé</th>\n
 		<th class=\"large\">Lien</th>\n
 		<th class=\"small\">Actions</th>\n
@@ -503,7 +503,7 @@ function afficher_menus($connexion,$requete) {
     
     while ($ligne = mysqli_fetch_object($resultat)) {
         $tab_resultats .= "<tr>\n";
-        $tab_resultats .= "\t<td>". $ligne->rang_menu ."</td>\n";
+        $tab_resultats .= "\t<td><a href=\"admin.php?module=menus&action=trier_menu&id_menu=" . $ligne->id_menu . "&tri=up\"><span class=\"dashicons dashicons-arrow-up\"></span></a>&nbsp;<a href=\"admin.php?module=menus&action=trier_menu&id_menu=" . $ligne->id_menu . "&tri=down\"><span class=\"dashicons dashicons-arrow-down\"></span></a></td>\n";
         $tab_resultats .= "\t<td>". $ligne->intitule_menu ."</td>\n";
         $tab_resultats .= "\t<td>". $ligne->lien_menu ."</td>\n";
         $tab_resultats .= "\t<td>";
