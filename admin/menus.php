@@ -74,11 +74,9 @@ if (isset($_SESSION['id_compte'])) {
                     }
                     if ($isUpdate){
                         $requete = "UPDATE menus SET rang_menu='" . $inversion_rang . "' WHERE rang_menu='" . $nouveau_rang . "'";
-                        echo $requete ."\n";
                         $resultat = mysqli_query($connexion, $requete);
                         // attribue le nouveau rang au menu concerné
                         $requete="UPDATE menus SET rang_menu='". $nouveau_rang. "' WHERE id_menu='". $_GET['id_menu'] . "'";
-                        echo $requete;
                         $resultat=mysqli_query($connexion, $requete);
                     }
                 }
