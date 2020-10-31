@@ -14,6 +14,7 @@
 	--hautBarres: 80px;
 	--ombre: rgba(0, 0, 0, .5);
 	--ombre2: rgba(0, 0, 0, .25);
+	--ombre3: rgba(0, 0, 0, .125);
 	--gris1: hsla(60, 18%, 70%, 1);
 	--gris2: hsla(60, 18%, 80%, 1);
 	--gris3: hsla(60, 18%, 95%, 1);
@@ -97,11 +98,6 @@ body {
 	right: -20px;
 	bottom: 0;
 	background-image: radial-gradient(circle at 100% 0, transparent 20px, var(--ombre) 21px);
-
-	/* transform: translateY(-50%);
-	border-left: 8px solid  var(--ombre);
-	border-top: 12px solid transparent;
-	border-bottom: 12px solid transparent; */
 }
 
 #menu_back li:first-of-type a {
@@ -126,8 +122,6 @@ body {
 	left: var(--largAside);
 	width: calc(100vw - var(--largAside));
 	height: 100vh;
-	/* display: flex;
-	flex-direction: column; */
 }
 
 #header_back {
@@ -216,7 +210,7 @@ body {
 	transform: scale(1);
 	opacity: 1;
 }
-
+/* 
 #footer_back {
 	position: fixed;
 	width: 100%;
@@ -224,13 +218,13 @@ body {
 	bottom: 0;
 	z-index: 20;
 	background: var(--gris2);
-}
+} */
 
 #contenu_back {
 	position: absolute;
 	top: var(--hautBarres);
 	left: 0;
-	height: calc(100vh - var(--hautBarres)*2);
+	height: calc(100vh - var(--hautBarres));
 	width: 100%;
 	padding: 36px 24px;
 	background: var(--gris3);
@@ -390,12 +384,8 @@ main #contenu_back p {
 	width: auto;	
 }
 
-.tab_resultats tr:hover {
-	background-color: var(--bleuLight);
-}
-
-.tab_resultats tr:nth-of-type(1):hover {
-	background-color: inherit;
+.tab_resultats tr:nth-child(even) td{
+	background-color: var(--ombre3);
 }
 
 .tab_resultats tr[id^="message"] td {
@@ -413,6 +403,7 @@ main #contenu_back p {
 
 .tab_resultats img {
 	display: block;
+	margin: 0 auto;
 	height: 40px;
 	border-radius: 4px;
 }
@@ -439,6 +430,9 @@ main #contenu_back p {
 }
 #tab_articles td {
 	vertical-align: top;
+}
+#tab_articles tr > :nth-of-type(2){
+	font-weight: 700;
 }
 #tab_sliders tr > :nth-of-type(1),
 #tab_sliders tr > :nth-of-type(3),
@@ -603,6 +597,17 @@ p.ok {
 	background-color: #fff;
 }
 
+p.alerte{
+	position: relative;
+}
+
+p.alerte .dashicons{
+	position: absolute;
+	top: 0;
+	right: 0;
+	cursor: pointer;
+}
+
 .alerte.ok {
 	color: var(--vert);
 	border-color: var(--vert);
@@ -618,9 +623,6 @@ p.ok {
 }
 
 /* gestion avatar dans le tableau des comptes */
-/* td.miniature{
-	text-align: center;
-} */
 .miniature figure{
 	position: relative;
 	width: min-content;

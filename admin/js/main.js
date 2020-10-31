@@ -1,5 +1,6 @@
 let myForm = document.querySelector('form');
 let inputFile = document.querySelector('.inputFile');
+let alerte = document.querySelector("p.alerte");
 
 window.addEventListener("load", e => {
 
@@ -38,4 +39,12 @@ window.addEventListener("load", e => {
         let today = new Date().toISOString().substr(0,10);
         d.value = today;
     }
+
+    if(alerte){
+        alerte.insertAdjacentHTML('beforeend', "<span class=\"dashicons dashicons-no-alt\"></span>");
+        alerte.addEventListener("click", e =>{
+            alerte.remove();
+        })
+    }
 });
+
