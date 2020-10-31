@@ -585,6 +585,7 @@ p.ok {
 }
 
 .alerte {
+	position: relative;
 	width: 80%;
 	min-height: 3em;
 	padding: .8em .4em;
@@ -597,11 +598,7 @@ p.ok {
 	background-color: #fff;
 }
 
-p.alerte{
-	position: relative;
-}
-
-p.alerte .dashicons{
+.alerte .dashicons{
 	position: absolute;
 	top: 0;
 	right: 0;

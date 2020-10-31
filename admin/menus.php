@@ -118,9 +118,16 @@ if (isset($_SESSION['id_compte'])) {
                     <a href=\"admin.php?module=menus&action=afficher_menus\">NON</a>
                     </h1>";
                     if(isset($_GET['confirm']) && $_GET['confirm']==1) {
+                        // récupère le rang du menu à supprimer
+                        $requete = "SELECT rang_menu FROM menus WHERE id_menu='".$_GET['id_menu']."'";
+                        $resultat = mysqli_query($connexion, $requete);
+                        $ligne=mysqli_fetch_object($resultat);
+                        $rang_a_supprimer = $ligne->rang_menu;
                         $requete = "DELETE FROM menus WHERE id_menu='". $_GET['id_menu']."'";
                         $resultat = mysqli_query($connexion, $requete);
-                        
+                        // Mise à jour des rangs
+                        $requete = "UPDATE menus SET rang_menu=(rang_menu -1) WHERE rang_menu>". $rang_a_supprimer;
+                        $resultat = mysqli_query($connexion, $requete);
                         $action_form = "afficher_menus";
                         $entete = "<h1 class=\"alerte ok\">Menu supprimé</h1>";
                     }

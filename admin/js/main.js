@@ -1,6 +1,6 @@
 let myForm = document.querySelector('form');
 let inputFile = document.querySelector('.inputFile');
-let alerte = document.querySelector("p.alerte");
+let alerte = document.querySelector(".alerte");
 
 window.addEventListener("load", e => {
 
@@ -41,10 +41,12 @@ window.addEventListener("load", e => {
     }
 
     if(alerte){
-        alerte.insertAdjacentHTML('beforeend', "<span class=\"dashicons dashicons-no-alt\"></span>");
-        alerte.addEventListener("click", e =>{
-            alerte.remove();
-        })
+        if (!alerte.classList.contains("ouinon")){
+            alerte.insertAdjacentHTML('beforeend', "<span class=\"dashicons dashicons-no-alt\"></span>");
+            alerte.addEventListener("click", e =>{
+                alerte.remove();
+            })
+        }
     }
 });
 
