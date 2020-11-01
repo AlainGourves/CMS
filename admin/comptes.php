@@ -167,7 +167,7 @@ if (isset($_SESSION['id_compte'])) {
                         $entete="<h1 class=\"alerte pas_ok\">Impossible ! Il faut au moins un compte admin</h1>";
                     }else{
                         $extension = (isset($_GET['ext'])) ? "&ext=". $_GET['ext'] : '';
-                        $entete="<h1 class=\"alerte ouinon\">Vous-voulez vraiment supprimer ce compte ? 
+                        $entete="<h1 class=\"alerte ouinon flex\">Vous-voulez vraiment supprimer ce compte&nbsp;? 
                         <a href=\"admin.php?module=comptes&action=supprimer_compte&statut_compte=".$_GET['statut_compte']."&id_compte=".$_GET['id_compte']. $extension. "&confirm=1\">OUI</a>
                         <a href=\"admin.php?module=comptes&action=afficher_comptes\">NON</a>
                         </h1>";
@@ -194,7 +194,7 @@ if (isset($_SESSION['id_compte'])) {
             case 'supprimer_avatar':
                 if(isset($_GET['id_compte'])) {
                     $extension = (isset($_GET['ext'])) ? "&ext=". $_GET['ext'] : '';
-                    $entete="<h1 class=\"alerte ouinon\">Vous-voulez vraiment supprimer l'avatar ? 
+                    $entete="<h1 class=\"alerte ouinon flex\">Vous-voulez vraiment supprimer l'avatar&nbsp;? 
                     <a href=\"admin.php?module=comptes&action=supprimer_avatar&id_compte=".$_GET['id_compte']. $extension. "&confirm=1\">OUI</a>
                     <a href=\"admin.php?module=comptes&action=afficher_comptes\">NON</a>
                     </h1>";

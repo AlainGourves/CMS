@@ -1,4 +1,4 @@
-@media (hover: none) and (pointer: coarse) {
+@media (hover: none) and (any-pointer: coarse) {
     #header_back .user_status {
         transform: scaleY(1);
         opacity: 1;
@@ -24,6 +24,7 @@
 
     .tab_resultats,
     .tab_resultats td {
+        --rnd: 6px;
         border: none;
     }
 
@@ -35,13 +36,13 @@
     }
 
     .tab_resultats tr td:first-of-type {
-        border-top-right-radius: 8px;
-        border-top-left-radius: 8px;
+        border-top-right-radius: var(--rnd);
+        border-top-left-radius: var(--rnd);
     }
 
     .tab_resultats tr td:last-of-type {
-        border-bottom-right-radius: 8px;
-        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: var(--rnd);
+        border-bottom-left-radius: var(--rnd);
         margin-bottom: 1em;
     }
 

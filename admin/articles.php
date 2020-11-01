@@ -157,7 +157,7 @@ if (isset($_SESSION['id_compte'])) {
             
             case 'supprimer_article':
                 if(isset($_GET['id_article'])) {
-                    $entete = "<h1 class=\"alerte ouinon\">Vous-voulez vraiment supprimer cet article&nbsp;? 
+                    $entete = "<h1 class=\"alerte ouinon flex\">Vous-voulez vraiment supprimer cet article&nbsp;? 
                     <a href=\"admin.php?module=articles&action=supprimer_article&id_article=" . $_GET['id_article'] . "&confirm=1\">OUI</a>
                     <a href=\"admin.php?module=articles&action=afficher_articles\">NON</a>
                     </h1>";
@@ -233,7 +233,7 @@ if (isset($_SESSION['id_compte'])) {
 
             case 'supprimer_image':
                 if(isset($_GET['id_article'])) {
-                    $entete="<h1 class=\"alerte ouinon\">Vous-voulez vraiment supprimer l'image ? 
+                    $entete="<h1 class=\"alerte ouinon flex\">Vous-voulez vraiment supprimer l'image&nbsp;? 
                     <a href=\"admin.php?module=articles&action=supprimer_image&id_article=".$_GET['id_article']. "&confirm=1\">OUI</a>
                     <a href=\"admin.php?module=articles&action=afficher_articles\">NON</a>
                     </h1>";

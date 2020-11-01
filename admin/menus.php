@@ -113,7 +113,7 @@ if (isset($_SESSION['id_compte'])) {
             
             case 'supprimer_menu':
                 if(isset($_GET['id_menu'])) {
-                    $entete="<h1 class=\"alerte ouinon\">Vous-voulez vraiment supprimer ce menu&nbsp;? 
+                    $entete="<h1 class=\"alerte ouinon flex\">Vous-voulez vraiment supprimer ce menu&nbsp;? 
                     <a href=\"admin.php?module=menus&action=supprimer_menu&id_menu=".$_GET['id_menu']."&confirm=1\">OUI</a>
                     <a href=\"admin.php?module=menus&action=afficher_menus\">NON</a>
                     </h1>";

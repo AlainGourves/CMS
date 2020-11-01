@@ -83,7 +83,7 @@ if (isset($_SESSION['id_compte'])) {
                         $requete="UPDATE sliders 
                             SET titre_slider='".addslashes($_POST['titre_slider'])."',
                                 descriptif_slider='".addslashes($_POST['descriptif_slider'])."' 
-                            WHERE id_slider='".$_GET['id_slider']."'";	
+                            WHERE id_slider='".$_GET['id_slider']."'";
                         $resultat=mysqli_query($connexion,$requete);
                         
                         //si une nouvelle image a été choisie
@@ -148,7 +148,7 @@ if (isset($_SESSION['id_compte'])) {
             
             case 'supprimer_slider':
                 if(isset($_GET['id_slider'])) {
-                    $entete = "<h1 class=\"alerte ouinon\">Vous-voulez vraiment supprimer cette image ? 
+                    $entete = "<h1 class=\"alerte ouinon flex\">Vous-voulez vraiment supprimer cette image&nbsp;? 
                     <a href=\"admin.php?module=slider&action=supprimer_slider&id_slider=" . $_GET['id_slider'] . "&confirm=1\">OUI</a>
                     <a href=\"admin.php?module=slider&action=afficher_sliders\">NON</a>
                     </h1>";

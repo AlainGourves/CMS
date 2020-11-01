@@ -29,6 +29,9 @@ window.addEventListener("load", e => {
         inputFile.addEventListener('change', e => {
             let path = e.target.value;
             let file = path.split('\\').pop();
+            if(file.length>35){
+                file = file.substring(0,10) + '...' + file.slice(-8);
+            }
             let label = inputFile.nextElementSibling;
             label.lastChild.textContent = file;
         });

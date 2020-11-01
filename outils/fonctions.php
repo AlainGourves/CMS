@@ -3,20 +3,20 @@
  * ************************* FONCTIONS
  * 		- connexion()
  * 		- protocole()
- * 		- security($chaine)
- * 		- login($login,$password)
- * 		- fichier_type($uploadedFile)
- * 		- redimage($img_src, $img_dest, $dst_w, $dst_h, $quality)
- * 		- avatar($img_src, $img_dest, $dst_w, $dst_h, $quality)
- * 		- format_date($date,$format)
- * 		- envoi_mel($destinataire,$sujet,$message_txt, $message_html,$expediteur)
- * 		- afficher_contacts($connexion,$requete)
- * 		- afficher_comptes($connexion,$requete)
- * 		- extrait($texte,$nb_mots,$tolerance)
- * 		- afficher_articles($connexion,$requete,$cas)
- * 		- afficher_menus($connexion,$requete)
- * 		- afficher_droits($connexion)
- * 		- afficher_sliders($connexion,$requete)
+ * 		- security()
+ * 		- login()
+ * 		- fichier_type()
+ * 		- redimage()
+ * 		- avatar()
+ * 		- format_date()
+ * 		- envoi_mel()
+ * 		- afficher_contacts()
+ * 		- afficher_comptes()
+ * 		- extrait()
+ * 		- afficher_articles()
+ * 		- afficher_menus()
+ * 		- afficher_droits()
+ * 		- afficher_sliders()
  */
 
 
@@ -30,6 +30,7 @@ function connexion() {
 	//$connexion = mysqli_connect(SERVEUR,LOGIN,PASSE,BASE,PORT) or die("Error " . mysqli_error($connexion));
 	//si pas de numéro de port	
 	$connexion = mysqli_connect(SERVEUR,LOGIN,PASSE,BASE) or die("Error " . mysqli_error($connexion));
+	mysqli_set_charset($connexion, "utf8mb4"); // pour une gestion complète de l'UTF8 par mySQL
 	
 	return $connexion;
 }
@@ -294,13 +295,15 @@ function afficher_contacts($connexion,$requete) {
 		$tab_resultats .= "\"></span></a></td>\n";
 		
 		//traitement date
-		$tab_resultats .= "\t<td>\n";
-		setlocale(LC_TIME, "fr_FR");
-		$time = strtotime($ligne->date_contact);
-		$tab_resultats .= strftime("%e %b %Y %R", $time);
-		$tab_resultats .= "</td>\n";
-	
-
+		$date = new DateTime($ligne->date_contact);
+		$fmt = datefmt_create( 
+				"fr-FR",
+				IntlDateFormatter::MEDIUM,
+				IntlDateFormatter::SHORT,
+				'Europe/Paris',
+				IntlDateFormatter::GREGORIAN
+		);
+		$tab_resultats .= "\t<td>" .datefmt_format($fmt , $date). "</td>\n";
 		$tab_resultats .= "\t<td>\n";
 		$tab_resultats .= "<a href=\"admin.php?module=messages&action=supprimer_message&id_contact=" . $ligne->id_contact . "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
 		$tab_resultats .= "</td>\n</tr>\n";
@@ -423,9 +426,14 @@ function afficher_articles($connexion,$requete,$cas) {
 				$affichage.="<td>" . $ligne->titre_article . "</td>\n";
 				$affichage.="<td>" . extrait($ligne->contenu_article,8,4) . "</td>\n";
 				//traitement date
-				setlocale(LC_TIME, "fr_FR");
-				$time = strtotime($ligne->date_article);
-				$affichage.="<td>" .  strftime("%e %b %Y", $time). "</td>\n";	
+				$date = new DateTime($ligne->date_article);
+				$fmt = datefmt_create( "fr-FR",
+                        IntlDateFormatter::MEDIUM,
+                        IntlDateFormatter::NONE,
+                        'Europe/Paris',
+                        IntlDateFormatter::GREGORIAN
+				);
+				$affichage.="<td>" . datefmt_format($fmt , $date) . "</td>\n";
 				// $affichage.="<td>" . $ligne->rss . "</td>\n";
 				$affichage.="<td class=\"miniature\">";
 				if(empty($ligne->fichier_article)){
