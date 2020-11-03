@@ -1,0 +1,81 @@
+<section id="slider" role="banner">
+<?php
+    if(isset($slider)){
+        echo $slider;
+    }
+?>
+</section>
+
+<section id="presta" class="position fleche">
+    <h1>Nos prestations</h1>
+    <article>
+        <h2>Construction neuve</h2>
+        <p>C'est un fait établi depuis longtemps qu'un lecteur sera distrait par le contenu lisible d'une page lorsqu'il regarde sa mise en page.</p>
+        <button class="cta cta_vert">EN SAVOIR PLUS</button>
+    </article>
+    <article>
+        <h2>Extension</h2>
+        <p>C'est un fait établi depuis longtemps qu'un lecteur sera distrait par le. C'est un fait établi depuis longtemps qu'un lecteur sera distrait par le contenu lisible d'une page lorsqu'il regarde sa mise en page.</p>
+        <button class="cta cta_vert">EN SAVOIR PLUS</button>
+    </article>
+    <article>
+        <h2>Rénovation</h2>
+        <p>C'est un fait établi depuis longtemps qu'un lecteur sera distrait par le contenu lisible d'une page lorsqu'il regarde sa mise en page.</p>
+        <button class="cta cta_vert">EN SAVOIR PLUS</button>
+    </article>
+</section>
+
+
+<section id="entreprise" class="position fleche">
+    <h1>Qui sommes-nous ?</h1>
+    <figure>
+        <img src="../images/plan.jpg" alt="Père et Fils depuis 1920" />
+    </figure>
+    <article>
+        <p>Molestie aliqua praesent vel architecto anim! Tempore. Sodales feugiat aliquid eos cillum platea saepe magna egestas.</p>
+        <p>Cumque adipiscing voluptatum voluptas minima imperdiet magni placerat penatibus egestas ex praesent, adipiscing aliquip ac elit.</p>
+        <p>Quibusdam irure varius exercitation, minima libero, interdum montes error pellentesque volutpat facilisis! Atque senectus iste laoreet.</p>
+        <button class="cta cta_gris">EN SAVOIR PLUS</button>
+    </article>
+</section>
+
+<section id="actus" class="position fleche">
+    <h1>Toutes nos actus</h1>
+    <article class="a_la_une">
+        <img src="../images/slide1.jpg" alt="Actu à la une" />
+        <h2>Titre h2 ici</h2>
+        <p class="ref">GT45625</p>
+        <p>Molestiae do sunt pulvinar dapibus bibendum laborum diam, excepteur, varius autem voluptas sem condimentum? Eiusmod consequuntur.</p>
+        <a href="#">&gt; LIRE LA SUITE</a>
+    </article>
+    
+    <div>
+        <article>
+            <h2>Titre h2 ici</h2>
+            <p class="ref">UY78958</p>
+            <p>Sagittis blanditiis ligula reprehenderit voluptatem alias senectus molestiae? Itaque est lobortis impedit occaecat ab, auctor mattis. Molestiae do sunt pulvinar dapibus bibendum laborum diam, excepteur, varius autem voluptas sem condimentum? Eiusmod consequuntur.</p>
+            <a href="#">&gt; LIRE LA SUITE</a>				
+        </article>
+        <article>
+            <h2>Titre h2 ici</h2>
+            <p class="ref">AZ96521</p>
+            <p>Senectus bob, provident at feugiat cupiditate id minus, consectetuer anim vehicula ullamcorper, curae similique, at voluptatem. Sagittis blanditiis ligula reprehenderit voluptatem alias senectus molestiae? Itaque est lobortis impedit occaecat ab, auctor mattis. Molestiae do sunt pulvinar dapibus bibendum laborum diam, excepteur, varius autem voluptas sem condimentum? Eiusmod consequuntur.</p>
+            <a href="#">&gt; LIRE LA SUITE</a>				
+        </article>
+    </div>
+    
+    <button class="cta cta_vert"><a href="front.php?page=article">VOIR TOUTES LES ACTUS</a></button>
+</section>
+<section id="contact" class="position">
+<?php if(isset($contact)){ include $contact;} ?>
+</section>
+
+<script type="text/javascript">
+    $('#slider').sss({
+        slideShow : true, // Set to false to prevent SSS from automatically animating.
+        startOn : 0, // Slide to display first. Uses array notation (0 = first slide).    
+        transition : 400, // Length (in milliseconds) of the fade transition.
+        speed : 5500, // Slideshow speed in milliseconds.</span>
+        showNav : true // Set to false to hide navigation arrows.
+    });
+</script>

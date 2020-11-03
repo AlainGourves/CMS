@@ -469,23 +469,28 @@ function afficher_articles($connexion,$requete,$cas) {
 			$i=0;
 			while($ligne=mysqli_fetch_object($resultat)) {				
 				//calcul de la date en 3 morceaux
-				$tab_date=explode("-",$ligne->date_article);
+				// se débarsser de l'heure
+				$tab_date=explode(" ",$ligne->date_article); 
+				$tab_date=explode("-",$tab_date[0]);
 				$annee=$tab_date[0];
 				$mois=$nom_mois[$tab_date[1]-1];
 				$jour=$tab_date[2];
 
-				$affichage.="<article class=\"blog w50\">\n";
-				$affichage.="<div class=\"date backrose textblanc\">\n";
-				$affichage.="<span class=\"jj \">" . $jour . "</span>\n";
+				$affichage.="<article class=\"\">\n";
+				$affichage.="<div class=\"date\">\n";
+				$affichage.="<span class=\"jj\">" . $jour . "</span>\n";
 				$affichage.="<span class=\"mm\">" . $mois . "</span>\n"; 
 				$affichage.="<span class=\"aaaa\">" . $annee . "</span>\n";								
 				$affichage.="</div>\n";
 				if(!empty($ligne->fichier_article)){
-					$affichage.="<img src=\"". str_replace("_b","_s",$ligne->fichier_article) . "\" alt=\"" . $ligne->titre_article . "\" />\n";
+					$affichage.="<img src=\"". $ligne->fichier_article . "\" alt=\"" . $ligne->titre_article . "\" />\n";
+					// $affichage.="<img src=\"". str_replace("_s","_b",$ligne->fichier_article) . "\" alt=\"" . $ligne->titre_article . "\" />\n";
 				}
-				$affichage.="<h2 class=\"textvert\">" . $ligne->titre_article . "</h2>\n";
-				$affichage.="<p>" . $ligne->contenu_article . "</p>\n";
-				$affichage.="</article>\n";
+				$affichage .= "<div class=\"article_texte\">";
+				$affichage .="<h2>" . $ligne->titre_article . "</h2>\n";
+				$affichage .="<p>" . $ligne->contenu_article . "</p>\n";
+				$affichage .= "</div>";
+				$affichage .="</article>\n";
 				$i++;				
 			}
 					
@@ -553,41 +558,52 @@ function afficher_droits($connexion) {
 
 	
 //=======================================
-function afficher_sliders($connexion,$requete) {
+function afficher_sliders($connexion,$requete,$cas="back") {
 	$resultat = mysqli_query($connexion, $requete);
-	$affichage="<table class=\"tab_resultats\" id=\"tab_sliders\">\n";
-    //on calcule les entêtes des colonnes
-    $affichage.="<tr>\n";                            
-    $affichage.="<th class=\"small\">Tri</th>\n";    
-    $affichage.="<th class=\"large\">Titre image</th>\n";    
-    $affichage.="<th class=\"small\">Image</th>\n";        
-    $affichage.="<th class=\"small\">Actions</th>\n";
-    $affichage.="</tr>\n";
-    while($ligne=mysqli_fetch_object($resultat))
-        {
-        //on affiche le contenu de chaque uplet présent dans la table
-        $affichage.="<tr>\n";
-		$affichage.="<td>
-			<a href=\"admin.php?module=slider&action=trier_slider&id_slider=". $ligne->id_slider. "&tri=up\"><span class=\"dashicons dashicons-arrow-up\"></span>
-			&nbsp;
-			<a href=\"admin.php?module=slider&action=trier_slider&id_slider=". $ligne->id_slider. "&tri=down\"><span class=\"dashicons dashicons-arrow-down\"></span>
-		</td>\n";                
-        $affichage.="<td><strong>" . $ligne->titre_slider . "</strong><br />". extrait($ligne->descriptif_slider, 5, 0). "</td>\n";                
-        $affichage.="<td><a href=\"". str_replace("_s", "_b", $ligne->fichier_slider). "\" target=\"blank\"><img src=\"".$ligne->fichier_slider."\" alt=\"\" /></a></td>\n";
-        $affichage.="<td>";        
-        $affichage.="<a href=\"admin.php?module=slider&action=modifier_slider&id_slider=" . $ligne->id_slider . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
-        $affichage.="&nbsp;";
-        $affichage.="<a href=\"admin.php?module=slider&action=supprimer_slider&id_slider=" . $ligne->id_slider . "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
-        $affichage.="</td>\n";                        
-        $affichage.="</tr>\n";                    
-        }
-    $affichage.="</table>\n";
+	switch($cas) {
+		case "back":
+			$affichage="<table class=\"tab_resultats\" id=\"tab_sliders\">\n";
+			//on calcule les entêtes des colonnes
+			$affichage.="<tr>\n";                            
+			$affichage.="<th class=\"small\">Tri</th>\n";    
+			$affichage.="<th class=\"large\">Titre image</th>\n";    
+			$affichage.="<th class=\"small\">Image</th>\n";        
+			$affichage.="<th class=\"small\">Actions</th>\n";
+			$affichage.="</tr>\n";
+			while($ligne=mysqli_fetch_object($resultat)) {
+				//on affiche le contenu de chaque uplet présent dans la table
+				$affichage.="<tr>\n";
+				$affichage.="<td>
+					<a href=\"admin.php?module=slider&action=trier_slider&id_slider=". $ligne->id_slider. "&tri=up\"><span class=\"dashicons dashicons-arrow-up\"></span>
+					&nbsp;
+					<a href=\"admin.php?module=slider&action=trier_slider&id_slider=". $ligne->id_slider. "&tri=down\"><span class=\"dashicons dashicons-arrow-down\"></span>
+				</td>\n";                
+				$affichage.="<td><strong>" . $ligne->titre_slider . "</strong><br />". extrait($ligne->descriptif_slider, 5, 0). "</td>\n";                
+				$affichage.="<td><a href=\"". str_replace("_s", "_b", $ligne->fichier_slider). "\" target=\"blank\"><img src=\"".$ligne->fichier_slider."\" alt=\"\" /></a></td>\n";
+				$affichage.="<td>";        
+				$affichage.="<a href=\"admin.php?module=slider&action=modifier_slider&id_slider=" . $ligne->id_slider . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
+				$affichage.="&nbsp;";
+				$affichage.="<a href=\"admin.php?module=slider&action=supprimer_slider&id_slider=" . $ligne->id_slider . "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
+				$affichage.="</td>\n";                        
+				$affichage.="</tr>\n";                    
+			}
+			$affichage.="</table>\n";
+			break;
+
+			case "front":
+				$affichage = "";
+				while($ligne=mysqli_fetch_object($resultat)) {
+					$affichage .= "<figure>\n";
+					$affichage .= "<img src=\"". str_replace("_s", "_b", $ligne->fichier_slider). "\" alt=\"". $ligne->titre_slider. "\" />";
+					$affichage .= "<figcaption class=\"caption\">\n";
+					$affichage .= "<h1>". $ligne->titre_slider. "</h1>";
+					$affichage .= "<p>". $ligne->descriptif_slider. "</p>";
+					$affichage .= "</figcaption>\n";
+					$affichage .= "</figure>\n";
+				}
+			break;
+		}
 
     return $affichage;
 }
 ?>
-
-
-
-
-

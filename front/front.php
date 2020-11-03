@@ -20,7 +20,24 @@ while($ligne = mysqli_fetch_object($resultat)){
 }
 $menu_haut .= "</ul>\n";
 $menu_haut .= "</nav>\n";
-// ====================================================
+
+// ================================  Calcul du contenu des pages ==
+if(isset($_GET['page'])){
+    $contenu = $_GET['page']. ".html";
+    switch($_GET['page']){
+        case "article":
+            $requete = "SELECT * FROM articles ORDER BY date_article DESC";
+            $affichage = afficher_articles($connexion, $requete, "front");
+        break;
+    }
+}else{
+    // Gestion slider
+    $slider = "";
+    $requete = "SELECT * FROM sliders ORDER BY rang_slider ASC";
+    $slider = afficher_sliders($connexion, $requete, "front");
+    $contenu = "home.html";
+}
+
 
 $contact = "form_contact.html";
 
