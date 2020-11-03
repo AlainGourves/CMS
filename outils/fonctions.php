@@ -296,14 +296,14 @@ function afficher_contacts($connexion,$requete) {
 		
 		//traitement date
 		$date = new DateTime($ligne->date_contact);
-		$fmt = datefmt_create( 
+		$fmt = new IntlDateFormatter( 
 				"fr-FR",
 				IntlDateFormatter::MEDIUM,
 				IntlDateFormatter::SHORT,
 				'Europe/Paris',
 				IntlDateFormatter::GREGORIAN
 		);
-		$tab_resultats .= "\t<td>" .datefmt_format($fmt , $date). "</td>\n";
+		$tab_resultats .= "\t<td>" .$fmt->format($date). "</td>\n";
 		$tab_resultats .= "\t<td>\n";
 		$tab_resultats .= "<a href=\"admin.php?module=messages&action=supprimer_message&id_contact=" . $ligne->id_contact . "\"><span class=\"dashicons dashicons-no-alt\"></span></a>";
 		$tab_resultats .= "</td>\n</tr>\n";
@@ -427,13 +427,13 @@ function afficher_articles($connexion,$requete,$cas) {
 				$affichage.="<td>" . extrait($ligne->contenu_article,8,4) . "</td>\n";
 				//traitement date
 				$date = new DateTime($ligne->date_article);
-				$fmt = datefmt_create( "fr-FR",
+				$fmt = new IntlDateFormatter( "fr-FR",
                         IntlDateFormatter::MEDIUM,
                         IntlDateFormatter::NONE,
                         'Europe/Paris',
                         IntlDateFormatter::GREGORIAN
 				);
-				$affichage.="<td>" . datefmt_format($fmt , $date) . "</td>\n";
+				$affichage.="<td>" . $fmt->format($date) . "</td>\n";
 				// $affichage.="<td>" . $ligne->rss . "</td>\n";
 				$affichage.="<td class=\"miniature\">";
 				if(empty($ligne->fichier_article)){

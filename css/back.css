@@ -612,6 +612,7 @@ p.ok {
 .alerte {
 	position: relative;
 	width: calc(80% - 1em);
+	max-width: 800px;
 	min-height: 3em;
 	padding: .8em .4em;
 	margin: .5em auto;

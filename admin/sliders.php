@@ -15,7 +15,7 @@ if (isset($_SESSION['id_compte'])) {
                     if (empty($_POST['titre_slider'])) {
                         $message['titre_slider'] = "<label for=\"titre_slider\" class=\"pas_ok\">mets ton titre, chacal !</label>";
                     }elseif(empty($_FILES['fichier_slider']['name'])){
-                        $message['fichier_slider'] = "<label for=\"fichier_slider\" class=\"pas_ok\">Va chercher un fichier, abruti !</label>";
+                        $message['fichier_slider'] = "<p for=\"fichier_slider\" class=\"pas_ok\">Va chercher un fichier, abruti !</p>";
                     }else{
                         // on teste si le fichier a le bon format
                         if (fichier_type($_FILES['fichier_slider']['name'])=='png' || fichier_type($_FILES['fichier_slider']['name'])=='jpg' || fichier_type($_FILES['fichier_slider']['name'])=='gif') {
