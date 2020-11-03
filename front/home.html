@@ -41,28 +41,9 @@
 
 <section id="actus" class="position fleche">
     <h1>Toutes nos actus</h1>
-    <article class="a_la_une">
-        <img src="../images/slide1.jpg" alt="Actu à la une" />
-        <h2>Titre h2 ici</h2>
-        <p class="ref">GT45625</p>
-        <p>Molestiae do sunt pulvinar dapibus bibendum laborum diam, excepteur, varius autem voluptas sem condimentum? Eiusmod consequuntur.</p>
-        <a href="#">&gt; LIRE LA SUITE</a>
-    </article>
-    
-    <div>
-        <article>
-            <h2>Titre h2 ici</h2>
-            <p class="ref">UY78958</p>
-            <p>Sagittis blanditiis ligula reprehenderit voluptatem alias senectus molestiae? Itaque est lobortis impedit occaecat ab, auctor mattis. Molestiae do sunt pulvinar dapibus bibendum laborum diam, excepteur, varius autem voluptas sem condimentum? Eiusmod consequuntur.</p>
-            <a href="#">&gt; LIRE LA SUITE</a>				
-        </article>
-        <article>
-            <h2>Titre h2 ici</h2>
-            <p class="ref">AZ96521</p>
-            <p>Senectus bob, provident at feugiat cupiditate id minus, consectetuer anim vehicula ullamcorper, curae similique, at voluptatem. Sagittis blanditiis ligula reprehenderit voluptatem alias senectus molestiae? Itaque est lobortis impedit occaecat ab, auctor mattis. Molestiae do sunt pulvinar dapibus bibendum laborum diam, excepteur, varius autem voluptas sem condimentum? Eiusmod consequuntur.</p>
-            <a href="#">&gt; LIRE LA SUITE</a>				
-        </article>
-    </div>
+<?php
+        if(isset($actus)){ echo $actus; }
+?>
     
     <button class="cta cta_vert"><a href="front.php?page=article">VOIR TOUTES LES ACTUS</a></button>
 </section>
@@ -72,7 +53,7 @@
 
 <script type="text/javascript">
     $('#slider').sss({
-        slideShow : true, // Set to false to prevent SSS from automatically animating.
+        slideShow : false, // Set to false to prevent SSS from automatically animating.
         startOn : 0, // Slide to display first. Uses array notation (0 = first slide).    
         transition : 400, // Length (in milliseconds) of the fade transition.
         speed : 5500, // Slideshow speed in milliseconds.</span>

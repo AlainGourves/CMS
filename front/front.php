@@ -29,12 +29,26 @@ if(isset($_GET['page'])){
             $requete = "SELECT * FROM articles ORDER BY date_article DESC";
             $affichage = afficher_articles($connexion, $requete, "front");
         break;
+        case "single":
+            if (isset($_GET['id_article'])){
+                $requete = "SELECT * FROM articles WHERE id_article='". $_GET['id_article']. "'";
+                $affichage = afficher_articles($connexion, $requete, "single");
+            }else{
+                header('Location: ../front/');
+                exit;
+            }
+        break;
     }
 }else{
     // Gestion slider
     $slider = "";
     $requete = "SELECT * FROM sliders ORDER BY rang_slider ASC";
     $slider = afficher_sliders($connexion, $requete, "front");
+    // Gestion Actus
+    $requete = "SELECT * FROM articles ORDER BY rang_article ASC LIMIT 3";
+    $resultat = mysqli_query($connexion, $requete);
+    $actus = afficher_articles($connexion, $requete, "home");
+
     $contenu = "home.html";
 }
 

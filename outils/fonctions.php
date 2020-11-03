@@ -17,6 +17,7 @@
  * 		- afficher_menus()
  * 		- afficher_droits()
  * 		- afficher_sliders()
+ * 		- maDate()
  */
 
 
@@ -375,30 +376,24 @@ function extrait($texte,$nb_mots,$tolerance) {
 	$nb_mots_dans_texte=count($tab_mots);
 	
 	//si le nb de valeur est inférieur ou égal à $nb_mots
-	if($nb_mots_dans_texte<=($nb_mots+$tolerance))
-		{
+	if($nb_mots_dans_texte<=($nb_mots+$tolerance)) {
 		$extrait=$texte;	
-		}
-	else//alors il faut raccourcir le texte et fgarder seulement les $nb_mots premiers mots
-		{
+	}else{
+		//alors il faut raccourcir le texte et garder seulement les $nb_mots premiers mots
 		//on fait une boucle qui tourne $nb_mots fois	
 		$extrait="";
-		for($i=0;$i<$nb_mots;$i++)
-			{
+		for($i=0;$i<$nb_mots;$i++) {
 			//au premier tour de boucle
-			if($i==0)
-				{
+			if($i==0) {
 				$extrait.=$tab_mots[$i];	
-				}
-			else
-				{
+			}else{
 				$extrait.=" " . $tab_mots[$i];
-				}
 			}
-		$extrait.="...";
 		}
-	return $extrait;
+		$extrait.="...";
 	}
+	return $extrait;
+}
 	
 //=======================================
 function afficher_articles($connexion,$requete,$cas) {
@@ -425,15 +420,7 @@ function afficher_articles($connexion,$requete,$cas) {
 				$affichage.="<td><a href=\"admin.php?module=articles&action=trier_article&id_article=" . $ligne->id_article . "&tri=up\"><span class=\"dashicons dashicons-arrow-up\"></span></a>&nbsp;<a href=\"admin.php?module=articles&action=trier_article&id_article=" . $ligne->id_article . "&tri=down\"><span class=\"dashicons dashicons-arrow-down\"></span></a></td>\n";	
 				$affichage.="<td>" . $ligne->titre_article . "</td>\n";
 				$affichage.="<td>" . extrait($ligne->contenu_article,8,4) . "</td>\n";
-				//traitement date
-				$date = new DateTime($ligne->date_article);
-				$fmt = new IntlDateFormatter( "fr-FR",
-                        IntlDateFormatter::MEDIUM,
-                        IntlDateFormatter::NONE,
-                        'Europe/Paris',
-                        IntlDateFormatter::GREGORIAN
-				);
-				$affichage.="<td>" . $fmt->format($date) . "</td>\n";
+				$affichage.="<td>" . maDate($ligne->date_article) . "</td>\n";
 				// $affichage.="<td>" . $ligne->rss . "</td>\n";
 				$affichage.="<td class=\"miniature\">";
 				if(empty($ligne->fichier_article)){
@@ -492,9 +479,46 @@ function afficher_articles($connexion,$requete,$cas) {
 				$affichage .= "</div>";
 				$affichage .="</article>\n";
 				$i++;				
+			}	
+			break;
+
+			case "home":
+			$i = 0;
+			$affichage = "";
+			while($ligne = mysqli_fetch_object($resultat)){
+				if ($i==0){
+					// article à la une
+					$affichage .= "<article class=\"a_la_une\">\n";
+					if (!empty($ligne->fichier_article)){
+						$affichage .= "<img src=\"". str_replace("_s", "_b",$ligne->fichier_article). "\" alt=\"". $ligne->titre_article. "\" />";
+					}
+				}elseif($i==1){
+					$affichage .= "<div>\n<article>\n";
+				}else{
+					$affichage .= "<article>\n";
+				}
+				$affichage .= "<h2>". $ligne->titre_article. "</h2>\n";
+				$affichage .= "<p class=\"ref\">". maDate($ligne->date_article). "</p>\n";
+				$texte = extrait($ligne->contenu_article, 20, 5);
+				$affichage .= "<p>". $texte. "</p>\n";
+				if (strlen($texte) < strlen($ligne->contenu_article)) {
+					$affichage .= "<a href=\"front.php?page=single&id_article=". $ligne->id_article."\">&gt; LIRE LA SUITE</a>\n";
+				}
+				$affichage .= "</article>\n";
+				$i++;
 			}
-					
-			break;			
+				$affichage .= "</div>\n";
+			break;
+
+			case "single":
+			$ligne = mysqli_fetch_object($resultat);
+            $affichage = "<article>\n";
+            $affichage = "<h1>". $ligne->titre_article. "</h1>\n";
+            $affichage .= "<p class=\"date_single\">". maDate($ligne->date_article). "</p>\n";
+            $affichage .= "<img src=\"". str_replace("_s", "_b",$ligne->fichier_article). "\" alt=\"". $ligne->titre_article. "\" />\n";
+            $affichage .= "<p>". $ligne->contenu_article. "</p>\n";
+            $affichage .= "</article>\n";
+			break;
 		}		
 	}
 
@@ -605,5 +629,17 @@ function afficher_sliders($connexion,$requete,$cas="back") {
 		}
 
     return $affichage;
+}
+
+// ===========================Date en clair
+function maDate($date){
+	$d = new DateTime($date);
+	$fmt = new IntlDateFormatter( "fr-FR",
+			IntlDateFormatter::MEDIUM,
+			IntlDateFormatter::NONE,
+			'Europe/Paris',
+			IntlDateFormatter::GREGORIAN
+	);
+	return $fmt->format($d);
 }
 ?>
