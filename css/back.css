@@ -408,6 +408,10 @@ select{
 	background-color: var(--ombre3);
 }
 
+.tab_resultats tr:nth-child(even) td:not(:last-of-type){
+	border-right: 1px solid var(--gris3);
+}
+
 .tab_resultats tr[id^="message"] td {
 	display: none;
 }

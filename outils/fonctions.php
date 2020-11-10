@@ -651,24 +651,36 @@ function maDate($date){
 // ===========================Flux RSS
 function generer_flux_rss($connexion, $requete){
 	$resultat = mysqli_query($connexion, $requete);
+	// cf. https://stackoverflow.com/questions/4503135/php-get-site-url-protocol-http-vs-https
+	if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+		$protocol = 'https://';
+	}else {
+		$protocol = 'http://';
+	}
+	$host = $_SERVER['HTTP_HOST'];
+	$root = $protocol. $host. "/archi/";
+	$logo_path = "images/logo.png";
+	$logo_dimensions = getimagesize("../". $logo_path);
 
 	//on calcule l'entete du flux RSS
     $flux_rss="<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n";
-    $flux_rss.="<rss xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" version=\"2.0\" xml:base=\"http://localhost:8888/archi/\">\n";
+	$flux_rss.="<rss version=\"2.0\"\n";
+	$flux_rss.="xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\"  xml:base=\"". $root. "\">\n";
     $flux_rss.="<channel>\n";
-    $flux_rss.="<atom:link rel=\"self\" href=\"http://localhost:8888/archi/feed/rss.xml\"/>\n";    
-    $flux_rss.="<title>Nos actus</title>\n";    
+    $flux_rss.="<atom:link rel=\"self\" href=\"". $root. "feed/rss.xml\"/>\n";    
+    $flux_rss.="<title>BETB Construction et rénovation</title>\n";    
+    $flux_rss.="<link>". $root. "</link>\n";
     $flux_rss.="<description>Le petit journal hebdo de Archi</description>\n";
-    $flux_rss.="<lastBuildDate>" . date("D") . ", " . date("d M Y") . " " .  date("H:i:s") . " " . date("O") . "</lastBuildDate>\n";    
-    $flux_rss.="<link>http://localhost:8888/archi/</link>\n";
-    $flux_rss.="<language>fr</language>\n";
-    $flux_rss.="<copyright>Copyright " . date("Y") . "</copyright>\n";    
+    $flux_rss.="<language>fr-FR</language>\n";
+	$flux_rss.="<copyright>Copyright ". date("Y") ."</copyright>\n";
+    $flux_rss.="<lastBuildDate>". date("r") . "</lastBuildDate>\n";    
+	  
     $flux_rss.="<image>\n";
-    $flux_rss.="<title>Archi : construction et rénovation</title>\n";
-    $flux_rss.="<url>http://localhost:8888/archi/images/logo.png</url>\n";
-    $flux_rss.="<link>http://localhost:8888/archi/</link>\n";
-    $flux_rss.="<width>185</width>\n"; 
-    $flux_rss.="<height>99</height>\n"; 
+    $flux_rss.="<url>". $root. $logo_path. "</url>\n";
+    $flux_rss.="<title>BETB Construction et rénovation</title>\n";
+    $flux_rss.="<link>". $root. "</link>\n";
+    $flux_rss.="<width>". $logo_dimensions[0]. "</width>\n"; 
+    $flux_rss.="<height>". $logo_dimensions[1]. "</height>\n"; 
     $flux_rss.="</image>\n";
     
     $car_replace=array("<br>","<br />");  
@@ -676,18 +688,22 @@ function generer_flux_rss($connexion, $requete){
     //on calcule chaque item du flux (1 item=1 article avec RSS=oui)
 	$i=0;
 	while($ligne=mysqli_fetch_object($resultat)) {
+		$link = $root. "front/front.php?page=single&amp;id_article=". $ligne->id_article;
+
         $flux_rss.="\n<item>\n";
         $flux_rss.="<title><![CDATA[". $ligne->titre_article. "]]></title>\n";
-        $contenu_flux=str_replace($car_replace,"\n",$ligne->contenu_article);
+        $flux_rss.="<link>". $link. "</link>\n";
+		
+		$contenu_flux=str_replace($car_replace,"\n",$ligne->contenu_article);
         $flux_rss.="<description><![CDATA[". str_replace("&","&amp;",strip_tags($contenu_flux)). "]]></description>\n";
-        $date_flux=date("r", strtotime($ligne->date_article));
+		
+		$date_flux=date("r", strtotime($ligne->date_article));
         $flux_rss.="<pubDate>". $date_flux. "</pubDate>\n";    
-        $flux_rss.="<link>http://localhost:8888/archi/front/front.php?page=single&amp;id_article=". $ligne->id_article. "</link>\n";
-        $flux_rss.="<guid isPermaLink=\"false\">". $ligne->id_article. "</guid>\n";
+        $flux_rss.="<guid>". $link. "</guid>\n";
         if(!empty($ligne->fichier_article)) {
-            $lien_image[$i]=$ligne->fichier_article;
-            $taille_image[$i]=filesize($ligne->fichier_article);
-            $flux_rss.="<enclosure lenght=\"". $taille_image[$i]. "\" url=\"". $lien_image[$i]. "\"  type=\"image/". str_replace("jpg","jpeg",fichier_type($ligne->fichier_article)). "\" />\n";
+			$img = getimagesize($ligne->fichier_article);
+            $size =filesize($ligne->fichier_article);
+            $flux_rss.="<enclosure length=\"". $size. "\" url=\"". $root. str_replace("../", "", $ligne->fichier_article). "\"  type=\"". $img['mime']. "\" />\n";
         }
         $flux_rss.="</item>\n";    
         $i++;
