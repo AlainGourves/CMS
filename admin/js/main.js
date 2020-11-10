@@ -21,6 +21,9 @@ window.addEventListener("load", e => {
                     let val = label.dataset.val;
                     label.lastChild.textContent = val;
                 }
+                if (fields[i].nodeName === "INPUT" && fields[i].type === "checkbox") {
+                    fields[i].checked = false;
+                }
             }
         });
     }

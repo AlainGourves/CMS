@@ -2,3 +2,4 @@
 .DS_Store
 outils/connect.php
 medias/
+feed/rss.xml

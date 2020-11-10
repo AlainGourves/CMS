@@ -12,6 +12,14 @@ if (isset($_SESSION['id_compte'])) {
             case 'afficher_articles':
                 $action_form = "afficher_articles";
                 if (isset($_POST['submit'])) {
+                    if(!empty($_POST['flux_article'])){
+                        // la case flux RSS a été cochée
+                        $checked = " checked=\"checked\"";
+                        $_POST['flux_article'] = 1;
+                    }else{
+                        // si la case n'est pas cochée, $_POST['flux_article'] n'est pas défini
+                        $_POST['flux_article'] = 0;
+                    }
                     if (empty($_POST['titre_article'])) {
                         $message['titre_article'] = "<label for=\"titre_article\" class=\"pas_ok\">Mets un titre, gros naze !</label>";
                     } elseif (!strlen(trim($_POST['contenu_article']))) {
@@ -35,8 +43,9 @@ if (isset($_SESSION['id_compte'])) {
                                     titre_article='". $titre_article. "',
                                     contenu_article='". $contenu_article. "',
                                     date_article='". $date_article. "',
-                                    rang_article='". $rang_article. "'";
-                        $resultat = mysqli_query($connexion, $requete);
+                                    rang_article='". $rang_article. "',
+                                    flux_article='". $_POST['flux_article']. "'";
+                                    $resultat = mysqli_query($connexion, $requete);
                         $dernier_id_cree = mysqli_insert_id($connexion);
 
                         // Cas où il y a une image :
@@ -83,6 +92,13 @@ if (isset($_SESSION['id_compte'])) {
             case 'modifier_article':
                 $action_form = "modifier_article&id_article=". $_GET['id_article'];
                 if (isset($_POST['submit'])) {
+                    if(!empty($_POST['flux_article'])){
+                        // la case flux RSS a été cochée
+                        $_POST['flux_article'] = 1;
+                    }else{
+                        // si la case n'est pas cochée, $_POST['flux_article'] n'est pas défini
+                        $_POST['flux_article'] = 0;
+                    }
                     if (empty($_POST['titre_article'])) {
                         $message['titre_article'] = "<label for=\"titre_article\" class=\"pas_ok\">Mets un titre, gros naze !</label>";
                     } elseif (!strlen(trim($_POST['contenu_article']))) {
@@ -97,7 +113,8 @@ if (isset($_SESSION['id_compte'])) {
                         $requete = "UPDATE articles SET 
                                     titre_article='". $titre_article. "',
                                     contenu_article='". $contenu_article. "',
-                                    date_article='". $date_article. "'
+                                    date_article='". $date_article. "',
+                                    flux_article='". $_POST['flux_article']. "'
                                     WHERE id_article='". $_GET['id_article']. "'";
                         $resultat = mysqli_query($connexion, $requete);
 
@@ -152,6 +169,9 @@ if (isset($_SESSION['id_compte'])) {
                     // traitement de la date pour passer du format mySQL à un format YYYY-MM-DD
                     $t = strtotime($ligne->date_article);
                     $_POST['date_article'] = date("Y-m-d", $t);
+                    if ($ligne->flux_article == 1) {
+                        $checked = " checked=\"checked\"";
+                    }
                 }
                 break;
             

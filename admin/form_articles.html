@@ -26,7 +26,11 @@ if(isset($action_form)) {
             Image article
         </label>
     </div>
-
+    <fieldset>
+        <label for="flux_article">Ajouter au flux RSS
+            <input type="checkbox" value="1" name="flux_article" id="flux_article"<?php if (isset($checked)) echo $checked; ?>>
+        </label>
+    </fieldset>
 
     <div class="flex">
         <a href="#" id="videForm" class="ouinon"><span class="dashicons dashicons-trash"></span></a>

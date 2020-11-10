@@ -445,6 +445,7 @@ main #contenu_back p {
 	text-align: center;
 }
 #tab_articles tr > :nth-of-type(1),
+#tab_articles tr > :nth-of-type(4),
 #tab_articles tr > :nth-of-type(5),
 #tab_articles tr > :nth-of-type(6){
 	text-align: center;
@@ -668,10 +669,25 @@ p.ok {
 	text-shadow: 1px 1px 1px var(--ombre);
 }
 
+.tab_resultats .dashicons-rss,
+.tab_resultats .dashicons-rss:hover,
 .miniature .dashicons-hidden,
 .miniature .dashicons-hidden:hover{
 	width: 100%;
 	height: 100%;
 	color: var(--ombre2);
 	font-size: 2.5rem;
+}
+
+/* TODO */
+#contenu_back fieldset{
+    display:flex;    
+    border:none;
+    align-items:flex-start;
+}
+
+#contenu_back fieldset input{
+    width:auto;
+    width:20px;
+    height:20px;
 }
