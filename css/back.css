@@ -288,9 +288,9 @@ main #contenu_back p {
 	background-color: var(--gris3);
 }
 
-#contenu_back input,
-#contenu_back textarea,
-#contenu_back select{
+input,
+textarea,
+select{
 	display: inline-block;
 	padding: 8px 15px;
 	border: none;
@@ -301,25 +301,25 @@ main #contenu_back p {
 	width: 100%;
 	box-shadow: 0 0 4px rgba(0, 0, 0, .25) inset;
 }
-#contenu_back select,
-#contenu_back .inputFile + label{
+select,
+.inputFile + label{
 	border: 1px solid var(--gris1);
 	border-radius: 4px;
 }
 
-#contenu_back textarea {
+textarea {
 	font-size: 13.33px;
 	min-height: 100px;
 	resize: vertical;
 	max-height: 180px;
 }
 
-#contenu_back input:focus,
-#contenu_back textarea:focus {
+input:focus,
+textarea:focus {
 	background-color: #fff;
 }
 
-#contenu_back input[type=submit] {
+input[type=submit] {
 	width: auto;
 	text-transform: uppercase;
 	-webkit-appearance: none;
@@ -327,14 +327,14 @@ main #contenu_back p {
 	border-radius: 0;
 }
 
-#contenu_back input[type=date] {
+input[type=date] {
 	width: 14em;
 	height: 2.5rem;
 	text-transform: uppercase;
 	text-align: center;
 }
 
-#contenu_back select{
+select{
 	background-color: var(--gris2);
 	color: var(--bleu);
 	height: 2.5rem;
@@ -470,7 +470,8 @@ main #contenu_back p {
 /* --------------------- */
 .ouinon a,
 a.ouinon,
-#contenu_back input[type=submit] {
+#contenu_back input[type=submit],
+#color_choice input[type=submit]{
 	display: block;
 	padding: 6px 8px;
 	margin-bottom: 1em;
@@ -690,4 +691,34 @@ p.ok {
     width:auto;
     width:20px;
     height:20px;
+}
+
+
+#color_choice{
+	position: absolute;
+	right: -20vw;
+	top: var(--hautBarres);
+	width: 20vw;
+	max-width: 200px;
+	padding: 1em;
+	font-size: .8em;
+	background-color: #fff;
+	box-shadow: 2px 2px 4px var(--ombre);
+	transition: right .25s ease-in-out;
+}
+
+#color_choice span{
+	position: absolute;
+	top: 0;
+	right: 0;
+	cursor: pointer;
+}
+
+#color_choice input[type=color]{
+	height: 4em;
+	padding: 0;
+}
+
+#color_choice input[type=submit]{
+	margin-left: auto;
 }

@@ -46,7 +46,10 @@
             <div class="user flex">
                     <?php if (isset($bienvenue)) { echo $bienvenue; } ?>
             </div>
-            <a href="admin.php?module=deconnecter"><span class="dashicons dashicons-no"></span></a>
+            <div>
+                <a href="#" id="config"><span class="dashicons dashicons-admin-generic"></span></a>
+                <a href="admin.php?module=deconnecter"><span class="dashicons dashicons-no"></span></a>
+            </div>
         </header>
         <section id="contenu_back">
             <?php
@@ -58,6 +61,20 @@
                 }
             ?> 
         </section>
+            
+            
+        <form action="./admin.php?module=config" id="color_choice" method="POST">
+            <span class="dashicons dashicons-no-alt"></span>
+            <?php for($i=1; $i<4; $i++):
+                ?>
+                <div class="flex">
+                    <label for="color_<?= $i ?>">Couleur <?= $i ?>:</label>
+                    <input type="color" name="color_<?= $i ?>" id="color_<?= $i ?>" value="<?= (isset($colors)) ? $colors[$i-1] : "#000" ?>">
+                </div>
+            <?php endfor; ?>
+            <input type="submit" value="Enregistrer">
+        </form>
+            
         <!-- <footer id="footer_back">
 
         </footer> -->

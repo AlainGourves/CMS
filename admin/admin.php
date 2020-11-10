@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+// Couleurs du site
+$css_colors = "../css/colors.css";
 
 if (isset($_SESSION['id_compte'])) {
 	// Si la personne est autorisée à accéder au back, 
@@ -47,6 +49,10 @@ if (isset($_SESSION['id_compte'])) {
 			case 'messages':
 				include_once("messages.php");
 				break;
+	
+			case 'config':
+				include_once("config.php");
+				break;
 
 			default:
 				$contenu = "intro.html";
@@ -55,6 +61,12 @@ if (isset($_SESSION['id_compte'])) {
 	} else {
 		$contenu = "intro.html";
 	}
+
+	// Couleurs du site : on récupère les valeurs actuelles
+	$css_file = @file_get_contents($css_colors);
+	preg_match_all('/--color_(\d):\s?(#[0-9a-f]{6,8});/', $css_file, $matches);
+	$colors = array_pop($matches); // les couleurs sont dans le dernier array de $matches
+	fclose($css_file);
 
 	// on calcule les notifications de nouveaux messages
 	$requete = "SELECT lu FROM contacts WHERE lu=0";

@@ -1,31 +1,44 @@
-let myForm = document.querySelector('form');
-let inputFile = document.querySelector('.inputFile');
-let alerte = document.querySelector(".alerte");
+const myForm = document.querySelector('form');
+const inputFile = document.querySelector('.inputFile');
+const alerte = document.querySelector(".alerte");
+const configBtn = document.querySelector("#config");
+const config = document.querySelector("#color_choice");
+
 
 window.addEventListener("load", e => {
+    configBtn.addEventListener("click", e => {
+        config.style.right = 0;
+        e.preventDefault();
+    });
+
+    config.querySelector("span").addEventListener("click", e => {
+        config.style.right = "-20vw";
+    })
 
     if (myForm) {
-        let fields = myForm.elements;
-        let emptyBtn = document.querySelector('#videForm');
+        const fields = myForm.elements;
+        const emptyBtn = document.querySelector('#videForm');
 
-        emptyBtn.addEventListener("click", e => {
-            for (i = 0; i < fields.length; i++) {
-                if (fields[i].nodeName === "SELECT"){
-                    fields[i].selectedIndex = 0;
+        if(emptyBtn){
+            emptyBtn.addEventListener("click", e => {
+                for (i = 0; i < fields.length; i++) {
+                    if (fields[i].nodeName === "SELECT"){
+                        fields[i].selectedIndex = 0;
+                    }
+                    if (fields[i].nodeName === "INPUT" && (fields[i].type === "text" || fields[i].type === "number" || fields[i].type === "password" || fields[i].type === "date")) {
+                        fields[i].value = '';
+                    }
+                    if (fields[i].nodeName === "INPUT" && fields[i].type === "file") {
+                        let label = fields[i].nextElementSibling;
+                        let val = label.dataset.val;
+                        label.lastChild.textContent = val;
+                    }
+                    if (fields[i].nodeName === "INPUT" && fields[i].type === "checkbox") {
+                        fields[i].checked = false;
+                    }
                 }
-                if (fields[i].nodeName === "INPUT" && (fields[i].type === "text" || fields[i].type === "number" || fields[i].type === "password" || fields[i].type === "date")) {
-                    fields[i].value = '';
-                }
-                if (fields[i].nodeName === "INPUT" && fields[i].type === "file") {
-                    let label = fields[i].nextElementSibling;
-                    let val = label.dataset.val;
-                    label.lastChild.textContent = val;
-                }
-                if (fields[i].nodeName === "INPUT" && fields[i].type === "checkbox") {
-                    fields[i].checked = false;
-                }
-            }
-        });
+            });
+        }
     }
 
     if (inputFile){
