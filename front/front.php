@@ -11,7 +11,7 @@ if(isset($_SESSION['id_compte'])) {
 }
 
 // ================================  Calcul du menu ==
-$requete = "SELECT * FROM menus ORDER BY rang_menu ASC";
+$requete = "SELECT * FROM menus WHERE type_menu='front' ORDER BY rang_menu ASC";
 $resultat = mysqli_query($connexion, $requete);
 $menu_haut = "	<nav id=\"menu_haut\" role=\"navigation\">\n";
 $menu_haut .= "<ul>\n";

@@ -403,25 +403,32 @@ function afficher_articles($connexion,$requete,$cas) {
 	if(isset($cas)){
 		switch($cas) {
 			case "back":
-			$i=0;
 			$affichage="<table class=\"tab_resultats\" id=\"tab_articles\">\n";
 			//on calcule les entêtes des colonnes
 			$affichage.="<tr>\n";
 			$affichage.="<th class=\"small\">Tri</th>\n";			
 			$affichage.="<th class=\"medium\">Titre</th>\n";
 			$affichage.="<th class=\"large\">Extrait</th>\n";
-			$affichage.="<th class=\"medium\">Date</th>\n";	
+			$affichage.="<th class=\"small\">Date</th>\n";	
 			$affichage.="<th class=\"small\">RSS</th>\n";	
 			$affichage.="<th class=\"small\">Image</th>\n";		
 			$affichage.="<th class=\"small\">Actions</th>\n";
-			$affichage.="</tr>\n";	
+			$affichage.="</tr>\n";
+			$i = 0;
+			$tab_comptes = array();
 			while($ligne=mysqli_fetch_object($resultat)) {
-				//on affiche le contenu de chaque uplet présent dans la table
+				// stocke l'auteur de l'article précédent (pour détecter les changements)
+				$tab_comptes[$i] = $ligne->id_compte;
+				if($i==0 || ($i>0 && $tab_comptes[$i] != $tab_comptes[$i - 1])){
+					$affichage.= "<tr><td colspan=\"7\" class=\"auteur\">";
+					$affichage.= $ligne->prenom_compte. " ". $ligne->nom_compte;
+					$affichage.= "</td></tr>\n";
+				}
 				$affichage.="<tr>\n";
-				$affichage.="<td><a href=\"admin.php?module=articles&action=trier_article&id_article=" . $ligne->id_article . "&tri=up\"><span class=\"dashicons dashicons-arrow-up\"></span></a>&nbsp;<a href=\"admin.php?module=articles&action=trier_article&id_article=" . $ligne->id_article . "&tri=down\"><span class=\"dashicons dashicons-arrow-down\"></span></a></td>\n";	
-				$affichage.="<td>" . $ligne->titre_article . "</td>\n";
-				$affichage.="<td>" . extrait($ligne->contenu_article,8,4) . "</td>\n";
-				$affichage.="<td>" . maDate($ligne->date_article) . "</td>\n";
+				$affichage.="<td><a href=\"admin.php?module=articles&action=trier_article&id_article=" . $ligne->id_article . "&tri=up\"><span class=\"dashicons dashicons-arrow-up\"></span></a>&nbsp;<a href=\"admin.php?module=articles&action=trier_article&id_article=" . $ligne->id_article. "&tri=down\"><span class=\"dashicons dashicons-arrow-down\"></span></a></td>\n";	
+				$affichage.="<td>". $ligne->titre_article . "</td>\n";
+				$affichage.="<td>". extrait($ligne->contenu_article,8,4) . "</td>\n";
+				$affichage.="<td>". maDate($ligne->date_article) . "</td>\n";
 				$affichage.="<td>"; 
 				if ($ligne->flux_article == 1){
 					$affichage .= "<span class=\"dashicons dashicons-rss\"></span>";
@@ -442,8 +449,6 @@ function afficher_articles($connexion,$requete,$cas) {
 				}
 				$affichage.="</td>\n";
 				$affichage.="<td>";
-				$affichage.="<a href=\"admin.php?module=articles&action=dupliquer_article&id_article=" . $ligne->id_article . "\"><span class=\"dashicons dashicons-admin-page\"></span></a>";
-				$affichage.="&nbsp;";				
 				$affichage.="<a href=\"admin.php?module=articles&action=modifier_article&id_article=" . $ligne->id_article . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
 				$affichage.="&nbsp;";
 				$affichage.="<a href=\"admin.php?module=articles&action=supprimer_article&id_article=" . $ligne->id_article . "\"><span class=\"dashicons dashicons-trash\"></span></a>";
@@ -713,7 +718,5 @@ function generer_flux_rss($connexion, $requete){
     $flux_rss.="</rss>\n";
     return $flux_rss;    
 }
-
-
 
 ?>

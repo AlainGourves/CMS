@@ -23,19 +23,19 @@
                     <a href="admin.php?module=home">Home</a>
                 </li>
                 <li<?php if(isset($val) && $val=="comptes") { echo " class=\"actif\"";} ?>>
-                    <a href="admin.php?module=comptes&action=afficher_comptes">Gestion des comptes</a>
+                    <a href="admin.php?module=comptes&amp;action=afficher_comptes">Gestion des comptes</a>
                 </li>
                 <li<?php if(isset($val) && $val=="menus") { echo " class=\"actif\"";} ?>>
-                    <a href="admin.php?module=menus&action=afficher_menus">Gestion des menus</a>
+                    <a href="admin.php?module=menus&amp;action=afficher_menus">Gestion des menus</a>
                 </li>
                 <li<?php if(isset($val) && $val=="articles") { echo " class=\"actif\"";} ?>>
-                    <a href="admin.php?module=articles&action=afficher_articles">Gestion des articles</a>
+                    <a href="admin.php?module=articles&amp;action=afficher_articles">Gestion des articles</a>
                 </li>
                 <li<?php if(isset($val) && $val=="slider") { echo " class=\"actif\"";} ?>>
-                    <a href="admin.php?module=slider&action=afficher_sliders">Gestion du slider</a>
+                    <a href="admin.php?module=slider&amp;action=afficher_sliders">Gestion du slider</a>
                 </li>
                 <li<?php if(isset($val) && $val=="messages") { echo " class=\"actif\"";} ?>>
-                    <a href="admin.php?module=messages&action=afficher_message">Messagerie<?php if (isset($notification)) { echo $notification;} ?></a>
+                    <a href="admin.php?module=messages&amp;action=afficher_message">Messagerie<?php if (isset($notification)) { echo $notification;} ?></a>
                 </li>
             </ul>
         </nav>

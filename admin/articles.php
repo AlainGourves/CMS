@@ -280,8 +280,17 @@ if (isset($_SESSION['id_compte'])) {
                 break;
         }
         
-        // on construit un tableau qui affiche tous les sliders
-        $requete = "SELECT * FROM articles ORDER BY rang_article";
+        // on construit un tableau qui affiche tous les articles
+        // Méthode 1 (Jointure simple (équivalent à INNER JOIN)) :
+        $requete = "SELECT c.*, a.* FROM comptes c, articles a
+                        WHERE c.id_compte=a.id_compte
+                        ORDER BY a.rang_article";
+        // Méthode 2 (Jointure gauche: on  veut voir tous les articles, même si le compte n'existe plus) :
+        // 3 valeurs dispos : INNER JOIN, LEFT JOIN, RIGHT JOIN
+        // pour RIGHT JOIN, on aurait RIGHT JOiN articles a
+        $requete = "SELECT c.*, a.* FROM articles a LEFT JOIN comptes c
+                        ON a.id_compte=c.id_compte
+                        ORDER BY a.id_compte, a.rang_article";
         $tab_resultats = afficher_articles($connexion,$requete,"back");  
     }
 }else{

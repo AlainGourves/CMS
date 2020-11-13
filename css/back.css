@@ -449,10 +449,10 @@ select{
 	text-align: center;
 }
 #tab_articles tr > :nth-of-type(1),
-#tab_articles tr > :nth-of-type(4),
 #tab_articles tr > :nth-of-type(5),
-#tab_articles tr > :nth-of-type(6){
-	text-align: center;
+#tab_articles tr > :nth-of-type(6),
+#tab_articles tr > :nth-of-type(7){
+text-align: center;
 }
 #tab_articles td {
 	vertical-align: top;
@@ -460,9 +460,14 @@ select{
 #tab_articles tr > :nth-of-type(2){
 	font-weight: 700;
 }
-#tab_articles tr > :nth-of-type(4){
+#tab_articles tr > td:nth-of-type(4){
 	font-size: .9em;
 	font-style: oblique;
+}
+#tab_articles .auteur{
+	background-color: var(--color_1);
+	font-weight: 700;
+	text-transform: uppercase;
 }
 #tab_sliders tr > :nth-of-type(1),
 #tab_sliders tr > :nth-of-type(3),
@@ -700,8 +705,8 @@ p.ok {
 
 #color_choice{
 	position: absolute;
-	right: -20vw;
 	top: var(--hautBarres);
+	right: -20vw;
 	width: 20vw;
 	max-width: 200px;
 	padding: 1em;
@@ -709,6 +714,10 @@ p.ok {
 	background-color: #fff;
 	box-shadow: 2px 2px 4px var(--ombre);
 	transition: right .25s ease-in-out;
+}
+
+#color_choice.open{
+	right: 0;
 }
 
 #color_choice span{
@@ -725,4 +734,55 @@ p.ok {
 
 #color_choice input[type=submit]{
 	margin-left: auto;
+}
+
+/* gestion des menus front & back */
+.myMenu{
+	position: relative;
+	padding-top: 1.6em;
+}
+
+.myMenu label{
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+.myMenu label::after{
+	content: '\f347';
+	font-family: dashicons;
+	font-size: 2.5em;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.myMenu label:hover{
+	cursor: pointer
+}
+
+.myMenu > div{
+	transform-origin: top;
+	transform: scaleY(0);
+	height: 0;
+	opacity: 0;
+	transition: all .25s ease-in-out;
+}
+
+.myMenu input{
+	position: absolute;
+	top:-100rem;
+	left:-10rem;
+}
+
+.myMenu input:checked + div{
+	transform: scaleY(1);
+	height: auto;
+	opacity: 1;
+}
+
+.myMenu input:checked ~ label::after{
+	content: '\f343';
 }

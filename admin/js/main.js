@@ -7,12 +7,12 @@ const config = document.querySelector("#color_choice");
 
 window.addEventListener("load", e => {
     configBtn.addEventListener("click", e => {
-        config.style.right = 0;
+        config.classList.toggle('open');
         e.preventDefault();
     });
-
+    
     config.querySelector("span").addEventListener("click", e => {
-        config.style.right = "-20vw";
+        config.classList.remove('open');
     })
 
     if (myForm) {

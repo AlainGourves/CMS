@@ -28,7 +28,7 @@ if(isset($action_form)) {
     </div>
     <fieldset>
         <label for="flux_article">Ajouter au flux RSS
-            <input type="checkbox" value="1" name="flux_article" id="flux_article"<?php if (isset($checked)) echo $checked; ?>>
+            <input type="checkbox" value="1" name="flux_article" id="flux_article"<?php if (isset($checked) && !$insertion) echo $checked; ?>>
         </label>
     </fieldset>
 
