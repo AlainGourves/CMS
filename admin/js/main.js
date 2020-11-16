@@ -6,15 +6,16 @@ const config = document.querySelector("#color_choice");
 
 
 window.addEventListener("load", e => {
-    configBtn.addEventListener("click", e => {
-        config.classList.toggle('open');
-        e.preventDefault();
-    });
+    if(configBtn){
+        configBtn.addEventListener("click", e => {
+            config.classList.toggle('open');
+            e.preventDefault();
+        });
+        config.querySelector("span").addEventListener("click", e => {
+            config.classList.remove('open');
+        });
+    }
     
-    config.querySelector("span").addEventListener("click", e => {
-        config.classList.remove('open');
-    })
-
     if (myForm) {
         const fields = myForm.elements;
         const emptyBtn = document.querySelector('#videForm');

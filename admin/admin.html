@@ -14,31 +14,7 @@
 
 <body>
     <aside id="zone_gauche" class="flex-center">
-        <nav id="menu_back">
-            <ul>
-                <li>
-                    <a href="../">Voir le site</a>
-                </li>
-                <li<?php if(isset($val) && $val=="home") { echo " class=\"actif\"";} ?>>
-                    <a href="admin.php?module=home">Home</a>
-                </li>
-                <li<?php if(isset($val) && $val=="comptes") { echo " class=\"actif\"";} ?>>
-                    <a href="admin.php?module=comptes&amp;action=afficher_comptes">Gestion des comptes</a>
-                </li>
-                <li<?php if(isset($val) && $val=="menus") { echo " class=\"actif\"";} ?>>
-                    <a href="admin.php?module=menus&amp;action=afficher_menus">Gestion des menus</a>
-                </li>
-                <li<?php if(isset($val) && $val=="articles") { echo " class=\"actif\"";} ?>>
-                    <a href="admin.php?module=articles&amp;action=afficher_articles">Gestion des articles</a>
-                </li>
-                <li<?php if(isset($val) && $val=="slider") { echo " class=\"actif\"";} ?>>
-                    <a href="admin.php?module=slider&amp;action=afficher_sliders">Gestion du slider</a>
-                </li>
-                <li<?php if(isset($val) && $val=="messages") { echo " class=\"actif\"";} ?>>
-                    <a href="admin.php?module=messages&amp;action=afficher_message">Messagerie<?php if (isset($notification)) { echo $notification;} ?></a>
-                </li>
-            </ul>
-        </nav>
+<?php if(isset($menu_back)) echo $menu_back; ?>
     </aside>
     <main id="zone_droite">
         <header id="header_back" class="flex">
@@ -47,7 +23,9 @@
                     <?php if (isset($bienvenue)) { echo $bienvenue; } ?>
             </div>
             <div>
+                <?php if($_SESSION['parametres']) : ?>
                 <a href="#" id="config"><span class="dashicons dashicons-admin-generic"></span></a>
+                <?php endif; ?>
                 <a href="admin.php?module=deconnecter"><span class="dashicons dashicons-no"></span></a>
             </div>
         </header>
@@ -62,7 +40,7 @@
             ?> 
         </section>
             
-            
+<?php if($_SESSION['parametres']) : ?>            
         <form action="./admin.php?module=config" id="color_choice" method="POST">
             <span class="dashicons dashicons-no-alt"></span>
             <?php for($i=1; $i<4; $i++):
@@ -74,7 +52,7 @@
             <?php endfor; ?>
             <input type="submit" value="Enregistrer">
         </form>
-            
+<?php endif; ?>            
         <!-- <footer id="footer_back">
 
         </footer> -->

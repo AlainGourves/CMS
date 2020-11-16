@@ -12,14 +12,7 @@ if(isset($_SESSION['id_compte'])) {
 
 // ================================  Calcul du menu ==
 $requete = "SELECT * FROM menus WHERE type_menu='front' ORDER BY rang_menu ASC";
-$resultat = mysqli_query($connexion, $requete);
-$menu_haut = "	<nav id=\"menu_haut\" role=\"navigation\">\n";
-$menu_haut .= "<ul>\n";
-while($ligne = mysqli_fetch_object($resultat)){
-    $menu_haut .= "<li><a href=\"". $ligne->lien_menu. "\">". $ligne->intitule_menu. "</a></li>\n";
-}
-$menu_haut .= "</ul>\n";
-$menu_haut .= "</nav>\n";
+$menu_haut = afficher_menus($connexion,$requete,"menu_front");
 
 // ================================  Calcul du contenu des pages ==
 if(isset($_GET['page'])){

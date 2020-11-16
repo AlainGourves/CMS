@@ -19,11 +19,17 @@ if (isset($_SESSION['id_compte'])) {
 	require_once("../outils/fonctions.php");
 	$connexion = connexion();
 
-	if (isset($_GET['module'])) {
-		$val = $_GET['module'];
-		$contenu = "form_" . $val . ".html";
+	// Calcule le menu côté back
+	$requete = "SELECT d.*,m.* FROM droits d 
+					INNER JOIN menus m ON d.id_menu=m.id_menu 
+					WHERE d." . $_SESSION['statut_compte'] . "='oui' 
+					AND m.type_menu='back' ORDER BY m.rang_menu";
+	$menu_back = afficher_menus($connexion,$requete,"menu_back");
 
-		switch ($val) {
+	if (isset($_GET['module'])) {
+		$contenu = "form_" . $_GET['module'] . ".html";
+
+		switch ($_GET['module']) {
 			case 'deconnecter':
 				// détruit l'ensemble des variables de session
 				session_destroy();
@@ -36,6 +42,10 @@ if (isset($_SESSION['id_compte'])) {
 	
 			case 'comptes':
 				include_once("comptes.php");
+			break;
+	
+			case 'droits':
+				include_once("droits.php");
 			break;
 			
 			case 'articles':
@@ -62,18 +72,12 @@ if (isset($_SESSION['id_compte'])) {
 		$contenu = "intro.html";
 	}
 
-	// Couleurs du site : on récupère les valeurs actuelles
-	$css_file = @file_get_contents($css_colors);
-	preg_match_all('/--color_(\d):\s?(#[0-9a-f]{6,8});/', $css_file, $matches);
-	$colors = array_pop($matches); // les couleurs sont dans le dernier array de $matches
-	fclose($css_file);
-
-	// on calcule les notifications de nouveaux messages
-	$requete = "SELECT lu FROM contacts WHERE lu=0";
-	$resultat = mysqli_query($connexion, $requete);
-	$nb_lignes = mysqli_num_rows($resultat);
-	if ($nb_lignes > 0) {
-		$notification = " <span class=\"notif flex-center\">" . $nb_lignes . "</span>";
+	if($_SESSION['parametres']){
+		// Couleurs du site : on récupère les valeurs actuelles
+		$css_file = @file_get_contents($css_colors);
+		preg_match_all('/--color_(\d):\s?(#[0-9a-f]{6,8});/', $css_file, $matches);
+		$colors = array_pop($matches); // les couleurs sont dans le dernier array de $matches
+		fclose($css_file);
 	}
 
 	// on referme la connexion à la bdd

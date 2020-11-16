@@ -475,7 +475,19 @@ text-align: center;
 	text-align: center;
 }
 
+#tab_droits img{
+	height: auto;
+	border-radius: initial;
+}
 
+#tab_droits img:hover{
+	transform: none;
+	box-shadow: none;
+}
+#tab_droits tr > :nth-of-type(2),
+#tab_droits tr > :nth-of-type(3){
+	text-align: center;
+}
 /* --------------------- */
 .ouinon a,
 a.ouinon,

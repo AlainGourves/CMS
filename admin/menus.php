@@ -37,6 +37,13 @@ if (isset($_SESSION['id_compte'])) {
                             type_menu='". $type_menu. "',
                             rang_menu='". $dernier_rang."'";
                         $resultat = mysqli_query($connexion, $requete);
+                        $dernier_id_menu=mysqli_insert_id($connexion);
+                        // Si c'est un menu pour le back, on l'ajoute à la table `droits`
+                        // avec les valeurs par défaut
+                        if ($type_menu == "back"){
+                            $requete2="INSERT INTO droits SET id_menu='" . $dernier_id_menu . "'";
+                            $resultat2=mysqli_query($connexion,$requete2);
+                        }
                         if ($resultat) {
                             $insertion = true;
                             $message['resultat'] = "<p class=\"alerte ok\">Menu ajouté !</p>";
@@ -123,6 +130,12 @@ if (isset($_SESSION['id_compte'])) {
                                         AND rang_menu>". $ancien_rang_menu;
                         echo $requete . "<br>";
                         $resultat = mysqli_query($connexion, $requete);
+
+                        // Si le nouveau type est "back", il faut créer une nouvelle entrée dans la table droits
+                        if ($type_menu == "back"){
+                            $requete2="INSERT INTO droits SET id_menu='" . $_GET['id_menu'] . "'";
+                            $resultat2=mysqli_query($connexion,$requete2);
+                        }
                     }
                     if ($resultat) {
                         $insertion = true;
@@ -169,6 +182,11 @@ if (isset($_SESSION['id_compte'])) {
                         $resultat = mysqli_query($connexion, $requete);
                         $action_form = "afficher_menus";
                         $entete = "<h1 class=\"alerte ok\">Menu supprimé</h1>";
+                        // Si type_menu="back", il faut supprimer l'entrée correspondantes dans la table droits
+                        if($ligne->type_menu == "back"){
+                            $requete = "DELETE FROM droits WHERE id_menu=\"". $_GET['id_menu']. "\"";
+                            $resultat = mysqli_query($connexion, $requete);
+                        }
                     }
                 }
             break;
@@ -180,17 +198,17 @@ if (isset($_SESSION['id_compte'])) {
     $tab_resultats .= "<input id=\"menuFront\" type=\"checkbox\" checked/>";
     $tab_resultats .= "<div>";
     $requete = "SELECT * FROM menus WHERE type_menu='front' ORDER BY rang_menu ASC";
-    $tab_resultats .= afficher_menus($connexion,$requete);
+    $tab_resultats .= afficher_menus($connexion,$requete,"back");
     $tab_resultats .= "</div>";
     $tab_resultats .= "<label for=\"menuFront\"><h1>Menu Front</h1></label>";
     $tab_resultats .= "</div>";
     
     // Affichage menu "Back"
     $tab_resultats .= "<div class=\"myMenu\">";
-    $tab_resultats .= "<input id=\"menuBack\" type=\"checkbox\"/>";
+    $tab_resultats .= "<input id=\"menuBack\" type=\"checkbox\"/ checked>";
     $tab_resultats .= "<div>";
     $requete = "SELECT * FROM menus WHERE type_menu='back' ORDER BY rang_menu ASC";
-    $tab_resultats .= afficher_menus($connexion,$requete);
+    $tab_resultats .= afficher_menus($connexion,$requete,"back");
     $tab_resultats .= "</div>";
     $tab_resultats .= "<label for=\"menuBack\"><h1>Menu Back</h1></label>";
     $tab_resultats .= "</div>";
