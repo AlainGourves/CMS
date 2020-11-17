@@ -14,7 +14,9 @@ if(isset($action_form)) {
     <input type="text" name="titre_article"  id="titre_article" placeholder="Titre de l'article" value="<?php if(isset($_POST['titre_article']) && !$insertion) echo $_POST['titre_article']; ?>">
 
     <?php  if (isset($message['contenu_article'])) { echo $message['contenu_article']; } ?>
-    <textarea name="contenu_article"  id="contenu_article" placeholder="Texte de l'article"><?php if(isset($_POST['contenu_article']) && !$insertion) echo $_POST['contenu_article']; ?></textarea>
+    <div class="YSeditor">
+        <textarea name="contenu_article"  id="contenu_article" placeholder="Texte de l'article"><?php if(isset($_POST['contenu_article']) && !$insertion) echo $_POST['contenu_article']; ?></textarea>
+    </div>
 
     <div class="flex">
         <input type="date" name="date_article" id="date_article" value="<?php if(isset($_POST['date_article']) && !$insertion) echo $_POST['date_article']; ?>">
