@@ -1,0 +1,42 @@
+<?php 
+
+if (isset($entete)) {
+    echo $entete;
+}
+?>
+<form id="form_page" action="admin.php?module=pages&action=<?php 
+if(isset($action_form)) { 
+    echo $action_form;
+}else{
+    echo "afficher_pages";
+} ?>" method="POST" enctype="multipart/form-data">
+    <?php  if (isset($message['titre_page'])) { echo $message['titre_page']; } ?>
+    <input type="text" name="titre_page"  id="titre_page" placeholder="Titre de la page" value="<?php if(isset($_POST['titre_page']) && !$insertion) echo $_POST['titre_page']; ?>">
+
+    <?php  if (isset($message['contenu_page'])) { echo $message['contenu_page']; } ?>
+    <!-- <div class="YSeditor"> -->
+        <textarea name="contenu_page"  id="contenu_page" placeholder="Texte de l'page"><?php if(isset($_POST['contenu_page']) && !$insertion) echo $_POST['contenu_page']; ?></textarea>
+    <!-- </div> -->
+
+    <div class="flex">
+        <?php  if (isset($message['fichier_page'])) { echo $message['fichier_page']; } ?>
+        <input type="file" name="fichier_page"  id="fichier_page" class="inputFile" value="">
+        <label for="fichier_page" data-val="Image page">
+            <span class="dashicons dashicons-cloud-upload flex-center"></span>
+            Image page
+        </label>
+        <?php  if (isset($message['id_menu'])) { echo $message['id_menu']; } ?>
+        <label for="id_menu">Associer au menu :
+            <select name="id_menu">
+                <option value="">Choisir...</option>
+                <?php  if (isset($liste_menus)) { echo $liste_menus; } ?>
+            </select>
+            <span class="custom-arrow"></span></label>
+    </div>
+
+    <div class="flex">
+        <a href="#" id="videForm" class="ouinon"><span class="dashicons dashicons-trash"></span></a>
+        <input type="submit" name="submit" value="Envoyer">
+    </div>
+</form>
+<?php  if (isset($message['resultat'])) { echo $message['resultat']; } ?>

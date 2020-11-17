@@ -464,8 +464,8 @@ text-align: center;
 	font-size: .9em;
 	font-style: oblique;
 }
-#tab_articles .auteur{
-	background-color: var(--color_1);
+.tab_resultats .auteur{
+	background-color: var(--color_1)!important;
 	font-weight: 700;
 	text-transform: uppercase;
 }
@@ -486,6 +486,11 @@ text-align: center;
 }
 #tab_droits tr > :nth-of-type(2),
 #tab_droits tr > :nth-of-type(3){
+	text-align: center;
+}
+
+#tab_pages tr > :nth-of-type(3),
+#tab_pages tr > :nth-of-type(4){
 	text-align: center;
 }
 /* --------------------- */

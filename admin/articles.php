@@ -45,7 +45,7 @@ if (isset($_SESSION['id_compte'])) {
                                     date_article='". $date_article. "',
                                     rang_article='". $rang_article. "',
                                     flux_article='". $_POST['flux_article']. "'";
-                                    $resultat = mysqli_query($connexion, $requete);
+                        $resultat = mysqli_query($connexion, $requete);
                         $dernier_id_cree = mysqli_insert_id($connexion);
 
                         // Cas où il y a une image :
@@ -150,7 +150,7 @@ if (isset($_SESSION['id_compte'])) {
                                     }
                                 }
                             }else{
-                                $message['fichier_slider'] = "<label for=\"fichier_slider\" class=\"pas_ok\">Seules les exentions png, svg, jpg et gif sont autorisées !</label>";
+                                $message['fichier_slider'] = "<label for=\"fichier_article\" class=\"pas_ok\">Seules les exentions png, svg, jpg et gif sont autorisées !</label>";
                             }
                         }
                         $insertion = true;
@@ -282,9 +282,9 @@ if (isset($_SESSION['id_compte'])) {
         
         // on construit un tableau qui affiche tous les articles
         // Méthode 1 (Jointure simple (équivalent à INNER JOIN)) :
-        $requete = "SELECT c.*, a.* FROM comptes c, articles a
-                        WHERE c.id_compte=a.id_compte
-                        ORDER BY a.rang_article";
+        // $requete = "SELECT c.*, a.* FROM comptes c, articles a
+        //                 WHERE c.id_compte=a.id_compte
+        //                 ORDER BY a.rang_article";
         // Méthode 2 (Jointure gauche: on  veut voir tous les articles, même si le compte n'existe plus) :
         // 3 valeurs dispos : INNER JOIN, LEFT JOIN, RIGHT JOIN
         // pour RIGHT JOIN, on aurait RIGHT JOiN articles a

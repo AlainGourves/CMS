@@ -589,7 +589,7 @@ function afficher_menus($connexion,$requete,$cas) {
 				// on calcule les notifications de nouveaux messages
 				$notification = "";
 				$req = "SELECT lu FROM contacts WHERE lu=0";
-				$res = mysqli_query($connexion, $requete);
+				$res = mysqli_query($connexion, $req);
 				$nb_msgs = mysqli_num_rows($res);
 				if ($nb_msgs > 0) {
 					$notification = " <span class=\"notif flex-center\">" . $nb_msgs . "</span>";
@@ -599,7 +599,11 @@ function afficher_menus($connexion,$requete,$cas) {
 				while($ligne = mysqli_fetch_object($resultat)){
 					$query = parse_url($ligne->lien_menu, PHP_URL_QUERY);
 					parse_str($query, $output);
-					$module = $output['module'];
+					if(isset($output['module'])){
+						$module = $output['module'];
+					}else{
+						$module = "";
+					}
 					if($module != "config"){
 						if(isset($_GET['module']) && $_GET['module']==$module){
 							$affichage .= "<li class=\"actif\">";
@@ -773,4 +777,67 @@ function generer_flux_rss($connexion, $requete){
     return $flux_rss;    
 }
 
+
+// ===========================Afficher Pages
+function afficher_pages($connexion,$requete,$cas) {
+	$resultat=mysqli_query($connexion,$requete);
+	
+	if(isset($cas)){
+		switch($cas) {
+			case "back":
+			$affichage="<table class=\"tab_resultats\" id=\"tab_pages\">\n";
+			//on calcule les entêtes des colonnes
+			$affichage.="<tr>\n";
+			$affichage.="<th class=\"large\">Titre</th>\n";
+			$affichage.="<th class=\"medium\">Date</th>\n";	
+			$affichage.="<th class=\"small\">Image</th>\n";		
+			$affichage.="<th class=\"small\">Actions</th>\n";
+			$affichage.="</tr>\n";
+			$i = 0;
+			$tab_comptes = array();
+			while($ligne=mysqli_fetch_object($resultat)) {
+				// stocke l'auteur de la page précédente (pour détecter les changements)
+				$tab_comptes[$i] = $ligne->id_compte;
+				if($i==0 || ($i>0 && $tab_comptes[$i] != $tab_comptes[$i - 1])){
+					$affichage.= "<tr><td colspan=\"4\" class=\"auteur\">";
+					$affichage.= $ligne->prenom_compte. " ". $ligne->nom_compte;
+					$affichage.= "</td></tr>\n";
+				}
+				$affichage.="<tr>\n";
+				$affichage.="<td>". $ligne->titre_page . "</td>\n";
+				$affichage.="<td>". maDate($ligne->date_page) . "</td>\n";
+				$affichage.="<td class=\"miniature\">";
+				if(empty($ligne->fichier_page)){
+					$affichage.="<span class=\"dashicons dashicons-hidden\"></span></td>";
+				}else{
+					$affichage.="<figure>";
+
+					$affichage.="<a href=\"". str_replace("_s", "_b", $ligne->fichier_page). "\" target=\"blank\">";
+					$affichage.="<img class=\"miniature\" src=\"" . $ligne->fichier_page . "\" alt=\"\" />";
+					$affichage.="</a>";
+
+					$affichage.="<figcaption><a class=\"suppr_img\" href=\"admin.php?module=pages&action=supprimer_image&id_page=". $ligne->id_page ."\">
+					<span class=\"dashicons dashicons-dismiss\"></span></a></figcaption>";		
+				}
+				$affichage.="</td>\n";
+				$affichage.="<td>";
+				$affichage.="<a href=\"admin.php?module=pages&action=modifier_page&id_page=" . $ligne->id_page . "\"><span class=\"dashicons dashicons-edit\"></span></a>";
+				$affichage.="&nbsp;";
+				$affichage.="<a href=\"admin.php?module=pages&action=supprimer_page&id_page=" . $ligne->id_page . "\"><span class=\"dashicons dashicons-trash\"></span></a>";
+				$affichage.="</td>\n";						
+				$affichage.="</tr>\n";
+				$i++;					
+			}
+			$affichage.="</table>\n";
+			break;
+
+
+			case "front":
+			$affichage="";	
+			break;
+		}		
+	}
+
+	return $affichage;
+}
 ?>

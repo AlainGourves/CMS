@@ -48,6 +48,10 @@ if (isset($_SESSION['id_compte'])) {
 				include_once("droits.php");
 			break;
 			
+			case 'pages':
+				include_once("pages.php");
+			break;
+			
 			case 'articles':
 				include_once("articles.php");
 			break;
@@ -77,7 +81,6 @@ if (isset($_SESSION['id_compte'])) {
 		$css_file = @file_get_contents($css_colors);
 		preg_match_all('/--color_(\d):\s?(#[0-9a-f]{6,8});/', $css_file, $matches);
 		$colors = array_pop($matches); // les couleurs sont dans le dernier array de $matches
-		fclose($css_file);
 	}
 
 	// on referme la connexion à la bdd
