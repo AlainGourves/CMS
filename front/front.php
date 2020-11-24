@@ -31,6 +31,13 @@ if(isset($_GET['page'])){
                 exit;
             }
         break;
+
+        case "content":
+            if(isset($_GET['id_page'])) {
+                $requete="SELECT * FROM pages WHERE id_page='". $_GET['id_page'] . "'";
+                $affichage=afficher_pages($connexion, $requete,"front");            
+            }
+        break; 
     }
 }else{
     // Gestion slider

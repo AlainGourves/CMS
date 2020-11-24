@@ -17,6 +17,7 @@
  * 		- afficher_menus()
  * 		- afficher_droits()
  * 		- afficher_sliders()
+ * 		- afficher_pages()
  * 		- maDate()
  * 		- generer_flux_rss()
  */
@@ -579,7 +580,29 @@ function afficher_menus($connexion,$requete,$cas) {
 				$affichage = "<nav id=\"menu_haut\" role=\"navigation\">\n";
 				$affichage .= "<ul>\n";
 				while($ligne = mysqli_fetch_object($resultat)){
-				$affichage .= "<li><a href=\"". $ligne->lien_menu. "\">". $ligne->intitule_menu. "</a></li>\n";
+					// on regarde s'il existe des pages associées à cet item de menu
+					$requete2 = "SELECT * FROM pages WHERE id_menu='". $ligne->id_menu. "'";
+					$resultat2 = mysqli_query($connexion, $requete2);
+					$nb = mysqli_num_rows($resultat2);
+					if($nb==0){
+						$affichage .= "<li><a href=\"". $ligne->lien_menu. "\" target=\"blank\">".$ligne->intitule_menu. "</a></li>\n";
+					}elseif($nb==1){
+						$pages = mysqli_fetch_object($resultat2);
+						$href = "front.php?page=content&amp;id_page=". $pages->id_page;
+						$affichage .= "<li><a href=\"". $href. "\">".$ligne->intitule_menu. "</a></li>\n";
+					}else{
+						// il faut calculer un sous-menu
+						//alors il y a plusieurs pages associée à cet item de menu
+						$affichage.="<li>";
+						$affichage.="<label for=\"item" . $ligne->id_menu . "\">" . $ligne->intitule_menu . "</label>";    
+						$affichage.="<input type=\"checkbox\" name=\"item\" id=\"item". $ligne->id_menu. "\" />";
+						$affichage.="<ul>";
+						while($pages = mysqli_fetch_object($resultat2)) {
+							$affichage.="<li><a href=\"front.php?page=content&amp;id_page=" . $pages->id_page . "\">" . $pages->titre_page . "</a></li>";        
+							}
+						$affichage.="</ul>";
+						$affichage.="</li>";
+					}
 				}
 				$affichage .= "</ul>\n";
 				$affichage .= "</nav>\n";
@@ -833,7 +856,14 @@ function afficher_pages($connexion,$requete,$cas) {
 
 
 			case "front":
-			$affichage="";	
+				$ligne=mysqli_fetch_object($resultat);
+				$affichage= "<article id=\"page-". $ligne->id_page."\">";
+				$affichage.= "<h1>". $ligne->titre_page. "</h1>";
+				if (!empty($ligne->fichier_page)){
+					$affichage.= "<figure>\n<img src=\"". str_replace("_s", "_b", $ligne->fichier_page). "\" alt=\"". $ligne->titre_page. "\"></figure>\n";
+				}
+				$affichage.= $ligne->contenu_page;
+				$affichage.= "</article>";
 			break;
 		}		
 	}

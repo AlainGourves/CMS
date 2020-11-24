@@ -136,15 +136,16 @@ a.cta,
 
 #menu_haut ul{
 	display:flex;
+	flex-wrap:wrap;
+	justify-content:space-between;
+	align-items:center;
 	min-height:inherit;
 	list-style-type:none;
-	justify-content:space-between;
-	flex-wrap:wrap;
-	align-items:center;
 	padding:0 20%;
 }
 
 #menu_haut a{
+	padding: 0 .5em;
 	color:#fff;
 	text-decoration:none;
 }
@@ -573,4 +574,59 @@ label.ok{
 #single .date_single{
     color:#c2c2c2;
     text-align:center;
+}
+
+/******************** sous-menus #menu_haut */
+#menu_haut input[type=checkbox]{
+	position: absolute;
+	top: -9999px;
+	left: -9999px;
+}
+
+#menu_haut input[type=checkbox] + ul{
+	visibility: hidden;
+	opacity: 0;
+	padding: 0 .5em;
+}
+
+#menu_haut input:checked + ul,
+#menu_haut input:focus-within + ul{
+	/* display: block; */
+	visibility: visible;
+	opacity: 1;
+	padding: .5em;
+}
+
+#menu_haut label{
+	display: block;
+	color: #fff;
+	cursor: pointer;
+}
+
+#menu_haut ul > li{
+	position: relative;
+}
+
+#menu_haut li > ul{
+	position: absolute;
+	top: calc(1em + (60px - 1em)/2);
+	left: -.5em;
+	min-width: 8em;
+	background-color: var(--color_3);
+	transition: all .25s ease-in-out;
+}
+
+#menu_haut ul ul li {
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	height: 2em;
+}
+
+:focus{
+    box-shadow: 0 0 2px 2px hsla(204deg, 100%, 50%, .75);
+}
+    /* cf. https://css-tricks.com/the-focus-visible-trick/  */
+focus:not(:focus-visible) {
+        outline: none;
 }

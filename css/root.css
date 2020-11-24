@@ -1,5 +1,9 @@
 @charset "UTF-8"; /* Définit l'encodage de la feuille de style à Unicode UTF-8 */
-*{ padding:0;margin:0;box-sizing:border-box;outline:none;}
+*{
+    padding:0;
+    margin:0;
+    box-sizing:border-box;
+}
 
 @font-face {
     font-family: 'montserratregular';

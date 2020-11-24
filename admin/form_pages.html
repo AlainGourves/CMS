@@ -14,9 +14,9 @@ if(isset($action_form)) {
     <input type="text" name="titre_page"  id="titre_page" placeholder="Titre de la page" value="<?php if(isset($_POST['titre_page']) && !$insertion) echo $_POST['titre_page']; ?>">
 
     <?php  if (isset($message['contenu_page'])) { echo $message['contenu_page']; } ?>
-    <!-- <div class="YSeditor"> -->
+    <div class="YSeditor">
         <textarea name="contenu_page"  id="contenu_page" placeholder="Texte de l'page"><?php if(isset($_POST['contenu_page']) && !$insertion) echo $_POST['contenu_page']; ?></textarea>
-    <!-- </div> -->
+    </div>
 
     <div class="flex">
         <?php  if (isset($message['fichier_page'])) { echo $message['fichier_page']; } ?>
